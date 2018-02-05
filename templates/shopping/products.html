@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block productslist %}
+<div class="container">
+	{% for product in products %}
+		<div class="card">
+			{{product}}
+		</div><!-- Product Card -->
+	{% endfor %}
+</div><!-- Container -->
+{% endblock %}

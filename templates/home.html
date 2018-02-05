@@ -2,8 +2,25 @@
 
 {% block page %}
 <div class="container" id="pageContainer">
-	<div class="">
-		<h1>Hello World! </h1>
-	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<h5>Category List</h5>
+			<ul class="nav flex-column">
+			  <li class="nav-item">
+			    <a class="nav-link active" href="#">Active</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" href="#">Link</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" href="#">Link</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link disabled" href="#">Disabled</a>
+			  </li>
+			</ul>
+		</div><!-- /Category List -->
+	</div><!-- /Row -->
 </div><!-- /Page Container -->
+{% block productslist%}{% endblock %}
 {% endblock page %}

@@ -21,8 +21,8 @@ from django.conf import settings
 from app.views import home
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    url('$', home ,name="home"),
+    url('^admin/', admin.site.urls),
+    url('^$', home ,name="home"),
     url(r'^shopping/', include('shopping.urls')),
 ]
 

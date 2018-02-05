@@ -3,13 +3,56 @@
 {% block page %}
 <style type="text/css">
 	#pageContainer{
-		margin: 50px auto;
+		margin: 60px auto;
 	}
 </style>
 <div class="container" id="pageContainer">
-	<div class="">
-		<h1>Hello World! </h1>
-	</div>
-</div><!-- /Page Container -->
+	<div class="row">
+		<div class="col-md-3">
+			<h5>Category List</h5>
+			<ul class="nav flex-column">
+			  <li class="nav-item">
+			    <a class="nav-link active" href="{% url 'shopping-mobiles' %}">Mobiles</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" href="#">Tablets</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link" href="#">Desktops</a>
+			  </li>
+			  <li class="nav-item">
+			    <a class="nav-link disabled" href="#">Disabled</a>
+			  </li>
+			</ul>
+		</div><!-- /Category List -->
 
+		<!-- ProductsList -->
+		<div class="col-md-9">
+			{% if products %}
+					<div class="container">
+						<div class="row">
+							{% for product in products %}
+							<div class="col-sm-6">
+								<div class="card">
+									<div class="card-header">
+										<a href="{{product.productUrl}}">{{product.title}}</a>
+										<small>{{product.productId}}</small>
+									</div><!-- /Product Title -->
+									<div class="card-body">
+										<div class="card-text">
+											
+										</div><!-- Text -->
+										
+									</div><!-- Production Description -->
+								</div><!-- Product Card -->
+							</div><!-- Product Div -->
+							{% endfor %}
+						</div><!-- Row -->
+					</div><!-- Card -->
+			{% else %}
+				<h5>No products Available</h5>
+			{% endif %}
+		</div><!-- ProductsList -->
+	</div><!-- /Row -->
+</div><!-- /Page Container -->
 {% endblock page %}
