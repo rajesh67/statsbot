@@ -25,7 +25,7 @@ SECRET_KEY = 'f57s+v#&#75*8)bxmiwr^#sk#=k$e%ef(-@65slmljx=p3ic+y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -36,9 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-    'app',
     'shopping',
+    'app',
+
+    #third-party apps
+    'graphos',
+    'whitenoise',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'statsbot_project.urls'
@@ -66,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.csrf',
                 'django.template.context_processors.request',
+                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -81,8 +88,12 @@ WSGI_APPLICATION = 'statsbot_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3_new'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'statsbotdb',
+        'USER' : 'rajeshmeena',
+        'PASSWORD' : '11cs30025',
+        'HOST' : 'localhost',
+        'PORT' : '',
     }
 }
 
@@ -122,19 +133,17 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
-STATIC_ROOT=os.path.join(BASE_DIR, "staticfiles")
-
+STATIC_ROOT=os.path.join(BASE_DIR, "staticfiles/")
 STATICFILES_DIRS=[
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "static/"),
 ]
 
-STATIC_URL = '/media/'
-STATIC_ROOT=os.path.join(BASE_DIR, "mediafiles")
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT=os.path.join(BASE_DIR, "mediafiles/")
 MEDIAFILES_DIRS=[
-    os.path.join(BASE_DIR, "media"),
+    os.path.join(BASE_DIR, "media/"),
 ]
 
 # Access Tokens
@@ -143,7 +152,11 @@ MEDIAFILES_DIRS=[
 FLIPKART_AFF_ID='rajeshmee'
 FLIPKART_AFF_TOKEN='78fef03fe9d84c9eb6387b80ba4c98d2'
 FLIPKART_BASE_URL='https://affiliate-api.flipkart.net/affiliate/api/rajeshmee.json'
-
+FLIPKART_SEARCH_URL='https://affiliate-api.flipkart.net/affiliate/1.0/search.json'
+FLIPKART_OFFERS_XML_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/all/xml'
+FLIPKART_OFFERS_JSON_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/all/json'
+FLIPKART_DOTD_XML_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/xml'
+FLIPKART_DOTD_JSON_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/json'
 # Amazon Credentials
-AMAZON_AFF_ID=''
-AMAZON_AFF_TOKEN=''
+AWS_ACCESS_KEY='AKIAIB47WRL55Y4D7GCQ'
+AWS_SECRET_KEY='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'

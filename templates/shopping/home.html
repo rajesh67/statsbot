@@ -5,10 +5,22 @@
 	#pageContainer{
 		margin: 60px auto;
 	}
+	#pageMessage{
+		margin: 60px auto;
+	}
 </style>
+<div class="container" id="pageMessage">
+	<div class="alert alert-success" role="alert">
+	  <h4 class="alert-heading">Welcome to the Shopping Section</h4>
+	  <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+	  <hr>
+	  <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+	</div>
+</div><!-- Support Message -->
+
 <div class="container" id="pageContainer">
 	<div class="row">
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<h5>Category List</h5>
 			<ul class="nav flex-column">
 			  <li class="nav-item">
@@ -27,28 +39,45 @@
 		</div><!-- /Category List -->
 
 		<!-- ProductsList -->
-		<div class="col-md-9">
+		<div class="col-md-10">
 			{% if products %}
 					<div class="container">
-						<div class="row">
+						<div class="row" style="">
 							{% for product in products %}
-							<div class="col-sm-6">
-								<div class="card">
-									<div class="card-header">
-										<a href="{{product.productUrl}}">{{product.title}}</a>
-										<small>{{product.productId}}</small>
-									</div><!-- /Product Title -->
-									<div class="card-body">
-										<div class="card-text">
-											
-										</div><!-- Text -->
-										
-									</div><!-- Production Description -->
-								</div><!-- Product Card -->
+							<div class="col-xs-sm-3" style="margin: 20px 20px 20px 10px;">
+								<div class="card" style="width: 15rem;">
+								  {% if not product.image_set.last %}
+								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="200" height="200">
+								  {% else %}
+								  	<img class="card-img-top" src="{{product.image_set.first.url}}" alt="Card image cap">
+								  {% endif %}
+								  <div class="card-body">
+								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
+								    <p class="card-text">{{prduct.sellingPrice}}</p>
+								    <a href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
+								    <a href="#" class="btn btn-primary">Track Price</a>
+								  </div>
+								</div>
+								<div class="card-body">
+									{% for price in product.pricehistory_set.all %}
+										<div class="card" style="border:none;">
+											<div class="card-body">
+												<p class="card-title">Rs. {{price.specialPrice}}{{price.date}}</p>
+											</div>
+										</div>
+									{% endfor %}
+								</div><!-- Chart Div for Each Product Instance -->
 							</div><!-- Product Div -->
+							<!-- <div class="col-xs-sm-1"></div> -->
+							{% if forloop.counter|divisibleby:3 %}
+								<div class="clearfix">
+									
+								</div>
+							{% endif %}
 							{% endfor %}
 						</div><!-- Row -->
 					</div><!-- Card -->
+					<div class="clear-fix"></div>
 			{% else %}
 				<h5>No products Available</h5>
 			{% endif %}

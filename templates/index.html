@@ -1,5 +1,5 @@
+{% load static from staticfiles %}
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -26,7 +26,7 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">Shopping</a>
+            <a class="nav-link" href="{% url 'shopping-home' %}">Shopping</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Flights</a>
@@ -34,7 +34,7 @@
           <li class="nav-item">
             <a class="nav-link" href="#">Cabs</a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#">Buses</a>
           </li>
           <li class="nav-item">
@@ -45,18 +45,24 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Bill Payment</a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'shopping-offers' %}">Offers</a>
           </li>
           <li class="nav-item">
-            <form class="form-inline mt-12 mt-md-12">
+            <a class="nav-link" href="{% url 'shopping-deals' %}">Deals</a>
+          </li>
+          <li class="nav-item">
+            <form class="form-inline mt-12 mt-lg-12">
               <input class="form-control mr-sm-12" type="text" placeholder="Search" style="display: inline-block;">
-              <button class="btn btn-outline-success my-12 my-sm-0" type="submit">Search</button>
+              <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
             </form>
           </li>
         </ul>
       </div>
     </nav>
 
-    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- <div id="myCarousel" class="carousel slide" data-ride="carousel">
       <ol class="carousel-indicators">
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
@@ -64,7 +70,7 @@
       </ol>
       <div class="carousel-inner" role="listbox">
         <div class="carousel-item active">
-          <img class="first-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="First slide">
+          <img class="first-slide" src="{{MEDIA_URL}}images/no_image.jpg" alt="First slide" width="100%">
           <div class="container">
             <div class="carousel-caption d-none d-md-block text-left">
               <h1>Example headline.</h1>
@@ -102,6 +108,18 @@
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="sr-only">Next</span>
       </a>
+    </div> -->
+
+
+    <!-- Jumbotron -->
+    <div class="jumbotron" style="text-align: center;">
+      <h1 class="display-4">We Believe in Helping Fellow Living Beings</h1>
+      <!-- <p class="lead">We are here to innovate </p> -->
+      <hr class="my-4">
+      <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+      <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+      </p>
     </div>
 
 
@@ -113,20 +131,22 @@
 
       <!-- Three columns of text below the carousel -->
       <div class="row">
-        <div class="col-lg-4">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
-          <h2>Choose the best</h2>
-          <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
-          <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        <div class="col-md-4" style="">
+          <img class="rounded-circle" src="{% static 'images/best_time.jpg' %}" alt="Generic placeholder image" width="140" height="140" style="position: relative;">
+          <div class="feature-body">
+            <h2>Choose Best</h2>
+            <p>Use our comparison tools with uses NLP to describe the best product among the compared products. Our tool provides out of the box technology to describe which product is best fit according to user requirements</p>
+            <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+          </div><!-- Feature Body -->
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+        <div class="col-md-4">
+          <img class="rounded-circle" src="{% static 'images/notification.jpg' %}" alt="Generic placeholder image" width="140" height="140">
           <h2>Price Alerts</h2>
           <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
           <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
         </div><!-- /.col-lg-4 -->
-        <div class="col-lg-4">
-          <img class="rounded-circle" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+        <div class="col-md-4">
+          <img class="rounded-circle" src="{% static 'images/graph.png' %}" alt="Generic placeholder image" width="140" height="140">
           <h2>Best Time to Buy</h2>
           <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
           <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
@@ -140,11 +160,11 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
+          <h2 class="featurette-heading">We belive in Human Values<span class="text-muted"></span></h2>
           <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
         </div>
         <div class="col-md-5">
-          <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+          <img class="featurette-image img-fluid mx-auto" src="{% static 'images/earth.jpg' %}" alt="Generic placeholder image">
         </div>
       </div>
 
@@ -152,11 +172,11 @@
 
       <div class="row featurette">
         <div class="col-md-7 push-md-5">
-          <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
+          <h2 class="featurette-heading">When You Celebrate, Someone On this Planet Blesses You<span class="text-muted"></span></h2>
           <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
         </div>
         <div class="col-md-5 pull-md-7">
-          <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+          <img class="featurette-image img-fluid mx-auto" src="{% static 'images/helping_others.jpg' %}" alt="Generic placeholder image">
         </div>
       </div>
 
@@ -164,11 +184,11 @@
 
       <div class="row featurette">
         <div class="col-md-7">
-          <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
+          <h2 class="featurette-heading">Everything In One Place<span class="text-muted"></span></h2>
           <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
         </div>
         <div class="col-md-5">
-          <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+          <img class="featurette-image img-fluid mx-auto" src="{% static 'images/everythin_in_place.png' %}" alt="Generic placeholder image">
         </div>
       </div>
 
@@ -180,7 +200,7 @@
       <!-- FOOTER -->
       <footer>
         <p class="float-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2017 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+        <p>&copy; 2018 Statsbot Social Innovations &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
       </footer>
 
     </div><!-- /.container -->
