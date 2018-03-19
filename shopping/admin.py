@@ -4,3 +4,4 @@ from django.contrib import admin
 from shopping.models import *
 
 admin.site.register(Store)
+admin.site.register(Category)

@@ -10,6 +10,7 @@ from shopping.models import (Product,
 	DOTDImage,
 	DOTD,
 	Store,
+	Category,
 )
 import datetime
 import timestring
@@ -186,103 +187,6 @@ class FlipkartAPIHandler():
 							off.save()
 					pro.save()
 
-class AmazonAPIHandler():
-
-	def register(self):
-		pass
-
-
-class FlipkartAPIAdmin():
-	def __init__(self,*args,**kwargs):
-		self.headers={'Fk-Affiliate-Id':settings.FLIPKART_AFF_ID,'Fk-Affiliate-Token':settings.FLIPKART_AFF_TOKEN}
-		return super(FlipkartAPIAdmin, self).__init__(*args, **kwargs)
-
-	def save_offers_xml_data(self, type="json"):
-		offers=[]
-		resp=requests.get(settings.FLIPKART_OFFERS_XML_URL, headers=self.headers)
-		if resp.ok:
-			root=ET.fromstring(resp.content)
-			#Find The List of All Available Offers
-			allOffersList=root.findall('allOffersList')
-			for off in allOffersList:
-				availability=''
-				category=''
-				description=''
-				endTime=''
-				startTime=''
-				imageUrls=[]
-				title=''
-				offer_url=''
-				for offer in off.getchildren():
-					# Find the Available Information for Individual Offers
-					# 'LIVE', 'EXPIRED', 'COMING SOON'
-					if offer.tag=='availability':
-						availability=offer.text
-					elif offer.tag=='category':
-						category=offer.text
-					elif offer.tag=='description':
-						description=offer.text
-					elif offer.tag=='endTime':
-						endTime=offer.text
-					elif offer.tag=='imageUrls':
-						resolutionType=''
-						image_url=''
-						for child in offer.getchildren():
-							if child.tag=='resolutionType':
-								resolutionType=child.text
-							elif child.tag=='url':
-								image_url=child.text
-						imageUrls.append({'resolutionType': resolutionType, 'url': image_url})
-					elif offer.tag=='startTime':
-						startTime=offer.text
-					elif offer.tag=='title':
-						title=offer.text
-					elif offer.tag=='url':
-						offer_url=offer.text
-					# Create New Product Then Add the Images
-					try:
-						new_offer, created=Offer.objects.get_or_create(
-							title=title,
-							category=category,
-							description=description,
-							endTime=timestring.Date(endTime),
-							startTime=timestring.Date(startTime),
-							url=offer_url,
-							availability=availability,
-						)
-						new_offer.save()
-						# Create Images If there are any
-						if created:
-							if imageUrls:
-								for imageUrl in imageUrls:
-									resolutionType=imageUrl['resolutionType']
-									image_url=imageUrl['url']
-									image=OfferImage.objects.create(resolutionType=resolutionType.text, url=image_url.text, offer=new_offer)
-							new_offer.save()
-					except Exception as e:
-						pass
-		#Connection Problem
-		print("Compelete!")
-
-	def get_dotd_xml_data(self, type="json"):
-		pass
-
-	def get_individual_product_data(self, type="json"):
-		pass
-
-	def get_all_category_base_urls(self):
-		pass
-
-	def get_individual_category_feeds(self, category_name):
-		pass
-
-	def get_individual_category_delta_feeds(self, category_name):
-		pass
-
-	def save_feeds_data(self, products_json):
-		pass
-
-
 class FKOffersAPIHandler():
 	def __init__(self,*args,**kwargs):
 		self.headers={'Fk-Affiliate-Id':settings.FLIPKART_AFF_ID,'Fk-Affiliate-Token':settings.FLIPKART_AFF_TOKEN}
@@ -351,3 +255,70 @@ class FKOffersAPIHandler():
 			for image in dotd['imageUrls']:
 				img=DOTDImage.objects.create(size=image['resolutionType'], url=image['url'], dotd=new_dotd)
 			print(new_dotd.title)
+
+
+class FKFeedAPIHandler():
+	def __init__(self,category,*args,**kwargs):
+		self.headers={'Fk-Affiliate-Id':settings.FLIPKART_AFF_ID,'Fk-Affiliate-Token':settings.FLIPKART_AFF_TOKEN}
+		self.store=Store.objects.get(short_name="flipkart")
+		cat, created=Category.objects.get_or_create(name=category, store=self.store)
+		self.category=cat
+		return super(FKFeedAPIHandler, self).__init__(*args, **kwargs)
+
+	def get_base_urls(self):
+		resp=requests.get(settings.FLIPKART_BASE_URL, headers=self.headers)
+		json_data=json.loads(resp.content)
+		apiListings=json_data['apiGroups']['affiliate']['apiListings']
+		return apiListings
+
+	def get_category_feeds(self):
+		# Find If the Category Exists
+		apiListings=self.get_base_urls()
+		category_vars=apiListings[self.category.name]
+		base_url=category_vars['availableVariants']['v1.1.0']['get']
+		self.category.baseApiURL=base_url
+		self.category.save()
+		resp=requests.get(base_url, headers=self.headers)
+		json_data=json.loads(resp.content)
+		return json_data
+
+	def save_category_feeds(self, productsData):
+		nextUrl=productsData['nextUrl']
+		productsList=productsData['products']
+		for product in productsList:
+			baseInfo=product['productBaseInfoV1']
+			new_prod=Product(
+				productId=baseInfo['productId'],
+				title=baseInfo['title'],
+				productUrl=baseInfo['productUrl'],
+				brand=baseInfo['productBrand'],
+				inStock=True if baseInfo['inStock']=='true' else False,
+				codAvailable=True if baseInfo['codAvailable']=='true' else False,
+				discountPercentage=True if baseInfo['discountPercentage']=='true' else False,
+				store=self.store,
+				category=self.category,
+			)
+			new_prod.save()
+			for key, value in baseInfo['imageUrls'].items():
+				image=ProductImage.objects.create(size=key, url=value, product=new_prod)
+			# Create Price History Record At The Current Time
+			priceHist=PriceHistory.objects.create(
+				date=datetime.datetime.now(),
+				retailPrice=baseInfo['maximumRetailPrice']['amount'],
+				sellingPrice=baseInfo['flipkartSellingPrice']['amount'],
+				specialPrice=baseInfo['flipkartSpecialPrice']['amount'],
+				product=new_prod
+			)
+			for offer in baseInfo['offers']:
+				new_off=ProductOffer.objects.create(text=offer)
+				new_off.products.add(new_prod)
+				new_off.save()
+		return nextUrl
+
+class FKSearchAPIHandler():
+	pass
+
+class AmazonSearchAPIHandler():
+
+	def register(self):
+		pass

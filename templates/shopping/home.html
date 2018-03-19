@@ -24,13 +24,13 @@
 			<h5>Category List</h5>
 			<ul class="nav flex-column">
 			  <li class="nav-item">
-			    <a class="nav-link active" href="{% url 'shopping-mobiles' %}">Mobiles</a>
+			    <a class="nav-link active" href="{% url 'category-products'  'mobiles' %}">Mobiles</a>
 			  </li>
 			  <li class="nav-item">
-			    <a class="nav-link" href="#">Tablets</a>
+			    <a class="nav-link" href="{% url 'category-products'  'tablets' %}">Tablets</a>
 			  </li>
 			  <li class="nav-item">
-			    <a class="nav-link" href="#">Desktops</a>
+			    <a class="nav-link" href="{% url 'category-products'  'desktops' %}">Desktops</a>
 			  </li>
 			  <li class="nav-item">
 			    <a class="nav-link disabled" href="#">Disabled</a>
@@ -46,16 +46,16 @@
 							{% for product in products %}
 							<div class="col-xs-sm-3" style="margin: 20px 20px 20px 10px;">
 								<div class="card" style="width: 15rem;">
-								  {% if not product.image_set.last %}
-								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="200" height="200">
+								  {% if not product.productimage_set.last %}
+								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
 								  {% else %}
-								  	<img class="card-img-top" src="{{product.image_set.first.url}}" alt="Card image cap">
+								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%">
 								  {% endif %}
 								  <div class="card-body">
 								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
 								    <p class="card-text">{{prduct.sellingPrice}}</p>
 								    <a href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
-								    <a href="#" class="btn btn-primary">Track Price</a>
+								    <a href="#" class="btn btn-warning">Track Price</a>
 								  </div>
 								</div>
 								<div class="card-body">
@@ -82,6 +82,27 @@
 				<h5>No products Available</h5>
 			{% endif %}
 		</div><!-- ProductsList -->
+		{% if is_paginated %}
+		  <ul class="pagination" style="text-align: center;">
+		    {% if page_obj.has_previous %}
+		      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
+		    {% endif %}
+		    {% for i in paginator.page_range %}
+		      {% if page_obj.number == i %}
+		        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+		      {% else %}
+		        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+		      {% endif %}
+		    {% endfor %}
+		    {% if page_obj.has_next %}
+		      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+		    {% else %}
+		      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+		    {% endif %}
+		  </ul>
+		{% endif %}
 	</div><!-- /Row -->
 </div><!-- /Page Container -->
 {% endblock page %}

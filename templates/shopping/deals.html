@@ -39,7 +39,7 @@
 					</div><!-- Applied Filters List -->
 
 					<!-- Main columns of The Offers Grids -->
-					{% for deal in dealsList %}
+					{% for deal in deals %}
 						<div class="col-md-4">
 							<div class="card" style="">
 							  <div class="card-header">
@@ -58,6 +58,27 @@
 						</div><!-- /Deal -->
 					{% endfor %}
 				</div><!-- Inner Rows -->
+				{% if is_paginated %}
+				  <ul class="pagination" style="text-align: center;">
+				    {% if page_obj.has_previous %}
+				      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+				    {% else %}
+				      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
+				    {% endif %}
+				    {% for i in paginator.page_range %}
+				      {% if page_obj.number == i %}
+				        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+				      {% else %}
+				        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+				      {% endif %}
+				    {% endfor %}
+				    {% if page_obj.has_next %}
+				      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+				    {% else %}
+				      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+				    {% endif %}
+				  </ul>
+				{% endif %}
 			</div><!-- Container -->
 		</div><!-- Offers Listing End -->
 	</div><!-- Offers Rows -->

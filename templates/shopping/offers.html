@@ -58,11 +58,11 @@
 				<!-- Listing container Inner Rows  -->
 				<div class="row">
 					<div class="col-md-12">
-						<h5>Applied Filters list</h5>
+						<h5>Showing Results Only for {{offers|length}} Offers</h5>
 					</div><!-- Applied Filters List -->
 
 					<!-- Main columns of The Offers Grids -->
-					{% for offer in offersList %}
+					{% for offer in offers %}
 					<div class="col-md-3" style="margin:auto;">
 						<!-- Card -->
 						<div class="card" style="margin: 10px auto;">
@@ -95,7 +95,29 @@
 						</div><!-- Card -->
 					</div>
 					{% endfor %}
+					<br>
 				</div><!-- Inner Rows -->
+				{% if is_paginated %}
+					  <ul class="pagination" style="text-align: center;">
+					    {% if page_obj.has_previous %}
+					      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+					    {% else %}
+					      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
+					    {% endif %}
+					    {% for i in paginator.page_range %}
+					      {% if page_obj.number == i %}
+					        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+					      {% else %}
+					        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+					      {% endif %}
+					    {% endfor %}
+					    {% if page_obj.has_next %}
+					      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+					    {% else %}
+					      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+					    {% endif %}
+					  </ul>
+					{% endif %}
 			</div><!-- Container -->
 		</div><!-- Offers Listing End -->
 	</div><!-- Offers Rows -->

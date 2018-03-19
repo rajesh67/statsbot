@@ -12,6 +12,14 @@ class Store(models.Model):
 	def __str__(self):
 		return self.name
 
+class Category(models.Model):
+	name=models.CharField(max_length=30)
+	baseApiURL=models.URLField(max_length=2500, null=True, blank=True)
+	store=models.ForeignKey('Store', on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.name
+
 class Product(models.Model):
 	productId=models.CharField(max_length=30)
 	title=models.CharField(max_length=500)
@@ -21,6 +29,7 @@ class Product(models.Model):
 	codAvailable=models.BooleanField(default=False)
 	discountPercentage=models.FloatField(default=0.0)
 	store=models.ForeignKey('Store', on_delete=models.CASCADE)
+	category=models.ForeignKey('Category', on_delete=models.CASCADE, default=None, null=True, blank=True)
 
 	def __str__(self):
 		return self.title
@@ -36,7 +45,7 @@ class PriceHistory(models.Model):
 	sellingPrice=models.FloatField(default=0)
 	specialPrice=models.FloatField(default=0)
 	status=models.CharField(max_length=10, choices=PRICE_STATUS,default='0')
-	product=models.ForeignKey(Product, on_delete=models.CASCADE)
+	product=models.ForeignKey('Product', on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.status

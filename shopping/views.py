@@ -8,6 +8,8 @@ import datetime
 from django.http import HttpResponse
 from graphos.sources.model import ModelDataSource
 from graphos.renderers import flot
+from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView
 # Create your views here.
 from shopping.collection.scrapper import FlipkartAPIHandler
 from shopping.models import (Product, 
@@ -16,6 +18,7 @@ from shopping.models import (Product,
 	ProductOffer, 
 	Offer,
 	DOTD,
+	Category,
 )
 
 def flipkart_search(keywords, results):
@@ -66,10 +69,46 @@ def shopping_mobiles(request):
 		return render(request, 'shopping/home.html',{'products':results})
 	return render(request,"shopping/products.html", {})
 
-def shopping_offers(request):
-	offers=Offer.objects.all()
-	return render(request, "shopping/offers.html", {'offersList': offers,})
-
 def shopping_deals(request):
 	deals=DOTD.objects.all()
 	return render(request, "shopping/deals.html", {'dealsList': deals,})
+
+class OfferListView(ListView):
+	model = Offer
+	template_name="shopping/offers.html"
+	context_object_name='offers'
+	paginate_by=12
+	queryset=Offer.objects.all()
+
+class DOTDListView(ListView):
+	model = DOTD
+	template_name = "shopping/deals.html"
+	context_object_name = "deals"
+	paginate_by = 12
+	queryset = DOTD.objects.all()
+
+class FeedsListView(ListView):
+	model = Product
+	template_name="shopping/home.html"
+	context_object_name='products'
+	paginate_by=12
+	queryset=Product.objects.all()
+
+
+class CategoryListView(ListView):
+	model = Product
+	template_name="shopping/products.html"
+	context_object_name='products'
+	paginate_by=12
+
+	def get_queryset(self):
+		# cat=Category.objects.get(name=self.kwargs.get('categoryName'))
+		return Product.objects.filter(category__name=self.kwargs.get('categoryName'))
+
+class SearchResultsView(TemplateView):
+
+	template_name = "shopping/search_results.html"
+
+	def get_context_data(self, **kwargs):
+		context=super().get_context_data(**kwargs)
+		return context
