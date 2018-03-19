@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block offerslist %} 
+<style type="text/css">
+	#page{
+		margin: 60px auto;
+	}
+</style>
+<div class="container" id="page">
+	<!-- OffersRow -->
+	<div class="row">
+		<!-- Filters Column -->
+		<div class="col-md-3">
+			<div class="container">
+				<form class="form-inline">
+				    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				  </form>
+			</div><!-- Search  -->
+			<div class="container">
+				<ul class="nav nav-pills nav-fill" style="text-transform: uppercase; text-decoration: none;">
+				  <li class="nav-item">
+				    <a class="nav-link active" href="#">Running</a>
+				  </li>
+				  <li class="nav-item">
+				    <a class="nav-link" href="#">Expired</a>
+				  </li>
+				</ul>
+			</div><!-- /Availability  -->
+
+			<div class="container">
+				<div id="accordion">
+				  {% for cat in categories %}
+				  	<div class="card">
+					    <div class="card-header" id="headingOne">
+					      <h5 class="mb-0">
+					        <button class="btn btn-link" data-toggle="collapse" data-target="#{{offer.category}}" aria-expanded="true" aria-controls="{{offer.category}}">
+					          Collapsible Group Item #1
+					        </button>
+					      </h5>
+					    </div>
+
+					    <div id="{{offer.category}}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+					      <div class="card-body">
+					        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+					      </div>
+					    </div>
+					  </div>
+				  {% endfor %}
+				  
+				</div>
+			</div><!-- Categories  -->
+		</div><!-- Filters Column End -->
+
+		<!-- Offers Listing -->
+		<div class="col-md-9">
+			<div class="container-fluid" id="offersListingContainer">
+				<!-- Listing container Inner Rows  -->
+				<div class="row">
+					<div class="col-md-12">
+						<h5>Applied Filters list</h5>
+					</div><!-- Applied Filters List -->
+
+					<!-- Main columns of The Offers Grids -->
+					{% for offer in offersList %}
+					<div class="col-md-3" style="margin:auto;">
+						<!-- Card -->
+						<div class="card" style="margin: 10px auto;">
+							<!-- Header -->
+							<div class="card-header">
+							    {{offer.created_on|timesince}}
+							  </div>
+
+						  <a href="#">
+						  	<img class="card-img-top img-responsive" src="{{offer.offerimage_set.first.url}}" alt="Card image cap" width="100px">
+						  </a>
+						  <div class="card-body">
+						    <a href="#" style="text-transform: uppercase; text-decoration: none;">{{offer.title}}</a>
+						    <p class="card-text">{{offer.description}}</p>
+						  </div>
+						  <ul class="list-group list-group-flush">
+
+						    <li class="list-group-item"><small>In category : {{offer.category}}</small></li>
+						    
+						  </ul>
+						  <div class="card-body">
+						    <a href="{{offer.url}}" class="btn btn-block btn-warning">Grab Now</a>
+						    <a href="#" class="btn btn-block btn-info">View More</a>
+						  </div>
+
+						  <!-- Footer -->
+						  <div class="card-footer text-muted">
+						    <bold>{{offer.store.name}}</bold>
+						  </div>
+						</div><!-- Card -->
+					</div>
+					{% endfor %}
+				</div><!-- Inner Rows -->
+			</div><!-- Container -->
+		</div><!-- Offers Listing End -->
+	</div><!-- Offers Rows -->
+</div><!-- Container -->
+{% endblock %}

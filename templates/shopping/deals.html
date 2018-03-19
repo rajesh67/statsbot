@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block dealslist %} 
+<style type="text/css">
+	#page{
+		margin: 60px auto;
+	}
+</style>
+<div class="container" id="page">
+	<!-- OffersRow -->
+	<div class="row">
+		<!-- Filters Column -->
+		<div class="col-md-3">
+			<div class="container">
+				<form class="form-inline">
+				    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				  </form>
+			</div><!-- Search  -->
+			<div class="container">
+				<ul class="nav nav-pills nav-fill" style="text-transform: uppercase; text-decoration: none;">
+				  <li class="nav-item">
+				    <a class="nav-link active" href="#">Running</a>
+				  </li>
+				  <li class="nav-item">
+				    <a class="nav-link" href="#">Expired</a>
+				  </li>
+				</ul>
+			</div><!-- /Availability  -->
+		</div><!-- Filters Column End -->
+
+		<!-- Offers Listing -->
+		<div class="col-md-9">
+			<div class="container-fluid" id="offersListingContainer">
+				<!-- Listing container Inner Rows  -->
+				<div class="row">
+					<div class="col-md-12">
+						<h5>Applied Filters list</h5>
+					</div><!-- Applied Filters List -->
+
+					<!-- Main columns of The Offers Grids -->
+					{% for deal in dealsList %}
+						<div class="col-md-4">
+							<div class="card" style="">
+							  <div class="card-header">
+							    {{deal.created_on|timesince}}
+							  </div>
+							  <img class="card-img-top" src="{{deal.get_default_image.url}}" alt="Card image cap" width="80%">
+							  <div class="card-body">
+							    <h5 class="card-title">{{deal.title}}</h5>
+							    <p class="card-text">{{deal.description}}</p>
+							    <a href="{{deal.url}}" class="btn btn-primary btn-block">Grab this Deal</a>
+							  </div>
+							  <div class="card-footer text-muted">
+							    <bold>{{deal.store.name}}</bold>
+							  </div>
+							</div>
+						</div><!-- /Deal -->
+					{% endfor %}
+				</div><!-- Inner Rows -->
+			</div><!-- Container -->
+		</div><!-- Offers Listing End -->
+	</div><!-- Offers Rows -->
+</div><!-- Container -->
+{% endblock %}
