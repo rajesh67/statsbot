@@ -1,5 +1,5 @@
 from django.db import models
-
+from urllib.parse import urlparse, parse_qs
 # Create your models here.
 
 class Store(models.Model):
@@ -13,12 +13,25 @@ class Store(models.Model):
 		return self.name
 
 class Category(models.Model):
+	catId=models.CharField(max_length=30, null=True, blank=True)
 	name=models.CharField(max_length=30)
+	
 	baseApiURL=models.URLField(max_length=2500, null=True, blank=True)
+	deltaGetURL=models.URLField(max_length=2500, null=True, blank=True)
+	topFeedsURL=models.URLField(max_length=2500, null=True, blank=True)
+
 	store=models.ForeignKey('Store', on_delete=models.CASCADE)
+	feedsListed=models.BooleanField(default=False)
+	last_updated_on=models.DateTimeField(null=True, blank=True)
+
+	version=models.PositiveIntegerField(default=0)
 
 	def __str__(self):
 		return self.name
+
+	def get_query_params(self):
+		data=urlparse(self.baseApiURL)
+		return data.query
 
 class Product(models.Model):
 	productId=models.CharField(max_length=30)
@@ -28,8 +41,11 @@ class Product(models.Model):
 	inStock=models.BooleanField(default=False)
 	codAvailable=models.BooleanField(default=False)
 	discountPercentage=models.FloatField(default=0.0)
+	topSeller=models.BooleanField(default=False)
+
 	store=models.ForeignKey('Store', on_delete=models.CASCADE)
 	category=models.ForeignKey('Category', on_delete=models.CASCADE, default=None, null=True, blank=True)
+
 
 	def __str__(self):
 		return self.title

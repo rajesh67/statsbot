@@ -11,7 +11,7 @@ from graphos.renderers import flot
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 # Create your views here.
-from shopping.collection.scrapper import FlipkartAPIHandler
+from shopping.collection.scrapper import FKFeedAPIHandler
 from shopping.models import (Product, 
 	PriceHistory, 
 	ProductImage, 

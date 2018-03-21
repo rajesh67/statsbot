@@ -15,182 +15,13 @@ from shopping.models import (Product,
 import datetime
 import timestring
 import xml.etree.ElementTree as ET
-
-class FlipkartAPIHandler():
-	
-	def __init__(self):
-		self.params={'Fk-Affiliate-Id':settings.FLIPKART_AFF_ID, 'Fk-Affiliate-Token': settings.FLIPKART_AFF_TOKEN}
-	
-	def get_apiListings(self):
-		resp=requests.get(settings.FLIPKART_BASE_URL, headers=self.params)
-		json_data=json.loads(resp.content)
-		apiListings=json_data['apiGroups']['affiliate']['apiListings']
-		print("Query Done")
-		return apiListings
-
-	def get_category_products(self, category_name):
-		apiListings=self.get_apiListings()
-		category_vars=apiListings[category_name]
-		base_url=category_vars['availableVariants']['v1.1.0']['get']
-		resp=requests.get(base_url, headers=self.params)
-		json_data=json.loads(resp.content)
-		productsList=json_data['productInfoList']
-		nextUrl=json_data['nextUrl']
-		print("Query Done")
-		return (productsList, nextUrl)
-
-	def get_specific_url_products(self, base_url):
-		resp=requests.get(base_url, headers=self.params)
-		json_data=json.loads(resp.content)
-		productsList=json_data['productInfoList']
-		nextUrl=json_data['nextUrl']
-		print("Query Done")
-		return (productsList, nextUrl)
-
-	def save_in_db(self, category_name):
-		initial_resp=self.get_category_products(category_name)
-		nextUrl=initial_resp[1]
-		products=initial_resp[0]
-		for p in products:
-			product, created=Product.objects.get_or_create(title=p['productBaseInfoV1']['title'])
-
-		while nextUrl:
-			resp=self.get_specific_url_products(nextUrl)
-			products=resp[0]
-			for p in products:
-				baseInfo=p['productBaseInfoV1']
-				product, created=Product.objects.get_or_create(title=baseInfo['title'])
-				if created:
-					product.productId=baseInfo['productId']
-					product.productUrl=baseInfo['productUrl']
-					product.save()
-			nextUrl=resp[1]
-		print("Saved In DB")
-
-	def save_category_feeds(self, category_name):
-		apiListings=self.get_apiListings()
-		category_vars=apiListings[category_name]
-		base_url=category_vars['availableVariants']['v1.1.0']['get']
-		nextUrl=base_url
-		while nextUrl:
-			resp=requests.get(nextUrl, headers=self.params)
-			data=json.loads(resp.content)
-			nextUrl=data['nextUrl']
-			products=[]
-			imageUrls={}
-			prices={}
-			offers={}
-			for product in data['productInfoList']:
-				baseInfo=product['productBaseInfoV1']
-				pro=Product(productId=baseInfo['productId'], 
-					productUrl=baseInfo['productUrl'],
-					title=baseInfo['title'],
-					brand=baseInfo['productBrand'],
-					inStock=True if baseInfo['inStock']==1 else False,
-					codAvailable=True if baseInfo['codAvailable']==1 else False,
-					discountPercentage=baseInfo['discountPercentage'])
-				products.append(pro)
-				imageUrls.update({baseInfo['productId'] : {'imageUrls':baseInfo['imageUrls']}})
-				prices.update({baseInfo['productId'] : {'retailPrice': baseInfo['maximumRetailPrice'], 'sellingPrice':baseInfo['flipkartSellingPrice'], 'specialPrice': baseInfo['flipkartSpecialPrice']}})
-				offers.update({baseInfo['productId']:{'offers':baseInfo['offers']}})
-			# Create bulk products in DB
-			saved_products=Product.objects.bulk_create(products)
-			for product in saved_products:
-				# Create Images for the Product
-				images=[]
-				pro.save()
-				for size, url in imageUrls[product.productId]['imageUrls'].items():
-					image=ProductImage(size=size, url=url, product=product)
-					images.append(image)
-				# Bulk Create Image instances
-				saved_images=Image.objects.bulk_create(images)
-				for image in saved_images:
-					image.save() 
-				# Update Price History for the Products
-				retailPrice=prices[product.productId]['retailPrice']['amount']
-				sellingPrice=prices[product.productId]['sellingPrice']['amount']
-				specialPrice=prices[product.productId]['specialPrice']['amount']
-				price=PriceHistory.objects.create(retailPrice=retailPrice, sellingPrice=sellingPrice, specialPrice=specialPrice, status=0, date=datetime.datetime.now(), product=product)
-				# Updates Offers for the product
-				for offer in offers[product.productId]['offers']:
-					off, created=ProductOffer.objects.get_or_create(text=offer)
-					off.products.add(product)
-					off.save()
-				# Finally Save the Product
-				product.save()
-		print("Category Feeds Saved Succefully")
-
-	def update_category_feeds_prices(self, category_name):
-		apiListings=self.get_apiListings()
-		category_vars=apiListings[category_name]
-		base_url=category_vars['availableVariants']['v1.1.0']['get']
-		nextUrl=base_url
-		while nextUrl:
-			resp=requests.get(nextUrl, headers=self.params)
-			data=json.loads(resp.content)
-			nextUrl=data['nextUrl']
-			prices=[]
-			for product in data['productInfoList']:
-				baseInfo=product['productBaseInfoV1']
-				productId=baseInfo['productId']
-				try:
-					pro=Product.objects.filter(productId=productId).first()
-					#Update Prices
-					last_price_history=pro.pricehistory_set.last()
-					new_price=baseInfo['flipkartSpecialPrice']['amount']
-					price_history=PriceHistory.objects.create(
-						retailPrice=baseInfo['maximumRetailPrice']['amount'],
-						sellingPrice=baseInfo['flipkartSellingPrice']['amount'],
-						specialPrice=baseInfo['flipkartSpecialPrice']['amount'],
-						date=datetime.datetime.now(),
-						status=0,
-						product=pro,)
-					# Update Offers
-					offers=baseInfo['offers']
-					pro.save()
-				except Product.DoesNotExist:
-					# Create the Product and save into database
-					pro=Product.objects.create(productId=productId,
-						productUrl=baseInfo['productUrl'],
-						title=baseInfo['title'],
-						brand=baseInfo['productBrand'],
-						inStock=True if baseInfo['inStock']==1 else False,
-						codAvailable=True if baseInfo['codAvailable']==1 else False,
-						discountPercentage=baseInfo['discountPercentage'])
-					# Save Product IMages
-					images=[]
-					for size, url in baseInfo['imageUrls']:
-						image=Image(size=size, url=url, product=pro)
-						images.append(image)
-					saved_images=Image.objects.bulk_create(images)
-					# Save or Update Prices
-					price_history=PriceHistory.objects.create(sellingPrice=baseInfo['flipkartSellingPrice']['amount'],
-						specialPrice=baseInfo['flipkartSpecialPrice']['amount'],
-						retailPrice=baseInfo['maximumRetailPrice']['amount'],
-						date=datetime.datetime.now(),
-						status=0,
-						product=pro)
-					pro.save()
-					# Update Offers
-					for offer in baseInfo['offers']:
-						offers=ProductOffer.objects.filter(text=offer)
-						if offers:
-							off=offers.first()
-							off.products.add(pro)
-							off.save()
-							pro.save()
-						else:
-							# Create The offer
-							off=Offer.objects.create(text=offer)
-							off.products.add(pro)
-							pro.save()
-							off.save()
-					pro.save()
+from multiprocessing import Process
+from urllib.parse import urlparse, parse_qs
 
 class FKOffersAPIHandler():
 	def __init__(self,*args,**kwargs):
-		self.headers={'Fk-Affiliate-Id':settings.FLIPKART_AFF_ID,'Fk-Affiliate-Token':settings.FLIPKART_AFF_TOKEN}
 		self.store=Store.objects.get(short_name="flipkart")
+		self.headers={'Fk-Affiliate-Id':self.store.affiliate_id,'Fk-Affiliate-Token':self.store.affiliate_token}
 		return super(FKOffersAPIHandler, self).__init__(*args, **kwargs)
 
 	def get_offers_feeds(self, type="json"):
@@ -259,10 +90,10 @@ class FKOffersAPIHandler():
 
 class FKFeedAPIHandler():
 	def __init__(self,category,*args,**kwargs):
-		self.headers={'Fk-Affiliate-Id':settings.FLIPKART_AFF_ID,'Fk-Affiliate-Token':settings.FLIPKART_AFF_TOKEN}
 		self.store=Store.objects.get(short_name="flipkart")
-		cat, created=Category.objects.get_or_create(name=category, store=self.store)
-		self.category=cat
+		self.category, created=Category.objects.get_or_create(name=category, store=self.store)
+		self.headers={'Fk-Affiliate-Id':self.store.affiliate_id,'Fk-Affiliate-Token':self.store.affiliate_token}
+		self.nextUrl=''
 		return super(FKFeedAPIHandler, self).__init__(*args, **kwargs)
 
 	def get_base_urls(self):
@@ -271,19 +102,34 @@ class FKFeedAPIHandler():
 		apiListings=json_data['apiGroups']['affiliate']['apiListings']
 		return apiListings
 
-	def get_category_feeds(self):
+	def get_category_feed_url(self):
 		# Find If the Category Exists
 		apiListings=self.get_base_urls()
 		category_vars=apiListings[self.category.name]
 		base_url=category_vars['availableVariants']['v1.1.0']['get']
 		self.category.baseApiURL=base_url
+		self.category.deltaGetURL=category_vars['availableVariants']['v1.1.0']['deltaGet']
+		self.category.topFeedsURL=category_vars['availableVariants']['v1.1.0']['top']
 		self.category.save()
-		resp=requests.get(base_url, headers=self.headers)
-		json_data=json.loads(resp.content)
-		return json_data
+		return base_url
+
+	def get_nexturl_feeds(self, nextUrl):
+		resp=requests.get(nextUrl, headers=self.headers)
+		if resp.status_code==200:
+			data=json.loads(resp.content)
+			return data
+
+	def save_current_version(self):
+		resp=requests.get(self.category.deltaGetURL, headers=self.headers)
+		if resp.status_code==200:
+			data=json.loads(resp.content)
+			self.category.catId=data['category']
+			self.category.version=data['version']
+			self.category.feedsListed=True
+			self.category.last_updated_on=datetime.datetime.now()
+			self.category.save()
 
 	def save_category_feeds(self, productsData):
-		nextUrl=productsData['nextUrl']
 		productsList=productsData['products']
 		for product in productsList:
 			baseInfo=product['productBaseInfoV1']
@@ -313,10 +159,88 @@ class FKFeedAPIHandler():
 				new_off=ProductOffer.objects.create(text=offer)
 				new_off.products.add(new_prod)
 				new_off.save()
+		nextUrl=productsData['nextUrl']
 		return nextUrl
 
+	def save_full_feeds(self):
+		nextUrl=self.get_category_feed_url()
+		while nextUrl:
+			data=self.get_nexturl_feeds(nextUrl)
+			nextUrl=self.save_category_feeds(data)
+		self.save_current_version()
+		print("All Products Saved Successfully")
+
+class FKDeltaFeedAPIHandler():
+	def __init__(self, category, *args, **kwargs):
+		self.store=Store.objects.get(short_name="flipkart")
+		self.category, created=Category.objects.get_or_create(name=category)
+		self.headers={'Fk-Affiliate-Id':self.store.affiliate_id,'Fk-Affiliate-Token':self.store.affiliate_token}
+		return super(FKDeltaFeedAPIHandler, self).__init__(*args, **kwargs)
+
+	def get_base_urls(self):
+		resp=requests.get(settings.FLIPKART_BASE_URL, headers=self.headers)
+		json_data=json.loads(resp.content)
+		apiListings=json_data['apiGroups']['affiliate']['apiListings']
+		return apiListings
+
+	def save_current_version(self):
+		resp=requests.get(self.category.deltaGetURL, headers=self.headers)
+		if resp.status_code==200:
+			data=json.loads(resp.content)
+			self.category.catId=data['category']
+			self.category.version=data['version']
+			self.category.last_updated_on=datetime.datetime.now()
+			self.category.save()
+
+	def get_delta_feeds(self):
+		data=urlparse(self.category.deltaGetURL)
+		json_qs=parse_qs(data.query)
+		DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(version=self.category.version, catId=self.category.catId)
+		resp=requests.get(DELTA_URL, headers=self.headers, params={'sig': json_qs['sig'], 'expiry': json_qs['expiresAt']})
+		print(resp.url)
+		print(resp)
+		if resp.status_code==200:
+			return json.loads(resp.content)
+
+
+	def save_delta_feeds(self):
+		pass
+
 class FKSearchAPIHandler():
-	pass
+	def __init__(self, *args, **kwargs):
+		self.store=Store.objects.get(short_name="flipkart")
+		self.headers={'Fk-Affiliate-Id':self.store.affiliate_id,'Fk-Affiliate-Token':self.store.affiliate_token}
+		return super(FKSearchAPIHandler, self).__init__(*args, **kwargs)
+
+	def get_search_results(self, keywords):
+		resp=requests.get(settings.FLIPKART_SEARCH_URL, headers=self.headers, params={'query': keywords, 'resultCount':10})
+		if resp.status_code==200:
+			data=json.loads(resp.content)
+			return data
+		else:
+			print(resp.status_code, resp.content)
+
+class FKTopFeedAPIHandler():
+	def __init__(self, category, *args, **kwargs):
+		self.store=Store.objects.get(short_name="flipkart")
+		self.category, created=Category.objects.get_or_create(name=category)
+		self.headers={'Fk-Affiliate-Id':self.store.affiliate_id,'Fk-Affiliate-Token':self.store.affiliate_token}
+		return super(FKTopFeedAPIHandler, self).__init__(*args, **kwargs)
+
+	def get_top_feeds(self):
+		resp=requests.get(self.category.topFeedsURL, headers=self.headers)
+		if resp.status_code==200:
+			data=json.loads(resp.content)
+			for product in data['products']:
+				prodId=product['productBaseInfoV1']['productId']
+				try:
+					prod=Product.objects.get(productId=prodId)
+					prod.topSeller=True
+					prod.save()
+				except Exception as e:
+					print(e.stackTrace())
+		else:
+			print(resp.status_code, resp.content)
 
 class AmazonSearchAPIHandler():
 

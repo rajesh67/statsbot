@@ -148,15 +148,11 @@ MEDIAFILES_DIRS=[
 
 # Access Tokens
 
-# Flipkart Credentials
-FLIPKART_AFF_ID='rajeshmee'
-FLIPKART_AFF_TOKEN='78fef03fe9d84c9eb6387b80ba4c98d2'
 FLIPKART_BASE_URL='https://affiliate-api.flipkart.net/affiliate/api/rajeshmee.json'
 FLIPKART_SEARCH_URL='https://affiliate-api.flipkart.net/affiliate/1.0/search.json'
 FLIPKART_OFFERS_XML_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/all/xml'
 FLIPKART_OFFERS_JSON_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/all/json'
 FLIPKART_DOTD_XML_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/xml'
 FLIPKART_DOTD_JSON_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/json'
-# Amazon Credentials
-AWS_ACCESS_KEY='AKIAIB47WRL55Y4D7GCQ'
-AWS_SECRET_KEY='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'
+FLIPKART_DELTA_FEEDS_JSON_URL='https://affiliate-api.flipkart.net/affiliate/1.0/deltaFeeds/rajeshmee/{catId}/fromVersion/{version}.json'
+FLIPKART_TOP_FEEDS_URL='https://affiliate-api.flipkart.net/affiliate/1.0/topFeeds/rajeshmee/category/{catId}.json'
