@@ -124,7 +124,7 @@ class FKFeedAPIHandler():
 		if resp.status_code==200:
 			data=json.loads(resp.content)
 			self.category.catId=data['category']
-			self.category.version=data['version']
+			self.category.current_version=data['version']
 			self.category.feedsListed=True
 			self.category.last_updated_on=datetime.datetime.now()
 			self.category.save()
@@ -183,28 +183,110 @@ class FKDeltaFeedAPIHandler():
 		apiListings=json_data['apiGroups']['affiliate']['apiListings']
 		return apiListings
 
-	def save_current_version(self):
-		resp=requests.get(self.category.deltaGetURL, headers=self.headers)
+	def version_changed(self):
+		apiListings=self.get_base_urls()
+		deltaGetURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['deltaGet']
+		resp=requests.get(deltaGetURL, headers=self.headers)
 		if resp.status_code==200:
 			data=json.loads(resp.content)
-			self.category.catId=data['category']
-			self.category.version=data['version']
-			self.category.last_updated_on=datetime.datetime.now()
-			self.category.save()
+			catId=data['category']
+			version=data['version']
+			if version!=self.category.current_version:
+				self.category.baseApiURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['get']
+				self.category.deltaGetURL=deltaGetURL
+				self.category.topFeedsURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['top']
+				self.category.last_updated_on=datetime.datetime.now()
+				self.category.last_version=self.category.current_version
+				self.category.current_version=version
+				self.category.save()
+				return True
+			else:
+				print("Category Not Changed")
+		else:
+			print("URL Could Not be reached")
 
-	def get_delta_feeds(self):
+	def update_delta_feeds(self, deltaFeeds):
+		def get_product(self, baseInfo):
+			return Product.objects.get(productId=baseInfo['productId'])
+
+		# check For Offer Updates
+		def update_offers(self, data):
+			baseInfo=data['productBaseInfoV1']
+			product=get_product(baseInfo)
+			product.productoffer_set.delete()
+			product.save()
+			for offer in baseInfo['offers']:
+				off, new=ProductOffer.objects.get_or_create(text=offer, product=product)
+			product.save()
+
+		# Update Prices
+		def update_pricehistory(self, data):
+			baseInfo=data['productBaseInfoV1']
+			product=get_product(baseInfo)
+			specialPrice=baseInfo['flipkartSpecialPrice']['amount']
+			history=PriceHistory()
+			if specialPrice==product.pricehistory_set.last.specialPrice:
+				history.date=datetime.datetime.now()
+				history.retailPrice=baseInfo['maximumRetailPrice']['amount']
+				history.sellingPrice=baseInfo['flipkartSellingPrice']['amount']
+				history.specialPrice=baseInfo['flipkartSpecialPrice']['amount']
+				history.product=product
+				history.save()
+			elif specialPrice<product.pricehistory_set.last.specialPrice:
+				history.date=datetime.datetime.now()
+				history.retailPrice=baseInfo['maximumRetailPrice']['amount']
+				history.sellingPrice=baseInfo['flipkartSellingPrice']['amount']
+				history.specialPrice=baseInfo['flipkartSpecialPrice']['amount']
+				history.product=product
+				history.status="-1"
+				history.save()
+				print("Price Changed For: %s"%(product.title))
+				print("Last Price : %d"%(product.pricehistory_set.last.specialPrice))
+				print("Current Price : %d, specialPrice : %d"%(product.pricehistory_set.last.specialPrice, specialPrice))
+			else:
+				history.date=datetime.datetime.now()
+				history.retailPrice=baseInfo['maximumRetailPrice']['amount']
+				history.sellingPrice=baseInfo['flipkartSellingPrice']['amount']
+				history.specialPrice=baseInfo['flipkartSpecialPrice']['amount']
+				history.product=product
+				history.status="1"
+				history.save()
+				print("Price Changed For: %s"%(product.title))
+				print("Last Price : %d"%(product.pricehistory_set.last.specialPrice))
+				print("Current Price : %d, specialPrice : %d"%(product.pricehistory_set.last.specialPrice, specialPrice))
+			print("PriceHistory Updated")
+		
+		# Update Stock Information
+		def update_availability(self, data):
+			baseInfo=data['productBaseInfoV1']
+			currStock=True if baseInfo['inStock']==1 or baseInfo['inStock']=='yes' or baseInfo['inStock']==1 else False
+			product=get_product(baseInfo)
+			if currStock!=product.inStock:
+				product.inStock=currStock
+				product.save()
+
+		for product in deltaFeeds['products']:
+			#update prices
+			update_availability(product)
+			update_pricehistory(product)
+			update_offers(product)
+		print("Delta Feeds Updated Successfully")
+
+	def get_initial_delta_url(self):
 		data=urlparse(self.category.deltaGetURL)
 		json_qs=parse_qs(data.query)
 		DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(version=self.category.version, catId=self.category.catId)
-		resp=requests.get(DELTA_URL, headers=self.headers, params=data.query)
-		print(resp.url)
-		print(resp)
-		if resp.status_code==200:
-			return json.loads(resp.content)
+		return DELTA_URL
 
-
-	def save_delta_feeds(self):
-		pass
+	def update_all_delta_feeds(self, nextUrl):
+		while nextUrl:
+			resp=requests.get(nextUrl, headers=self.headers)
+			if resp.status_code==200:
+				data=json.loads(resp.content)
+				self.update_delta_feeds(data)
+				nextUrl=data['nextUrl']
+			else:
+				print(resp, resp.content)
 
 class FKSearchAPIHandler():
 	def __init__(self, *args, **kwargs):

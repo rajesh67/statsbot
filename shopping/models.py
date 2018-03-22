@@ -24,7 +24,8 @@ class Category(models.Model):
 	feedsListed=models.BooleanField(default=False)
 	last_updated_on=models.DateTimeField(null=True, blank=True)
 
-	version=models.PositiveIntegerField(default=0)
+	last_version=models.PositiveIntegerField(default=0)
+	current_version=models.PositiveIntegerField(default=0)
 
 	def __str__(self):
 		return self.name
