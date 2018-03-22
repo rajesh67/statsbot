@@ -6,6 +6,7 @@ class Store(models.Model):
 	name=models.CharField(max_length=100)
 	short_name=models.CharField(max_length=10, null=True, blank=True)
 	home_url=models.URLField(max_length=150)
+	description=models.TextField(null=True, blank=True)
 	affiliate_id=models.CharField(max_length=100)
 	affiliate_token=models.CharField(max_length=250)
 
@@ -33,6 +34,22 @@ class Category(models.Model):
 	def get_query_params(self):
 		data=urlparse(self.baseApiURL)
 		return data.query
+
+class SearchProduct(models.Model):
+	productId=models.CharField(max_length=30)
+	title=models.CharField(max_length=500)
+	productUrl=models.URLField(max_length=500)
+	brand=models.CharField(max_length=50)
+	inStock=models.BooleanField(default=False)
+	codAvailable=models.BooleanField(default=False)
+	specialPrice=models.PositiveIntegerField(default=0)
+	discountPercentage=models.FloatField(default=0.0)
+	topSeller=models.BooleanField(default=False)
+
+	store=models.ForeignKey('Store', on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.title
 
 class Product(models.Model):
 	productId=models.CharField(max_length=30)

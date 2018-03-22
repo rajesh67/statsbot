@@ -206,33 +206,23 @@ class FKDeltaFeedAPIHandler():
 			print("URL Could Not be reached")
 
 	def update_delta_feeds(self, deltaFeeds):
-		def get_product(self, baseInfo):
+		def get_product(baseInfo):
 			return Product.objects.get(productId=baseInfo['productId'])
 
 		# check For Offer Updates
-		def update_offers(self, data):
+		def update_offers(data):
 			baseInfo=data['productBaseInfoV1']
 			product=get_product(baseInfo)
-			product.productoffer_set.delete()
-			product.save()
-			for offer in baseInfo['offers']:
-				off, new=ProductOffer.objects.get_or_create(text=offer, product=product)
-			product.save()
+			#
 
 		# Update Prices
-		def update_pricehistory(self, data):
+		def update_pricehistory(data):
 			baseInfo=data['productBaseInfoV1']
 			product=get_product(baseInfo)
 			specialPrice=baseInfo['flipkartSpecialPrice']['amount']
 			history=PriceHistory()
-			if specialPrice==product.pricehistory_set.last.specialPrice:
-				history.date=datetime.datetime.now()
-				history.retailPrice=baseInfo['maximumRetailPrice']['amount']
-				history.sellingPrice=baseInfo['flipkartSellingPrice']['amount']
-				history.specialPrice=baseInfo['flipkartSpecialPrice']['amount']
-				history.product=product
-				history.save()
-			elif specialPrice<product.pricehistory_set.last.specialPrice:
+			lastPrice=product.pricehistory_set.last()
+			if specialPrice!=lastPrice.specialPrice:
 				history.date=datetime.datetime.now()
 				history.retailPrice=baseInfo['maximumRetailPrice']['amount']
 				history.sellingPrice=baseInfo['flipkartSellingPrice']['amount']
@@ -241,23 +231,11 @@ class FKDeltaFeedAPIHandler():
 				history.status="-1"
 				history.save()
 				print("Price Changed For: %s"%(product.title))
-				print("Last Price : %d"%(product.pricehistory_set.last.specialPrice))
-				print("Current Price : %d, specialPrice : %d"%(product.pricehistory_set.last.specialPrice, specialPrice))
-			else:
-				history.date=datetime.datetime.now()
-				history.retailPrice=baseInfo['maximumRetailPrice']['amount']
-				history.sellingPrice=baseInfo['flipkartSellingPrice']['amount']
-				history.specialPrice=baseInfo['flipkartSpecialPrice']['amount']
-				history.product=product
-				history.status="1"
-				history.save()
-				print("Price Changed For: %s"%(product.title))
-				print("Last Price : %d"%(product.pricehistory_set.last.specialPrice))
-				print("Current Price : %d, specialPrice : %d"%(product.pricehistory_set.last.specialPrice, specialPrice))
-			print("PriceHistory Updated")
-		
+				print("Last Price : %d"%(lastPrice.specialPrice))
+				print("Current Price : %d, specialPrice : %d"%(lastPrice.specialPrice, specialPrice))
+			
 		# Update Stock Information
-		def update_availability(self, data):
+		def update_availability(data):
 			baseInfo=data['productBaseInfoV1']
 			currStock=True if baseInfo['inStock']==1 or baseInfo['inStock']=='yes' or baseInfo['inStock']==1 else False
 			product=get_product(baseInfo)
@@ -272,21 +250,27 @@ class FKDeltaFeedAPIHandler():
 			update_offers(product)
 		print("Delta Feeds Updated Successfully")
 
-	def get_initial_delta_url(self):
-		data=urlparse(self.category.deltaGetURL)
+	def update_all_delta_feeds(self):
+		listings=self.get_base_urls()
+		deltaGetURL=listings[self.category.name]['availableVariants']['v1.1.0']['deltaGet']
+		data=urlparse(deltaGetURL)
 		json_qs=parse_qs(data.query)
-		DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(version=self.category.version, catId=self.category.catId)
-		return DELTA_URL
-
-	def update_all_delta_feeds(self, nextUrl):
-		while nextUrl:
-			resp=requests.get(nextUrl, headers=self.headers)
-			if resp.status_code==200:
-				data=json.loads(resp.content)
-				self.update_delta_feeds(data)
-				nextUrl=data['nextUrl']
-			else:
-				print(resp, resp.content)
+		DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(version=self.category.last_version, catId=self.category.catId)
+		resp=requests.get(DELTA_URL, headers=self.headers, params=data.query)
+		if resp.status_code==200:
+			data=json.loads(resp.content)
+			nextUrl=data['nextUrl']
+			self.update_delta_feeds(data)
+			while nextUrl:
+				resp=requests.get(nextUrl, headers=self.headers)
+				if resp.status_code==200:
+					data=json.loads(resp.content)
+					self.update_delta_feeds(data)
+					nextUrl=data['nextUrl']
+				else:
+					print(resp, resp.url)
+		else:
+			print(resp, resp.url)
 
 class FKSearchAPIHandler():
 	def __init__(self, *args, **kwargs):
@@ -323,8 +307,3 @@ class FKTopFeedAPIHandler():
 					print(e.stackTrace())
 		else:
 			print(resp.status_code, resp.content)
-
-class AmazonSearchAPIHandler():
-
-	def register(self):
-		pass

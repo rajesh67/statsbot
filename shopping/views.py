@@ -10,15 +10,18 @@ from graphos.sources.model import ModelDataSource
 from graphos.renderers import flot
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 # Create your views here.
-from shopping.collection.scrapper import FKFeedAPIHandler
-from shopping.models import (Product, 
+from shopping.collection.flipkart import FKFeedAPIHandler
+from shopping.models import (
+	Product,
 	PriceHistory, 
 	ProductImage, 
 	ProductOffer, 
 	Offer,
 	DOTD,
 	Category,
+	Store,
 )
 
 def flipkart_search(keywords, results):
@@ -95,12 +98,32 @@ class CategoryListView(ListView):
 
 	def get_queryset(self):
 		# cat=Category.objects.get(name=self.kwargs.get('categoryName'))
-		return Product.objects.filter(category__name=self.kwargs.get('categoryName'))
+		return Product.objects.filter(category__name=self.kwargs.get('categoryName'), store__short_name=self.kwargs.get('storeName'))
+
+	def get_context_data(self, **kwargs):
+		context=super(CategoryListView, self).get_context_data(**kwargs)
+		context['category']=Category.objects.get(name=self.kwargs.get('categoryName'))
+		context['store']=Store.objects.get(short_name=self.kwargs.get('storeName'))
+		return context
 
 class SearchResultsView(TemplateView):
 
 	template_name = "shopping/search_results.html"
 
 	def get_context_data(self, **kwargs):
-		context=super().get_context_data(**kwargs)
+		context=super(SearchResultsView, self).get_context_data(**kwargs)
+		return context
+
+class StoreDetailView(DetailView):
+	model = Store
+	template_name="shopping/store.html"
+	context_object_name='store'
+
+	def get_object(self):
+		return Store.objects.get(short_name=self.kwargs.get('storeName'))
+
+	def get_context_data(self, **kwargs):
+		context=super(StoreDetailView, self).get_context_data(**kwargs)
+		store=self.get_object()
+		context['products']=store.product_set.filter(topSeller=True)[:50]
 		return context
