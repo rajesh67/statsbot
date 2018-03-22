@@ -154,5 +154,5 @@ FLIPKART_OFFERS_XML_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/
 FLIPKART_OFFERS_JSON_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/all/json'
 FLIPKART_DOTD_XML_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/xml'
 FLIPKART_DOTD_JSON_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/json'
-FLIPKART_DELTA_FEEDS_JSON_URL='https://affiliate-api.flipkart.net/affiliate/1.0/deltaFeeds/rajeshmee/{catId}/fromVersion/{version}.json'
+FLIPKART_DELTA_FEEDS_JSON_URL='https://affiliate-api.flipkart.net/affiliate/1.0/deltaFeeds/rajeshmee/category/{catId}/fromVersion/{version}.json'
 FLIPKART_TOP_FEEDS_URL='https://affiliate-api.flipkart.net/affiliate/1.0/topFeeds/rajeshmee/category/{catId}.json'

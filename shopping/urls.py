@@ -11,7 +11,7 @@ from shopping.views import (shopping_home,
 )
 
 urlpatterns=[
-	url('^$', FeedsListView.as_view(), name="shopping-home"),
+	url('^$', shopping_home, name="shopping-home"),
 	url('^search$', SearchResultsView.as_view(), name="search-products"),
 	url('^(?P<categoryName>[a-zA-Z]+)/$', CategoryListView.as_view(), name="category-products"),
 	url('^p/offers/$', OfferListView.as_view(), name="shopping-offers"),

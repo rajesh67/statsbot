@@ -49,15 +49,7 @@ def flipkart_search(keywords, results):
 	return results
 
 def shopping_home(request):
-	products_data=[]
-	prices_data=[['Date','Price']]
-	for product in Product.objects.all():
-		for price_history in product.pricehistory_set.all():
-			prices_data.append([price_history.date.day, price_history.specialPrice])
-		products_data.append((product.productId,prices_data))
-	data_source=ModelDataSource(PriceHistory.objects.all(), fields=['date', 'specialPrice'])
-	chart = flot.LineChart(data_source)
-	return render(request, 'shopping/home.html', {'products':Product.objects.all(), 'chart':chart})
+	return render(request, 'shopping/home.html', {'dotdList':DOTD.objects.all(), 'offersList': Offer.objects.all()})
 
 def shopping_mobiles(request):
 	products=Product.objects.all()

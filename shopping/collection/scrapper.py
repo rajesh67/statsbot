@@ -196,7 +196,7 @@ class FKDeltaFeedAPIHandler():
 		data=urlparse(self.category.deltaGetURL)
 		json_qs=parse_qs(data.query)
 		DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(version=self.category.version, catId=self.category.catId)
-		resp=requests.get(DELTA_URL, headers=self.headers, params={'sig': json_qs['sig'], 'expiry': json_qs['expiresAt']})
+		resp=requests.get(DELTA_URL, headers=self.headers, params=data.query)
 		print(resp.url)
 		print(resp)
 		if resp.status_code==200:

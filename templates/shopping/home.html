@@ -9,20 +9,191 @@
 		margin: 60px auto;
 	}
 </style>
-<div class="container" id="pageMessage">
-	<div class="alert alert-success" role="alert">
-	  <h4 class="alert-heading">Welcome to the Shopping Section</h4>
-	  <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
-	  <hr>
-	  <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
-	</div>
-</div><!-- Support Message -->
-
+<!-- Jumbotron -->
+<div class="jumbotron" style="text-align: center;">
+  <h1 class="display-4">Welcome to Best Shopping Experience</h1>
+  <!-- <p class="lead">We are here to innovate </p> -->
+  <hr class="my-4">
+  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+  <p class="lead">
+    <a class="btn btn-primary btn-lg" href="{% url 'category-products' 'mobiles' %}" role="button">View All Products</a>
+  </p>
+</div>
 <div class="container" id="pageContainer">
 	<div class="row">
 		<!-- The Caraousal Block-->
 		<div class="col-md-9">
-			
+			<div class="container" id="leftContainer">
+				<!-- DODTs -->
+				<div class="card">
+					<div class="card-header" style="text-transform: uppercase;">
+						<a href="{% url 'shopping-deals' %}" style="text-decoration: none;">Deals Of The Days</a>
+					</div><!-- /DODT Header -->
+					<div class="card-body">
+						<div id="carousel-example-generic-deals" class="carousel slide" data-ride="carousel" style="background-color: none;">
+						  <div class="carousel-inner" role="listbox">
+						    {% for dotd in dotdList %}
+						    {% if forloop.first %}
+						    <div class="carousel-item active" style="background-color: #fff;">
+						      <!-- DOTD CARD -->
+						      	<div class="card" style="height: 250px; width: 90%">
+								  <a href="{{dotd.url}}"><img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;"></a>
+								  <div class="card-body">
+								  	<p class="card-title">
+								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ dotd.title }}</a>
+								  	</p>
+								    <p class="card-text">
+								  		{{ dotd.description }}
+								  	</p>
+								  	<p class="card-text" style="text-transform: uppercase;">
+								  		{{dotd.availability}}
+								  	</p>
+								  </div>
+								  <div class="card-footer">
+								  	<p class="card-text">
+								  		{{dotd.store.name}}
+								  	</p>
+								  </div>
+								</div><!-- /DOTD Card -->
+						    </div>
+						    {% else %}
+						    <div class="carousel-item" style="background-color: #fff;">
+						      <!-- DOTD CARD -->
+						      	<div class="card" style="height: 250px; width: 90%">
+								  <a href="{{dotd.url}}">
+								  	<img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;">
+								  </a>
+								  <div class="card-body">
+								  	<p class="card-title">
+								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ dotd.title }}</a>
+								  	</p>
+								  	<p class="card-text">
+								  		{{ dotd.description }}
+								  	</p>
+								  	<p class="card-text" style="text-transform: uppercase;">
+								  		{{dotd.availability}}
+								  	</p>
+								  </div>
+								  <div class="card-footer">
+								  	<p class="card-text">
+								  		{{dotd.store.name}}
+								  	</p>
+								  </div>
+								</div><!-- /DOTD Card -->
+						    </div>
+						    {% endif %}
+
+						    {% endfor %}
+						  </div>
+						  <a class="left carousel-control" href="#carousel-example-generic-deals" role="button" data-slide="prev">
+						    <span class="icon-prev" aria-hidden="true"></span>
+						    <span class="sr-only">Previous</span>
+						  </a>
+						  <a class="right carousel-control" href="#carousel-example-generic-deals" role="button" data-slide="next">
+						    <span class="icon-next" aria-hidden="true"></span>
+						    <span class="sr-only">Next</span>
+						  </a>
+						</div>
+					</div><!-- /DODT BODY -->
+					<div class="card-footer">
+						<p class="text-center">
+							<a href="{% url 'shopping-deals' %}" style="text-transform: uppercase; text-decoration: none;">View All</a>
+						</p>
+					</div><!-- /DODT Footer -->
+				</div><!-- /Deal Of the Day Card -->
+				<div class="clear-fix"></div>
+
+				<!-- Top Offers IN Mobiles -->
+				<div class="card" style="margin: 35px auto;">
+					<div class="card-header" style="text-transform: uppercase;">
+						<a href="{% url 'shopping-offers' %}" style="text-decoration: none;">Top Offers</a>
+					</div><!-- /DODT Header -->
+					<div class="card-body">
+						<div id="carousel-example-generic-offers" class="carousel slide" data-ride="carousel" style="background-color: none;">
+						  <div class="carousel-inner" role="listbox">
+						    {% for offer in offersList %}
+						    {% if forloop.first %}
+						    <div class="carousel-item active" style="background-color: #fff;">
+						      <!-- DOTD CARD -->
+						      	<div class="card" style="height: 250px; width: 90%">
+								  <a href="{{offer.url}}"><img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;"></a>
+								  <div class="card-body">
+								  	<p class="card-title">
+								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ offer.title }}</a>
+								  	</p>
+								    <p class="card-text">
+								  		{{ offer.description }}
+								  	</p>
+								  	<p class="card-text" style="text-transform: uppercase;">
+								  		{{offer.availability}}
+								  	</p>
+								  	<p class="card-text">
+								  		Starts On : {{offer.startTime.date}}
+								  	</p>
+								  	<p class="card-text">
+								  		Ends On : {{ offer.endTime.date}}
+								  	</p>
+								  </div>
+								  <div class="card-footer">
+								  	<p class="card-text">
+								  		{{offer.store.name}}
+								  	</p>
+								  </div>
+								</div><!-- /DOTD Card -->
+						    </div>
+						    {% else %}
+						    <div class="carousel-item" style="background-color: #fff;">
+						      <!-- DOTD CARD -->
+						      	<div class="card" style="height: 250px; width: 90%">
+								  <a href="{{offer.url}}">
+								  	<img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;">
+								  </a>
+								  <div class="card-body">
+								  	<p class="card-title">
+								  		<a href="{{offer.url}}" style="text-decoration: none; text-transform: uppercase;">{{ offer.title }}</a>
+								  	</p>
+								  	<p class="card-text">
+								  		{{ offer.description }}
+								  	</p>
+								  	<p class="card-text" style="text-transform: uppercase;">
+								  		{{offer.availability}}
+								  	</p>
+								  	<p class="card-text">
+								  		Starts On : {{offer.startTime.date}}
+								  	</p>
+								  	<p class="card-text">
+								  		Ends On : {{ offer.endTime.date}}
+								  	</p>
+								  </div>
+								  <div class="card-footer">
+								  	<p class="card-text">
+								  		{{offer.store.name}}
+								  	</p>
+								  </div>
+								</div><!-- /Offer Card -->
+						    </div>
+						    {% endif %}
+
+						    {% endfor %}
+						  </div>
+						  <a class="left carousel-control" href="#carousel-example-generic-offers" role="button" data-slide="prev">
+						    <span class="icon-prev" aria-hidden="true"></span>
+						    <span class="sr-only">Previous</span>
+						  </a>
+						  <a class="right carousel-control" href="#carousel-example-generic-offers" role="button" data-slide="next">
+						    <span class="icon-next" aria-hidden="true"></span>
+						    <span class="sr-only">Next</span>
+						  </a>
+						</div>
+					</div><!-- /DODT BODY -->
+					<div class="card-footer">
+						<p class="text-center">
+							<a href="{% url 'shopping-offers' %}" style="text-transform: uppercase; text-decoration: none;">View All</a>
+						</p>
+					</div><!-- /DODT Footer -->
+				</div><!-- /Deal Of the Day Card -->
+
+			</div><!-- Left Container -->
 		</div><!-- /Left Column -->
 
 		<div class="col-md-3">
@@ -31,92 +202,15 @@
 	</div><!-- /Rows -->
 </div><!-- /PageContainer -->
 
+<script type="text/javascript">
+	 $('#carousel-example-generic-deals').on('slid.bs.carousel', function () {
+        $(".carousel-item.active:nth-child(" + ($(".carousel-inner .carousel-item").length -1) + ") + .carousel-item").insertBefore($(".carousel-item:first-child"));
+        $(".carousel-item.active:last-child").insertBefore($(".carousel-item:first-child"));
+    });
 
-<div class="container" id="pageContainer">
-	<div class="row">
-		<div class="col-md-2">
-			<h5>Category List</h5>
-			<ul class="nav flex-column">
-			  <li class="nav-item">
-			    <a class="nav-link active" href="{% url 'category-products'  'mobiles' %}">Mobiles</a>
-			  </li>
-			  <li class="nav-item">
-			    <a class="nav-link" href="{% url 'category-products'  'tablets' %}">Tablets</a>
-			  </li>
-			  <li class="nav-item">
-			    <a class="nav-link" href="{% url 'category-products'  'desktops' %}">Desktops</a>
-			  </li>
-			  <li class="nav-item">
-			    <a class="nav-link disabled" href="#">Disabled</a>
-			  </li>
-			</ul>
-		</div><!-- /Category List -->
-
-		<!-- ProductsList -->
-		<div class="col-md-10">
-			{% if products %}
-					<div class="container">
-						<div class="row" style="">
-							{% for product in products %}
-							<div class="col-xs-sm-3" style="margin: 20px 20px 20px 10px;">
-								<div class="card" style="width: 15rem;">
-								  {% if not product.productimage_set.last %}
-								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
-								  {% else %}
-								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%">
-								  {% endif %}
-								  <div class="card-body">
-								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
-								    <p class="card-text">{{prduct.sellingPrice}}</p>
-								    <a href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
-								    <a href="#" class="btn btn-warning">Track Price</a>
-								  </div>
-								</div>
-								<div class="card-body">
-									{% for price in product.pricehistory_set.all %}
-										<div class="card" style="border:none;">
-											<div class="card-body">
-												<p class="card-title">Rs. {{price.specialPrice}}{{price.date}}</p>
-											</div>
-										</div>
-									{% endfor %}
-								</div><!-- Chart Div for Each Product Instance -->
-							</div><!-- Product Div -->
-							<!-- <div class="col-xs-sm-1"></div> -->
-							{% if forloop.counter|divisibleby:3 %}
-								<div class="clearfix">
-									
-								</div>
-							{% endif %}
-							{% endfor %}
-						</div><!-- Row -->
-					</div><!-- Card -->
-					<div class="clear-fix"></div>
-			{% else %}
-				<h5>No products Available</h5>
-			{% endif %}
-		</div><!-- ProductsList -->
-		{% if is_paginated %}
-		  <ul class="pagination" style="text-align: center;">
-		    {% if page_obj.has_previous %}
-		      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
-		    {% else %}
-		      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
-		    {% endif %}
-		    {% for i in paginator.page_range %}
-		      {% if page_obj.number == i %}
-		        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
-		      {% else %}
-		        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
-		      {% endif %}
-		    {% endfor %}
-		    {% if page_obj.has_next %}
-		      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
-		    {% else %}
-		      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
-		    {% endif %}
-		  </ul>
-		{% endif %}
-	</div><!-- /Row -->
-</div><!-- /Page Container -->
+	 $('#carousel-example-generic-offers').on('slid.bs.carousel', function () {
+        $(".carousel-item.active:nth-child(" + ($(".carousel-inner .carousel-item").length -1) + ") + .carousel-item").insertBefore($(".carousel-item:first-child"));
+        $(".carousel-item.active:last-child").insertBefore($(".carousel-item:first-child"));
+    });
+</script>
 {% endblock page %}

@@ -5,3 +5,21 @@
    clear: both;
    margin-top: 10px;
 }
+
+.carousel-item.active,
+.carousel-item.active + .carousel-item,
+.carousel-item.active + .carousel-item  + .carousel-item {
+   width: 33.3%;
+   display: block;
+   float:left;
+} 
+
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
+}
+
+.carousel-inner{
+  width:100%;
+  max-height: 350px !important;
+}
