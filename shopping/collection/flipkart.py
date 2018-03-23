@@ -11,6 +11,8 @@ from shopping.models import (Product,
 	DOTD,
 	Store,
 	Category,
+	SearchProduct,
+	ProductPrice,
 )
 import datetime
 import timestring
@@ -279,10 +281,46 @@ class FKSearchAPIHandler():
 		return super(FKSearchAPIHandler, self).__init__(*args, **kwargs)
 
 	def get_search_results(self, keywords):
+		
+		def save_results_images(product, imageDict):
+			pass
+
+		def save_search_results(data):
+			productsList=[]
+			products=data['products']
+			for product in list(products):
+				baseInfo=product['productBaseInfoV1']
+				productId=baseInfo['productId']
+				new_prod, created=SearchProduct.objects.get_or_create(
+					productId=productId,
+					store=self.store,
+				)
+				if created:
+					new_prod.title=baseInfo['title']
+					new_prod.productId=baseInfo['productId']
+					new_prod.productUrl=baseInfo['productUrl']
+					new_prod.brand=baseInfo['productBrand']
+					new_prod.inStock=baseInfo['inStock']
+					new_prod.codAvailable=baseInfo['codAvailable']
+					new_prod.store=self.store
+					priceHistory=ProductPrice.objects.create(
+						sellingPrice=baseInfo['flipkartSpecialPrice']['amount'],
+						retailPrice=baseInfo['maximumRetailPrice']['amount'],
+						updated_on=datetime.datetime.now(),
+						product=new_prod,
+						discountPercentage=baseInfo['discountPercentage'],
+					)
+					new_prod.save()
+
+				productsList.append(new_prod)
+			return productsList
+
 		resp=requests.get(settings.FLIPKART_SEARCH_URL, headers=self.headers, params={'query': keywords, 'resultCount':10})
 		if resp.status_code==200:
 			data=json.loads(resp.content)
-			return data
+			# Save These Products and return Back
+			productsList=save_search_results(data)
+			return productsList
 		else:
 			print(resp.status_code, resp.content)
 

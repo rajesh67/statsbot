@@ -55,7 +55,7 @@
             <a class="nav-link" href="{% url 'shopping-deals' %}">Deals</a>
           </li>
           <li class="nav-item">
-            <form class="form-inline mt-12 mt-md-12" action="" method="get">
+            <form class="form-inline mt-12 mt-md-12" action="{% url 'search-products' %}" method="get">
               <input class="form-control mr-lg-12" type="text" id="searchbox" name="q" placeholder="Search any product here........" style="display: inline-block;">
               <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
             </form>

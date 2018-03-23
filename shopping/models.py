@@ -42,14 +42,22 @@ class SearchProduct(models.Model):
 	brand=models.CharField(max_length=50)
 	inStock=models.BooleanField(default=False)
 	codAvailable=models.BooleanField(default=False)
-	specialPrice=models.PositiveIntegerField(default=0)
-	discountPercentage=models.FloatField(default=0.0)
 	topSeller=models.BooleanField(default=False)
 
 	store=models.ForeignKey('Store', on_delete=models.CASCADE)
 
 	def __str__(self):
 		return self.title
+
+class ProductPrice(models.Model):
+	updated_on=models.DateTimeField(auto_now_add=True)
+	retailPrice=models.FloatField(default=0)
+	sellingPrice=models.FloatField(default=0)
+	discountPercentage=models.FloatField(default=0)
+	product=models.ForeignKey('SearchProduct', on_delete=models.CASCADE)
+
+	def __str__(self):
+		return str(self.sellingPrice)
 
 class Product(models.Model):
 	productId=models.CharField(max_length=30)

@@ -9,10 +9,10 @@ from django.http import HttpResponse
 from graphos.sources.model import ModelDataSource
 from graphos.renderers import flot
 from django.views.generic.list import ListView
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
 # Create your views here.
-from shopping.collection.flipkart import FKFeedAPIHandler
+from shopping.collection.flipkart import FKFeedAPIHandler, FKSearchAPIHandler
 from shopping.models import (
 	Product,
 	PriceHistory, 
@@ -106,13 +106,17 @@ class CategoryListView(ListView):
 		context['store']=Store.objects.get(short_name=self.kwargs.get('storeName'))
 		return context
 
-class SearchResultsView(TemplateView):
+class SearchResultsView(View):
 
 	template_name = "shopping/search_results.html"
 
-	def get_context_data(self, **kwargs):
-		context=super(SearchResultsView, self).get_context_data(**kwargs)
-		return context
+	def get(self, request, *args, **kwargs):
+		keywords=request.GET.get('q')
+		print(self.kwargs, request.GET.get('q'))
+		if keywords:
+			searchHandle=FKSearchAPIHandler()
+			productsList=searchHandle.get_search_results(keywords=keywords)
+		return render(request, self.template_name, {'products': productsList})
 
 class StoreDetailView(DetailView):
 	model = Store
