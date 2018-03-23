@@ -354,6 +354,6 @@ class FKTopFeedAPIHandler():
 					prod.topSeller=True
 					prod.save()
 				except Exception as e:
-					print(e.stackTrace())
+					print(e)
 		else:
 			print(resp.status_code, resp.content)
