@@ -103,7 +103,7 @@ class StoreDetailView(DetailView):
 	def get_context_data(self, **kwargs):
 		context=super(StoreDetailView, self).get_context_data(**kwargs)
 		store=self.get_object()
-		context['products']=store.product_set.filter(topSeller=True, inStock=True)[:50]
+		context['products']=store.product_set.filter(inStock=True)[:50]
 		return context
 
 class AboutUSView(TemplateView):
