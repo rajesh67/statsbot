@@ -19,10 +19,13 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.conf import settings
 from app.views import home
+from shopping.views import AboutUSView, WhyUSView
 
 urlpatterns = [
     url('^admin/', admin.site.urls),
     url('^$', home ,name="home"),
+    url('^about-us/$', AboutUSView.as_view(),name="about-us"),
+    url('^why-us/$', WhyUSView.as_view(),name="why-us"),
     url(r'^shopping/', include('shopping.urls')),
 ]
 urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

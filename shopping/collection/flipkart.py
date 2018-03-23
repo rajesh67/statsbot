@@ -4,7 +4,9 @@ import requests
 import json
 from shopping.models import (Product, 
 	PriceHistory, 
-	ProductOffer, ProductImage, 
+	ProductOffer, 
+	ProductImage,
+	SearchProductImage,
 	Offer, 
 	OfferImage,
 	DOTDImage,
@@ -19,6 +21,8 @@ import timestring
 import xml.etree.ElementTree as ET
 from multiprocessing import Process
 from urllib.parse import urlparse, parse_qs
+from itertools import islice
+from django.db import transaction
 
 class FKOffersAPIHandler():
 	def __init__(self,*args,**kwargs):
@@ -185,28 +189,7 @@ class FKDeltaFeedAPIHandler():
 		apiListings=json_data['apiGroups']['affiliate']['apiListings']
 		return apiListings
 
-	def version_changed(self):
-		apiListings=self.get_base_urls()
-		deltaGetURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['deltaGet']
-		resp=requests.get(deltaGetURL, headers=self.headers)
-		if resp.status_code==200:
-			data=json.loads(resp.content)
-			catId=data['category']
-			version=data['version']
-			if version!=self.category.current_version:
-				self.category.baseApiURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['get']
-				self.category.deltaGetURL=deltaGetURL
-				self.category.topFeedsURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['top']
-				self.category.last_updated_on=datetime.datetime.now()
-				self.category.last_version=self.category.current_version
-				self.category.current_version=version
-				self.category.save()
-				return True
-			else:
-				print("Category Not Changed")
-		else:
-			print("URL Could Not be reached")
-
+	@transaction.atomic
 	def update_delta_feeds(self, deltaFeeds):
 		def get_product(baseInfo):
 			return Product.objects.get(productId=baseInfo['productId'])
@@ -252,25 +235,44 @@ class FKDeltaFeedAPIHandler():
 			update_offers(product)
 		print("Delta Feeds Updated Successfully")
 
+	@transaction.atomic
 	def update_all_delta_feeds(self):
 		listings=self.get_base_urls()
 		deltaGetURL=listings[self.category.name]['availableVariants']['v1.1.0']['deltaGet']
 		data=urlparse(deltaGetURL)
 		json_qs=parse_qs(data.query)
-		DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(version=self.category.last_version, catId=self.category.catId)
-		resp=requests.get(DELTA_URL, headers=self.headers, params=data.query)
+		resp=requests.get(deltaGetURL, headers=self.headers)
 		if resp.status_code==200:
 			data=json.loads(resp.content)
-			nextUrl=data['nextUrl']
-			self.update_delta_feeds(data)
-			while nextUrl:
-				resp=requests.get(nextUrl, headers=self.headers)
-				if resp.status_code==200:
-					data=json.loads(resp.content)
-					self.update_delta_feeds(data)
-					nextUrl=data['nextUrl']
-				else:
-					print(resp, resp.url)
+			print(data)
+			catId=data['category']
+			version=data['version']
+			if version!=self.category.current_version:
+				DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(
+					version=self.category.current_version, 
+					catId=self.category.catId
+					)
+				# resp=requests.get(DELTA_URL, headers=self.headers, params=data.query)
+				nextUrl=DELTA_URL
+				while nextUrl:
+					resp=requests.get(nextUrl, headers=self.headers)
+					if resp.status_code==200:
+						data=json.loads(resp.content)
+						self.update_delta_feeds(data)
+						nextUrl=data['nextUrl']
+					else:
+						break
+				# Now Updates The Version Of the Category
+				self.category.baseApiURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['get']
+				self.category.deltaGetURL=deltaGetURL
+				self.category.topFeedsURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['top']
+				self.category.last_updated_on=datetime.datetime.now()
+				self.category.last_version=self.category.current_version
+				self.category.current_version=version
+				self.category.save()
+				return True
+			else:
+				print("Category Not Changed")
 		else:
 			print(resp, resp.url)
 
@@ -280,10 +282,16 @@ class FKSearchAPIHandler():
 		self.headers={'Fk-Affiliate-Id':self.store.affiliate_id,'Fk-Affiliate-Token':self.store.affiliate_token}
 		return super(FKSearchAPIHandler, self).__init__(*args, **kwargs)
 
+	@transaction.atomic
 	def get_search_results(self, keywords):
 		
-		def save_results_images(product, imageDict):
-			pass
+		def create_bulk_products(self, objs):
+			batch_size=100
+			while True:
+				batch=list(islice(objs, batch_size))
+				if not batch:
+					break
+				SearchProduct.objects.bulk_create(batch, batch_size)
 
 		def save_search_results(data):
 			productsList=[]
@@ -292,17 +300,15 @@ class FKSearchAPIHandler():
 				baseInfo=product['productBaseInfoV1']
 				productId=baseInfo['productId']
 				new_prod, created=SearchProduct.objects.get_or_create(
-					productId=productId,
 					store=self.store,
+					title=baseInfo['title'],
+					productId=baseInfo['productId'],
+					productUrl=baseInfo['productUrl'],
+					brand=baseInfo['productBrand'],
+					inStock=baseInfo['inStock'],
+					codAvailable=baseInfo['codAvailable'],
 				)
 				if created:
-					new_prod.title=baseInfo['title']
-					new_prod.productId=baseInfo['productId']
-					new_prod.productUrl=baseInfo['productUrl']
-					new_prod.brand=baseInfo['productBrand']
-					new_prod.inStock=baseInfo['inStock']
-					new_prod.codAvailable=baseInfo['codAvailable']
-					new_prod.store=self.store
 					priceHistory=ProductPrice.objects.create(
 						sellingPrice=baseInfo['flipkartSpecialPrice']['amount'],
 						retailPrice=baseInfo['maximumRetailPrice']['amount'],
@@ -310,12 +316,17 @@ class FKSearchAPIHandler():
 						product=new_prod,
 						discountPercentage=baseInfo['discountPercentage'],
 					)
-					new_prod.save()
-
+					imageUrls=baseInfo['imageUrls']
+					for size, url in imageUrls.items():
+						image=SearchProductImage.objects.create(
+							product=new_prod,
+							size=size,
+							url=url,
+						)
 				productsList.append(new_prod)
 			return productsList
 
-		resp=requests.get(settings.FLIPKART_SEARCH_URL, headers=self.headers, params={'query': keywords, 'resultCount':10})
+		resp=requests.get(settings.FLIPKART_SEARCH_URL, headers=self.headers, params={'query': keywords, 'resultCount':12})
 		if resp.status_code==200:
 			data=json.loads(resp.content)
 			# Save These Products and return Back
@@ -323,6 +334,7 @@ class FKSearchAPIHandler():
 			return productsList
 		else:
 			print(resp.status_code, resp.content)
+
 
 class FKTopFeedAPIHandler():
 	def __init__(self, category, *args, **kwargs):

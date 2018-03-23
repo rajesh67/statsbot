@@ -1,4 +1,5 @@
 from django.shortcuts import render, render_to_response
+from django.http import HttpResponseRedirect
 from django.template import Context
 from multiprocessing import Process, Value, Array
 import json
@@ -24,35 +25,8 @@ from shopping.models import (
 	Store,
 )
 
-def flipkart_search(keywords, results):
-	headers={'Fk-Affiliate-Id': settings.FLIPKART_AFF_ID, 'Fk-Affiliate-Token':settings.FLIPKART_AFF_TOKEN}
-	results=requests.get(settings.FLIPKART_SEARCH_URL, headers=headers, params={'query':keywords,'resultCount':10})
-	json_data=json.loads(results.content)
-	productsList=json_data['productInfoList']
-	products=[]
-	offers={}
-	imageUrls={}
-	prices={}
-	for product in productsList:
-		baseInfo=product['productBaseInfoV1']
-		pro=Product(productId=baseInfo['productId'], 
-			productUrl=baseInfo['productUrl'],
-			title=baseInfo['title'],
-			brand=baseInfo['productBrand'],
-			inStock=True if baseInfo['inStock']==1 else False,
-			codAvailable=True if baseInfo['codAvailable']==1 else False,
-			discountPercentage=baseInfo['discountPercentage'])
-		products.append(pro)
-		imageUrls.update({baseInfo['productId'] : {'imageUrls':baseInfo['imageUrls']}})
-		prices.update({baseInfo['productId'] : {'retailPrice': baseInfo['maximumRetailPrice'], 'sellingPrice':baseInfo['flipkartSellingPrice'], 'specialPrice': baseInfo['flipkartSpecialPrice']}})
-		offers.update({baseInfo['productId']:{'offers':baseInfo['offers']}})
-	# Create bulk products in DB
-	saved_products=Product.objects.bulk_create(products)
-	results=saved_products
-	return results
-
 def shopping_home(request):
-	return render(request, 'shopping/home.html', {'dotdList':DOTD.objects.all(), 'offersList': Offer.objects.all()})
+	return render(request, 'shopping/home.html', {'dotdList':DOTD.objects.all()[:10], 'offersList': Offer.objects.all()[:10]})
 
 def shopping_mobiles(request):
 	products=Product.objects.all()
@@ -129,5 +103,19 @@ class StoreDetailView(DetailView):
 	def get_context_data(self, **kwargs):
 		context=super(StoreDetailView, self).get_context_data(**kwargs)
 		store=self.get_object()
-		context['products']=store.product_set.filter(topSeller=True)[:50]
+		context['products']=store.product_set.filter(topSeller=True, inStock=True)[:50]
+		return context
+
+class AboutUSView(TemplateView):
+	template_name="index.html"
+
+	def get_context_data(self, **kwargs):
+		context=super(AboutUSView, self).get_context_data(**kwargs)
+		return context
+
+class WhyUSView(TemplateView):
+	template_name="index.html"
+
+	def get_context_data(self, **kwargs):
+		context=super(WhyUSView, self).get_context_data(**kwargs)
 		return context

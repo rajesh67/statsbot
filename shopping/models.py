@@ -9,6 +9,7 @@ class Store(models.Model):
 	description=models.TextField(null=True, blank=True)
 	affiliate_id=models.CharField(max_length=100)
 	affiliate_token=models.CharField(max_length=250)
+	logo_image=models.ImageField(upload_to='stores/', null=True)
 
 	def __str__(self):
 		return self.name
@@ -44,7 +45,7 @@ class SearchProduct(models.Model):
 	codAvailable=models.BooleanField(default=False)
 	topSeller=models.BooleanField(default=False)
 
-	store=models.ForeignKey('Store', on_delete=models.CASCADE)
+	store=models.ForeignKey('Store', on_delete=models.CASCADE, related_name="search_products")
 
 	def __str__(self):
 		return self.title
@@ -54,7 +55,7 @@ class ProductPrice(models.Model):
 	retailPrice=models.FloatField(default=0)
 	sellingPrice=models.FloatField(default=0)
 	discountPercentage=models.FloatField(default=0)
-	product=models.ForeignKey('SearchProduct', on_delete=models.CASCADE)
+	product=models.ForeignKey('SearchProduct', on_delete=models.CASCADE, null=True, related_name="prices")
 
 	def __str__(self):
 		return str(self.sellingPrice)
@@ -105,6 +106,12 @@ class BaseImage(models.Model):
 
 	class Meta:
 		abstract = True
+
+class SearchProductImage(BaseImage):
+	product=models.ForeignKey('SearchProduct', on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.size
 
 class ProductImage(BaseImage):
 	product=models.ForeignKey(Product, on_delete=models.CASCADE)

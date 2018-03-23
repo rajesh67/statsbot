@@ -11,10 +11,10 @@
 	<!-- OffersRow -->
 	<div class="row">
 		<!-- Filters Column -->
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<div class="container">
 				<form class="form-inline">
-				    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+				    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width: 175px;">
 				  </form>
 			</div><!-- Search  -->
 			<div class="container">
@@ -30,26 +30,26 @@
 		</div><!-- Filters Column End -->
 
 		<!-- Offers Listing -->
-		<div class="col-md-9">
+		<div class="col-md-10">
 			<div class="container-fluid" id="offersListingContainer">
 				<!-- Listing container Inner Rows  -->
 				<div class="row">
 					<div class="col-md-12">
-						<h5>Applied Filters list</h5>
+						<h5>Showing {{ deals|length }} Total Deals</h5>
 					</div><!-- Applied Filters List -->
 
 					<!-- Main columns of The Offers Grids -->
 					{% for deal in deals %}
-						<div class="col-md-4">
-							<div class="card" style="">
-							  <div class="card-header">
+						<div class="col-md-3">
+							<div class="card" style="border:none; margin: 10px auto;">
+							  <div class="card-header" style="border:none;">
 							    {{deal.created_on|timesince}}
 							  </div>
-							  <img class="card-img-top" src="{{deal.get_default_image.url}}" alt="Card image cap" width="80%" style="width: 100%; height: 200px;">
+							  <img class="card-img-top" src="{{deal.get_default_image.url}}" alt="Card image cap" width="80%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
 							  <div class="card-body">
 							    <h5 class="card-title">{{deal.title}}</h5>
 							    <p class="card-text">{{deal.description}}</p>
-							    <a href="{{deal.url}}" class="btn btn-primary btn-block">Grab this Deal</a>
+							    <a href="{{deal.url}}" class="btn btn-warning btn-block">Grab this Deal</a>
 							  </div>
 							  <div class="card-footer text-muted">
 							    <bold>{{deal.store.name}}</bold>

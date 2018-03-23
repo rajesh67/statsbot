@@ -18,6 +18,9 @@
     <link href="{% static 'shopping/shopping.css' %}" rel="stylesheet">
 
   </head>
+  <style>
+    #searchbox input[type=text]{width:430px !important;}
+  </style>
   <body>
 
     <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
@@ -30,12 +33,7 @@
           <li class="nav-item">
             <a class="nav-link" href="/shopping/">Shopping</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Flights</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Cabs</a>
-          </li>
+          
           <!-- <li class="nav-item">
             <a class="nav-link" href="#">Buses</a>
           </li>
@@ -55,8 +53,14 @@
             <a class="nav-link" href="{% url 'shopping-deals' %}">Deals</a>
           </li>
           <li class="nav-item">
-            <form class="form-inline mt-12 mt-md-12" action="{% url 'search-products' %}" method="get">
-              <input class="form-control mr-lg-12" type="text" id="searchbox" name="q" placeholder="Search any product here........" style="display: inline-block;">
+            <a class="nav-link" href="{% url 'why-us' %}">Why US</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'about-us' %}">About US</a>
+          </li>
+          <li class="nav-item navbar-right">
+            <form class="form-inline" action="{% url 'search-products' %}" method="get">
+              <input class="form-control" type="text" id="searchbox" name="q" placeholder="{{ request.GET.q}}" data="{{ request.GET.q}}" style="display: inline-block; max-width: 500px; width: 430px;">
               <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
             </form>
           </li>
@@ -94,5 +98,8 @@
     <script src="{% static 'js/flot/jquery.flot.js' %}"></script>
     <!-- <script type="text/javascript" src="{% static "fusioncharts/fusioncharts.js" %}"></script>
     <script type="text/javascript" src="{% static "fusioncharts/themes/fusioncharts.theme.fint.js" %}"></script> -->
+    <script type="text/javascript">
+      
+    </script>
   </body>
 </html>

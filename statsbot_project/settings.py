@@ -86,17 +86,24 @@ WSGI_APPLICATION = 'statsbot_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'statsbotdb',
+#         'USER' : 'rajeshmeena',
+#         'PASSWORD' : '11cs30025',
+#         'HOST' : 'localhost',
+#         'PORT' : '',
+#     }
+# }
+
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'statsbotdb',
-        'USER' : 'rajeshmeena',
-        'PASSWORD' : '11cs30025',
-        'HOST' : 'localhost',
-        'PORT' : '',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.crowdfunding'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

@@ -10,13 +10,13 @@
 	}
 </style>
 <div class="container" id="pageMessage">
-	<div class="card">
+	<div class="card" style="border:none;">
 		<!-- <div class="card-header">
 			
 		</div> --><!-- /Store Name -->
 		<div class="card-body">
 			<div class="storeImage" style="width: 20%; float: left">
-				<img src="{% static 'images/flipkart_logo.png' %}" style="width:100%; height:100px; overflow:hidden;">
+				<img src="{{MEDIA_URL}}{{store.logo_image}}" style="width:100%; height:100px; overflow:hidden;">
 			</div>
 			<div class="storeTitleDescription" style="width: 60%; float: left">
 				<h4>{{store.name}}</h4>
@@ -56,11 +56,11 @@
 						<div class="row" style="">
 							{% for product in products %}
 							<div class="col-xs-sm-3" style="margin: 20px 20px 20px 10px;">
-								<div class="card" style="width: 15rem;">
+								<div class="card" style="width: 15rem; border:none;">
 								  {% if not product.productimage_set.last %}
 								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
 								  {% else %}
-								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 100%; height: 300px; overflow: hidden;">
+								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 90%; height: 200px; overflow: hidden; margin: auto auto; display: block;">
 								  {% endif %}
 								  <div class="card-body">
 								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>

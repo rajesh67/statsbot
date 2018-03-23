@@ -10,13 +10,13 @@
 	}
 </style>
 <div class="container" id="pageMessage">
-	<div class="card">
+	<div class="card" style="border:none;">
 		<!-- <div class="card-header">
 			
 		</div> --><!-- /Store Name -->
 		<div class="card-body">
-			<div class="storeImage" style="width: 20%; float: left">
-				<img src="{% static 'images/flipkart_logo.png' %}" style="width:100%; height:100px; overflow:hidden;">
+			<div class="storeImage" style="width: 20%; float: left; display: block;">
+				<img src="{{MEDIA_URL}}{{store.logo_image}}" style="width:70%; height:100px; overflow:hidden; float: left; display: block; margin: auto auto;">
 			</div>
 			<div class="storeTitleDescription" style="width: 60%; float: left">
 				<h4>{{category.name}}</h4>
@@ -28,7 +28,7 @@
 				<div class="storeLink" style="margin: 10px 10px;">
 					<a class="btn btn-primary btn-block" href="{% url 'store-homepage' store.short_name %}" style="text-transform: uppercase;">Back To Home</a>
 
-					<a class="btn btn-warning btn-block" href="{{store.home_url}}?affid={{store.affiliate_id}}" style="text-transform: uppercase;">Visit Store</a>
+					<a class="btn btn-warning btn-block" href="{{store.home_url}}" style="text-transform: uppercase;">Visit Store</a>
 				</div>
 			</div>
 		</div><!-- /Store Description -->
@@ -57,11 +57,11 @@ class="col-md-2">             <h5>Category List</h5>
 						<div class="row" style="">
 							{% for product in products %}
 							<div class="col-xs-2" style="margin: 20px 20px 20px 10px;">
-								<div class="card" style="width: 15rem;">
+								<div class="card" style="width: 15rem; border:none;">
 								  {% if not product.productimage_set.last %}
 								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
 								  {% else %}
-								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 100%; height: 300px; overflow: hidden;">
+								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
 								  {% endif %}
 								  <div class="card-body">
 								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
@@ -87,6 +87,30 @@ class="col-md-2">             <h5>Category List</h5>
 								</div>
 							{% endif %}
 							{% endfor %}
+							<!-- Paginations -->
+							<div class="col-md-12">
+								{% if is_paginated %}
+								  <ul class="pagination" style="text-align: center;">
+								    {% if page_obj.has_previous %}
+								      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+								    {% else %}
+								      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
+								    {% endif %}
+								    {% for i in paginator.page_range %}
+								      {% if page_obj.number == i %}
+								        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+								      {% else %}
+								        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+								      {% endif %}
+								    {% endfor %}
+								    {% if page_obj.has_next %}
+								      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+								    {% else %}
+								      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+								    {% endif %}
+								  </ul>
+								{% endif %}
+							</div><!-- /Pagination -->
 						</div><!-- Row -->
 					</div><!-- Card -->
 					<div class="clear-fix"></div>
@@ -94,27 +118,7 @@ class="col-md-2">             <h5>Category List</h5>
 				<h5>No products Available</h5>
 			{% endif %}
 		</div><!-- ProductsList -->
-		{% if is_paginated %}
-		  <ul class="pagination" style="text-align: center;">
-		    {% if page_obj.has_previous %}
-		      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
-		    {% else %}
-		      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
-		    {% endif %}
-		    {% for i in paginator.page_range %}
-		      {% if page_obj.number == i %}
-		        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
-		      {% else %}
-		        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
-		      {% endif %}
-		    {% endfor %}
-		    {% if page_obj.has_next %}
-		      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
-		    {% else %}
-		      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
-		    {% endif %}
-		  </ul>
-		{% endif %}
+		
 	</div><!-- /Row -->
 </div><!-- /Page Container -->
 {% endblock page %}

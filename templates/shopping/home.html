@@ -51,11 +51,11 @@
 <div class="container" id="pageContainer">
 	<div class="row">
 		<!-- The Caraousal Block-->
-		<div class="col-md-9">
+		<div class="col-md-10">
 			<div class="container" id="leftContainer">
 				<!-- DODTs -->
-				<div class="card">
-					<div class="card-header" style="text-transform: uppercase;">
+				<div class="card" style="border:none;">
+					<div class="card-header" style="text-transform: uppercase; border: none;">
 						<a href="{% url 'shopping-deals' %}" style="text-decoration: none;">Deals Of The Days</a>
 					</div><!-- /DODT Header -->
 					<div class="card-body">
@@ -65,8 +65,8 @@
 						    {% if forloop.first %}
 						    <div class="carousel-item active" style="background-color: #fff;">
 						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 250px; width: 90%">
-								  <a href="{{dotd.url}}"><img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;"></a>
+						      	<div class="card" style="height: 250px; width: 90%; border: none;">
+								  <a href="{{dotd.url}}"><img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;"></a>
 								  <div class="card-body">
 								  	<p class="card-title">
 								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ dotd.title }}</a>
@@ -88,9 +88,9 @@
 						    {% else %}
 						    <div class="carousel-item" style="background-color: #fff;">
 						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 250px; width: 90%">
+						      	<div class="card" style="height: 250px; width: 90%; border:none;">
 								  <a href="{{dotd.url}}">
-								  	<img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;">
+								  	<img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 50%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
 								  </a>
 								  <div class="card-body">
 								  	<p class="card-title">
@@ -124,7 +124,7 @@
 						  </a>
 						</div>
 					</div><!-- /DODT BODY -->
-					<div class="card-footer">
+					<div class="card-footer" style="border:none;">
 						<p class="text-center">
 							<a href="{% url 'shopping-deals' %}" style="text-transform: uppercase; text-decoration: none;">View All</a>
 						</p>
@@ -133,8 +133,8 @@
 				<div class="clear-fix"></div>
 
 				<!-- Top Offers IN Mobiles -->
-				<div class="card" style="margin: 35px auto;">
-					<div class="card-header" style="text-transform: uppercase;">
+				<div class="card" style="margin: 35px auto; border:none;">
+					<div class="card-header" style="text-transform: uppercase; border: none;">
 						<a href="{% url 'shopping-offers' %}" style="text-decoration: none;">Top Offers</a>
 					</div><!-- /DODT Header -->
 					<div class="card-body">
@@ -144,8 +144,8 @@
 						    {% if forloop.first %}
 						    <div class="carousel-item active" style="background-color: #fff;">
 						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 250px; width: 90%">
-								  <a href="{{offer.url}}"><img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;"></a>
+						      	<div class="card" style="height: 300px; width: 90%; border:none;">
+								  <a href="{{offer.url}}"><img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 50%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;"></a>
 								  <div class="card-body">
 								  	<p class="card-title">
 								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ offer.title }}</a>
@@ -173,9 +173,9 @@
 						    {% else %}
 						    <div class="carousel-item" style="background-color: #fff;">
 						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 250px; width: 90%">
+						      	<div class="card" style="height: 250px; width: 90%; border:none;">
 								  <a href="{{offer.url}}">
-								  	<img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="height:150px; width: 100%; overflow: hidden;">
+								  	<img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
 								  </a>
 								  <div class="card-body">
 								  	<p class="card-title">
@@ -215,7 +215,7 @@
 						  </a>
 						</div>
 					</div><!-- /DODT BODY -->
-					<div class="card-footer">
+					<div class="card-footer" style="border:none;">
 						<p class="text-center">
 							<a href="{% url 'shopping-offers' %}" style="text-transform: uppercase; text-decoration: none;">View All</a>
 						</p>
@@ -225,7 +225,7 @@
 			</div><!-- Left Container -->
 		</div><!-- /Left Column -->
 
-		<div class="col-md-3">
+		<div class="col-md-2">
 			
 		</div><!-- /Right Column -->
 	</div><!-- /Rows -->
