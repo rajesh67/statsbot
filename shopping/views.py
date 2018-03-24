@@ -26,7 +26,8 @@ from shopping.models import (
 )
 
 def shopping_home(request):
-	return render(request, 'shopping/home.html', {'dotdList':DOTD.objects.all()[:10], 'offersList': Offer.objects.all()[:10]})
+	storesList=Store.objects.all()
+	return render(request, 'shopping/home.html', {'dotdList':DOTD.objects.all()[:10], 'offersList': Offer.objects.all()[:10], 'storesList':storesList})
 
 def shopping_mobiles(request):
 	products=Product.objects.all()

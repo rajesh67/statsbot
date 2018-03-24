@@ -244,7 +244,6 @@ class FKDeltaFeedAPIHandler():
 		resp=requests.get(deltaGetURL, headers=self.headers)
 		if resp.status_code==200:
 			data=json.loads(resp.content)
-			print(data)
 			catId=data['category']
 			version=data['version']
 			if version!=self.category.current_version:
@@ -263,14 +262,13 @@ class FKDeltaFeedAPIHandler():
 					else:
 						break
 				# Now Updates The Version Of the Category
-				self.category.baseApiURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['get']
+				self.category.baseApiURL=listings[self.category.name]['availableVariants']['v1.1.0']['get']
 				self.category.deltaGetURL=deltaGetURL
-				self.category.topFeedsURL=apiListings[self.category.name]['availableVariants']['v1.1.0']['top']
+				self.category.topFeedsURL=listings[self.category.name]['availableVariants']['v1.1.0']['top']
 				self.category.last_updated_on=datetime.datetime.now()
 				self.category.last_version=self.category.current_version
 				self.category.current_version=version
 				self.category.save()
-				return True
 			else:
 				print("Category Not Changed")
 		else:
