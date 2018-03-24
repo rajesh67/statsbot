@@ -77,7 +77,7 @@ class CategoryListView(ListView):
 	def get_context_data(self, **kwargs):
 		context=super(CategoryListView, self).get_context_data(**kwargs)
 		context['category']=Category.objects.get(name=self.kwargs.get('categoryName'))
-		context['store']=self.get_object()
+		context['store']=Store.objects.get(short_name=self.kwargs.get('storeName'))
 		return context
 
 class SearchResultsView(View):
