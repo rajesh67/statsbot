@@ -104,7 +104,7 @@ class StoreDetailView(DetailView):
 		context=super(StoreDetailView, self).get_context_data(**kwargs)
 		store=self.get_object()
 		context['store']=store
-		context['products']=store.product_set.filter(inStock=True)[:50]
+		context['products']=store.product_set.filter(inStock=True)[:12]
 		return context
 
 class AboutUSView(TemplateView):
