@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shopping',
     'flights',
+    'busses',
     'app',
 
     #third-party apps

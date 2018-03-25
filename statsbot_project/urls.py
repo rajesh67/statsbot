@@ -30,7 +30,10 @@ urlpatterns = [
     url(r'^shopping/', include('shopping.urls')),
     # Online trael App
     url(r'^flights/', include('flights.urls')),
+    # Online Bus Bookings
+    url(r'^buses/', include('busses.urls')),
 ]
+
 urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
