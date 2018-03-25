@@ -39,6 +39,10 @@
           </li>
           
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'hotels-home' %}">Hotels</a>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'buses-home' %}">Buses</a>
           </li>
 
@@ -62,12 +66,14 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'about-us' %}">About US</a>
           </li>
-          <li class="nav-item navbar-right">
-            <form class="form-inline" action="{% url 'search-products' %}" method="get">
-              <input class="form-control" type="text" id="searchbox" name="q" placeholder="{{ request.GET.q}}" data="{{ request.GET.q}}" style="display: inline-block; max-width: 500px; width: 430px;">
-              <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
-            </form>
-          </li>
+          {% block searchbox %}
+            <li class="nav-item navbar-right">
+              <form class="form-inline" action="{% url 'search-products' %}" method="get">
+                <input class="form-control" type="text" id="searchbox" name="q" placeholder="{{ request.GET.q}}" data="{{ request.GET.q}}" style="display: inline-block; max-width: 500px; width: 430px;">
+                <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
+              </form>
+            </li>
+          {% endblock %}
         </ul>
       </div>
     </nav><!-- End of Navigation Bar -->

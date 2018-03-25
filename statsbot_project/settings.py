@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'shopping',
     'flights',
     'busses',
+    'hotels',
     'app',
 
     #third-party apps

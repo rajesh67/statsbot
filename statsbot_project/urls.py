@@ -32,6 +32,8 @@ urlpatterns = [
     url(r'^flights/', include('flights.urls')),
     # Online Bus Bookings
     url(r'^buses/', include('busses.urls')),
+    # Online Hotel Bookings
+    url(r'^hotels/', include('hotels.urls')),
 ]
 
 urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
