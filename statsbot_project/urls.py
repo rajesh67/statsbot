@@ -26,7 +26,10 @@ urlpatterns = [
     url('^$', home ,name="home"),
     url('^about-us/$', AboutUSView.as_view(),name="about-us"),
     url('^why-us/$', WhyUSView.as_view(),name="why-us"),
+    # Online Shopping App
     url(r'^shopping/', include('shopping.urls')),
+    # Online trael App
+    url(r'^flights/', include('flights.urls')),
 ]
 urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

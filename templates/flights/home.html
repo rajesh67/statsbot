@@ -11,13 +11,13 @@
 </style>
 <!-- Jumbotron -->
 <div class="jumbotron" style="text-align: center;">
-  <h1 class="display-4">Welcome to Best Shopping Experience</h1>
+  <h1 class="display-4">Feel the Social Booking Experience</h1>
   <!-- <p class="lead">We are here to innovate </p> -->
   <hr class="my-4">
   <div id="featuredStores" class="container">
   	<div class="row">
   		<div class="col-md-12">
-  			<h5><blockquote>Feel the Social Shopping Experience</blockquote></h5>
+  			<h5><blockquote>Featured Stores For Flight Bookings</blockquote></h5>
   		</div>
   		{% for store in storesList %}
   		<div class="col-md-3">
@@ -26,8 +26,7 @@
 			  <div class="card-body">
 			    <h5 class="card-title">{{store.name}}</h5>
 			    <p class="card-text"></p>
-			    <a href="{% url 'store-homepage' store.short_name %}" class="btn btn-primary btn-block" style="text-transform: uppercase;">View All Products</a>
-			    <a href="{{store.home_url}}" class="btn btn-warning btn-block" style="text-transform: uppercase;">SHOP ON {{store.short_name }}</a>
+			    <a href="{{store.home_url}}" class="btn btn-warning btn-block" style="text-transform: uppercase;">Book Now on {{store.short_name }}</a>
 			  </div>
 			</div>
   		</div><!-- /Flipkart -->
