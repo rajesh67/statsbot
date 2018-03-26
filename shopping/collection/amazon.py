@@ -19,5 +19,7 @@ class AmazonSearchAPIHandler():
 		resp=self.amazon_handle.ItemSearch(Keywords=keywords, SearchIndex='All')
 		return resp
 
-	def parse_results_xml(self, resp):
+	def parse_products_from_xml(self, data):
+		def parse_next_page_url(pageUrlElem):
+			pass
 		pass
