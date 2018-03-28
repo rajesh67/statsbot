@@ -1,4 +1,6 @@
 from urllib.parse import urlparse, parse_qs
+from xml.etree import ElementTree
+from xml.etree.ElementTree import SubElement
 
 from django.conf import settings
 from shopping.models import (
@@ -20,6 +22,20 @@ class AmazonSearchAPIHandler():
 		return resp
 
 	def parse_products_from_xml(self, data):
-		def parse_next_page_url(pageUrlElem):
-			pass
-		pass
+		root=ElementTree.fromstring(data)
+		data=root.findall('./')
+		if len(data)==2:
+			items=data[-1]
+			childs=items.getchildren()
+			# Request Tag Processing
+			reqChilds=childs[0].getchildren()
+			isValid=reqChilds[0].text
+			if isValid==True:
+				totalResults=int(reqChilds[1].text)
+				totalPages=int(reqChilds[2].text)
+				moreSearchResultURL=reqChilds[3].text
+				# Extract Amazon Items Data from the Response
+			else:
+				print("Request Valid is not True")
+		else:
+			print("Response Doesn't Contains Any Items")
