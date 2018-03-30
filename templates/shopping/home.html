@@ -3,30 +3,28 @@
 {% block page %}
 <style type="text/css">
 	#pageContainer{
-		margin: 60px auto;
-	}
-	#pageMessage{
-		margin: 60px auto;
+		margin: 0px auto;
 	}
 </style>
 <!-- Jumbotron -->
 <div class="jumbotron" style="text-align: center;" id="pageContainer">
-  <h1 class="display-4">Welcome to Best Shopping Experience</h1>
+  <h5 class="display-4">Welcome to Best Shopping Experience</h5>
   <!-- <p class="lead">We are here to innovate </p> -->
-  <hr class="my-4">
+  <hr class="my-2">
   <div id="featuredStores" class="container">
   	<div class="row">
   		<div class="col-md-12">
-  			<h5><blockquote>Feel the Social Shopping Experience</blockquote></h5>
+  			<h5><blockquote>Featured Stores For Social Shopping Experience</blockquote></h5>
   		</div>
   		{% for store in storesList %}
   		<div class="col-md-3">
-  			<div class="card" style="width: 16rem; margin: 50px 50px;">
-			  <img class="card-img-top" src="{{MEDIA_URL}}{{store.logo_image}}" alt="Card image cap" style="width: 100%; height: 100px; overflow: hidden;">
+  			<div class="card" style="width: 16rem; margin: 20px 5px;">
+			  <img class="card-img-top" src="{{MEDIA_URL}}{{store.logo_image}}" alt="Card image cap" style="width: 100%; height: 50px; overflow: hidden;">
 			  <div class="card-body">
-			    <h5 class="card-title">{{store.name}}</h5>
 			    <p class="card-text"></p>
-			    <a href="{% url 'store-homepage' store.short_name %}" class="btn btn-primary btn-block" style="text-transform: uppercase;">View All Products</a>
+			    {% if store.search_products.all %}
+			    	<a href="{% url 'store-homepage' store.short_name %}" class="btn btn-primary btn-block" style="text-transform: uppercase;">View All Products</a>
+			    {% endif %}
 			    <a target="_blank" href="{{store.home_url}}" class="btn btn-warning btn-block" style="text-transform: uppercase;">SHOP ON {{store.short_name }}</a>
 			  </div>
 			</div>
@@ -41,187 +39,124 @@
 </div>
 
 <!-- New Template Content for Shopping Home Page -->
-<div class="container">
-  
-	<!--Carousel Wrapper-->
-	<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
+<!-- StoreWise Offers Container -->
+{% for store, offersList in offers_data.items %}
+<div class="container" id="storeContainer" style="margin-top: 25px;">
+	{% if offersList %}
+	<div class="card">
+		<div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
+			<h5 style="text-transform: uppercase;">Top Offers on {{ store.short_name }} </h5>
+		</div>
+		<!-- Offers List -->
+		<div class="card-body">
+			<!--Carousel Wrapper-->
+			<div id="multi-item-offers-{{store.short_name}}" class="carousel slide carousel-multi-item" data-ride="carousel">
+				<div class="carousel-inner" role="listbox" style="padding-bottom: 100px;">
+				{% for offer in offersList %}
+			    	<!--Slides-->
+			    	{% if forloop.first %}
+			    		<div class="carousel-item active" style="height:20rem;">
+			    	{% endif %}	
+			            <div class="col-md-3">
+			                <div class="card mb-2">
+			                    <img class="img-fluid" src="{{offer.get_default_image.url}}" alt="Card image cap" style="overflow: hidden; display: block; height: 250px;">
+			                    <div class="card-body">
+			                        <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{offer.title|truncatechars:100}}</h4>
+			                        <p class="card-text" style="font-size: 0.8em;">
+			                        	<p style="font-size: 0.8em;">LIVE Period : {{offer.startTime.date}} - {{offer.endTime.date}}</p>
+			                        </p>
+			                        <a class="btn btn-warning btn-block" href="{{offer.url}}" style="text-align: bottom;">Grab this offer</a>
+			                    </div>
+			                </div>
+			            </div><!-- /Product Div -->
+			            {% if forloop.last %}
+			            	<div class="col-md-3">
+			                	<div class="card mb-2 text-center" style="border: none;">
+			                		<a href="{% url 'shopping-offers' %}" class="btn btn-primary btn-block" style="margin-top: 50%;">Browse Top Offers</a>
+			                	</div>
+			                </div>
+			            {% endif %}
 
-	    <!--Indicators-->
-	    <!-- <ol class="carousel-indicators">
-	        <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
-	        <li data-target="#multi-item-example" data-slide-to="1"></li>
-	        <li data-target="#multi-item-example" data-slide-to="2"></li>
-	    </ol> -->
-	    <!--/.Indicators-->
+		            {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height:20rem;">{% endif %}
+		            {% if forloop.last %}</div>{% endif %}
+		            {% endfor%}
+			    </div>
+			    <!--/.Slides-->
 
-	    <!--Slides-->
-	    <div class="carousel-inner" role="listbox" style="padding-bottom: -100px;">
-
-	        <!--First slide-->
-	        <div class="carousel-item active">
-
-	            <div class="col-md-4">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	            <div class="col-md-4 clearfix d-none d-md-block">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(18).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	            <div class="col-md-4 clearfix d-none d-md-block">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(35).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	        </div>
-	        <!--/.First slide-->
-
-	        <!--Second slide-->
-	        <div class="carousel-item">
-
-	            <div class="col-md-4">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(60).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	            <div class="col-md-4 clearfix d-none d-md-block">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(47).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	            <div class="col-md-4 clearfix d-none d-md-block">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(48).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	        </div>
-	        <!--/.Second slide-->
-
-	        <!--Third slide-->
-	        <div class="carousel-item">
-
-	            <div class="col-md-4">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(53).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	            <div class="col-md-4 clearfix d-none d-md-block">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(45).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	            <div class="col-md-4 clearfix d-none d-md-block">
-	                <div class="card mb-2">
-	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(51).jpg" alt="Card image cap">
-	                    <div class="card-body">
-	                        <h4 class="card-title">Card title</h4>
-	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-	                        <a class="btn btn-primary">Button</a>
-	                    </div>
-	                </div>
-	            </div>
-
-	        </div>
-	        <!--/.Third slide-->
-
-	    </div>
-	    <!--/.Slides-->
-
-
-	    <!--Controls-->
-	    <div class="controls-bottom" style="text-align: center;">
-	        <a class="btn-floating btn btn-lg btn-primary" href="#multi-item-example" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
-	        <a class="btn-floating btn-lg btn btn-primary" href="#multi-item-example" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
-	    </div>
-	    <!--/.Controls-->
-
+			    <!--Controls-->
+			    <div class="controls-bottom" style="text-align: center;">
+			        <a class="btn-floating btn btn-md btn-primary" href="#multi-item-offers-{{store.short_name}}" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
+			        <a class="btn-floating btn-md btn btn-primary" href="#multi-item-offers-{{store.short_name}}" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
+			    </div>
+			    <!--/.Controls-->
+			</div>
+			<!--/.Carousel Wrapper-->
+		</div><!-- /OffersListCaraousal -->
 	</div>
-	<!--/.Carousel Wrapper-->
-</div><!-- /PAge Container -->
+	{% endif %}
+</div><!-- /OffersContainer -->
+{% endfor %}
 
-<!-- <script type="text/javascript">
-	 $('#carousel-example-generic-deals').on('slid.bs.carousel', function () {
-        $(".carousel-item.active:nth-child(" + ($(".carousel-inner .carousel-item").length -1) + ") + .carousel-item").insertBefore($(".carousel-item:first-child"));
-        $(".carousel-item.active:last-child").insertBefore($(".carousel-item:first-child"));
-    });
 
-	 $('#carousel-example-generic-offers').on('slid.bs.carousel', function () {
-        $(".carousel-item.active:nth-child(" + ($(".carousel-inner .carousel-item").length -1) + ") + .carousel-item").insertBefore($(".carousel-item:first-child"));
-        $(".carousel-item.active:last-child").insertBefore($(".carousel-item:first-child"));
-    });
-</script> -->
+<!-- StoreWise Deals Container -->
+{% for store, dealsList in deals_data.items %}
+<div class="container" id="storeContainer" style="margin-top: 20px;">
+	{% if dealsList %}
+	<div class="card">
+		<div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
+			<h5 style="text-transform: uppercase;">Top Deals of The Day on {{ store.short_name }} </h5>
+		</div>
+		<!-- Offers List -->
+		<div class="card-body">
+			<!--Carousel Wrapper-->
+			<div id="multi-item-deals-{{store.short_name}}" class="carousel slide carousel-multi-item" data-ride="carousel">
+				<div class="carousel-inner" role="listbox" style="padding-bottom: 100px;">
+				{% for deal in dealsList %}
+			    	<!--Slides-->
+			    	{% if forloop.first %}
+			    		<div class="carousel-item active" style="height:20rem;">
+			    	{% endif %}	
+			            <div class="col-md-3">
+			                <div class="card mb-2">
+			                    <img class="img-fluid" src="{{deal.get_default_image.url}}" alt="Card image cap" style="overflow: hidden; display: block; height: 250px;">
+			                    <div class="card-body">
+			                        <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{offer.title|truncatechars:100}}</h4>
+			                        <p class="card-text" style="font-size: 0.8em;">
+			                        	<p style="font-size: 0.8em;">status : {{deal.availability}}</p>
+			                        	<p class="description" style="font-size: 0.6em;">{{deal.description}}</p>
+			                        </p>
 
-<!-- New Template Javascript -->
-<script type="text/javascript">
-	// Instantiate the Bootstrap carousel
-	$('.multi-item-carousel').carousel({
-	  interval: false
-	});
+			                        <a class="btn btn-warning btn-block" href="{{deal.url}}" style="text-align: bottom;">Grab this deal</a>
+			                    </div>
+			                </div>
+			            </div><!-- /Product Div -->
+			            {% if forloop.last %}
+			            	<div class="col-md-3">
+			                	<div class="card mb-2 text-center" style="border: none;">
+			                		<a href="{% url 'shopping-deals' %}" class="btn btn-primary btn-block" style="margin-top: 50%;">Browse Top Deals</a>
+			                	</div>
+			                </div>
+			            {% endif %}
 
-	// for every slide in carousel, copy the next slide's item in the slide.
-	// Do the same for the next, next item.
-	$('.multi-item-carousel .item').each(function(){
-	  var next = $(this).next();
-	  if (!next.length) {
-	    next = $(this).siblings(':first');
-	  }
-	  next.children(':first-child').clone().appendTo($(this));
-	  
-	  if (next.next().length>0) {
-	    next.next().children(':first-child').clone().appendTo($(this));
-	  } else {
-	  	$(this).siblings(':first').children(':first-child').clone().appendTo($(this));
-	  }
-	});
-</script>
+		            {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height:20rem;">{% endif %}
+		            {% if forloop.last %}</div>{% endif %}
+		            {% endfor%}
+			    </div>
+			    <!--/.Slides-->
+
+			    <!--Controls-->
+			    <div class="controls-bottom" style="text-align: center;">
+			        <a class="btn-floating btn btn-md btn-primary" href="#multi-item-deals-{{store.short_name}}" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
+			        <a class="btn-floating btn-md btn btn-primary" href="#multi-item-deals-{{store.short_name}}" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
+			    </div>
+			    <!--/.Controls-->
+			</div>
+			<!--/.Carousel Wrapper-->
+		</div><!-- /OffersListCaraousal -->
+	</div>
+	{% endif %}
+</div><!-- /OffersContainer -->
+{% endfor %}
+
+
 {% endblock page %}

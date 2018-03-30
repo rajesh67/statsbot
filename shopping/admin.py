@@ -6,3 +6,5 @@ from shopping.models import *
 admin.site.register(Store)
 admin.site.register(Category)
 admin.site.register(SearchProductImage)
+admin.site.register(DOTDImage)
+admin.site.register(OfferImage)

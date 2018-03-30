@@ -28,7 +28,20 @@ from shopping.models import (
 
 def shopping_home(request):
 	storesList=Store.objects.all()
-	return render(request, 'shopping/home.html', {'dotdList':DOTD.objects.all()[:10], 'offersList': Offer.objects.all()[:10], 'storesList':storesList})
+	deals_data={}
+	offers_data={}
+	products_data={}
+	output_data={}
+	for store in Store.objects.all():
+		deals_data.update({store:store.dotd_set.all()[:11]})
+		offers_data.update({store:store.offer_set.all()[:11]})
+		products_data.update({store:store.search_products.all()[:11]})
+	return render(request, 'shopping/home.html', {
+		'storesList':storesList,
+		'offers_data':offers_data,
+		'deals_data' : deals_data,
+		'products_data':products_data,
+	})
 
 def shopping_mobiles(request):
 	products=Product.objects.all()

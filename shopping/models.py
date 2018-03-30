@@ -157,6 +157,9 @@ class Offer(models.Model):
 	def __str__(self):
 		return self.title
 
+	def get_default_image(self):
+		return self.offerimage_set.get(size='high')
+
 class OfferImage(BaseImage):
 	offer=models.ForeignKey('Offer', on_delete=models.CASCADE)
 
@@ -175,7 +178,7 @@ class DOTD(models.Model):
 		return self.title
 
 	def get_default_image(self):
-		return self.dotdimage_set.get(size='default')
+		return self.dotdimage_set.get(size='high')
 
 class DOTDImage(BaseImage):
 	dotd=models.ForeignKey('DOTD', on_delete=models.CASCADE)
