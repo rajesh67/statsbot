@@ -45,8 +45,10 @@
 				                <div class="card mb-2">
 				                    <img class="img-fluid" src="{{product.get_default_image.url}}" alt="Card image cap" style="overflow: hidden; display: block; height: 250px;">
 				                    <div class="card-body">
-				                        <h4 class="card-title" style="font-size: 0.8em; text-transform: uppercase;">{{product.title}}</h4>
-				                        <p class="card-text" style="font-size: 0.8em;">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+				                        <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{product.title}}</h4>
+				                        <p class="card-text" style="font-size: 0.8em;">
+				                        	<h5 style="font-size: 0.8em;">Price : INR {{product.prices.last.sellingPrice}}</h5>
+				                        </p>
 				                        <a class="btn btn-warning btn-block" href="{{product.productUrl}}" style="text-align: bottom;">Buy Now</a>
 				                    </div>
 				                </div>
