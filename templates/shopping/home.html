@@ -82,7 +82,9 @@
 	{% if offersList %}
 	<div class="card" style="border: none;">
 		<div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
-			<h5 style="text-transform: uppercase;">Top Offers on {{ store.short_name }} </h5>
+			<h5 style="text-transform: uppercase;">Top Offers on {{ store.short_name }} 
+				<a href="{% url 'shopping-deals' %}" class="btn btn-primary btn-sm" style="margin-left: 10px;">Browse All Offers</a>
+			</h5>
 		</div>
 		<!-- Offers List -->
 		<div class="card-body">
@@ -141,7 +143,10 @@
 	{% if dealsList %}
 	<div class="card" style="border: none;">
 		<div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
-			<h5 style="text-transform: uppercase;">Top Deals of The Day on {{ store.short_name }} </h5>
+			<h5 style="text-transform: uppercase;">Top Deals of The Day on {{ store.short_name }}
+				<a href="{% url 'shopping-deals' %}" class="btn btn-primary btn-sm" style="margin-left: 10px;">Browse Top Deals</a>
+			</h5>
+			
 		</div>
 		<!-- Offers List -->
 		<div class="card-body">
@@ -206,7 +211,7 @@
 	{% if productsList %}
 	<div class="card" style="border: none;">
 		<div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
-			<h5 style="text-transform: uppercase;">Top Product Being Searched on {{ store.short_name }} </h5>
+			<h5 style="text-transform: uppercase;">Top Product Being Searched on {{ store.short_name }} <a href="{% url 'store-homepage' store.short_name %}" class="btn btn-success btn-md" style="margin-left: 10px;">Browse All</a> </h5>
 		</div>
 		<!-- Offers List -->
 		<div class="card-body">
@@ -224,11 +229,11 @@
 			                    <div class="card-body">
 			                        <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{product.title|truncatechars:100}}</h4>
 			                        <p class="card-text" style="font-size: 0.8em;">
-			                        	<p style="font-size: 0.8em;"> {{product.description}}</p>
+			                        	<p style="font-size: 0.8em;">Brand : {{product.brand}}</p>
 			                        </p>
 
 			                        <p class="card-text" style="font-size: 0.8em;">
-			                        	<p style="font-size: 0.8em;">status : {{product.availability}}</p>
+			                        	<p style="font-size: 0.8em;">Price : INR {{product.prices.last.sellingPrice }}</p>
 			                        </p>
 
 			                        <a class="btn btn-warning btn-block" href="{{product.productUrl}}" style="text-align: bottom;">Buy Now</a>
