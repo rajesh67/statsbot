@@ -90,13 +90,23 @@ class SearchResultsView(View):
 		keywords=request.GET.get('q')
 		print(self.kwargs, request.GET.get('q'))
 		if keywords:
-			fkSearchHandle=FKSearchAPIHandler()
-			amazSearchHandle=AmazonSearchAPIHandler()
-			results=amazSearchHandle.get_search_results(keywords=keywords)
-			products=amazSearchHandle.parse_products_from_xml(results)
-			amazonProductsList=amazSearchHandle.save_result_products(products)
-			productsList=fkSearchHandle.get_search_results(keywords=keywords)
-		return render(request, self.template_name, {'products': productsList, 'amazonProductsList':amazonProductsList})
+			output_data={}
+			try:
+				fkSearchHandle=FKSearchAPIHandler()
+				productsList=fkSearchHandle.get_search_results(keywords=keywords)
+				output_data.update({Store.objects.get(short_name='flipkart'):productsList})
+			except Exception as e:
+				output_data.update({Store.objects.get(short_name='flipkart'):[]})
+
+			try:
+				amazSearchHandle=AmazonSearchAPIHandler()
+				results=amazSearchHandle.get_search_results(keywords=keywords)
+				products=amazSearchHandle.parse_products_from_xml(results)
+				amazonProductsList=amazSearchHandle.save_result_products(products)
+				output_data.update({Store.objects.get(short_name='amazon'):amazonProductsList})
+			except Exception as e:
+				output_data.update({Store.objects.get(short_name='amazon'):[]})
+		return render(request, self.template_name, {'data':output_data})
 
 class StoreDetailView(DetailView):
 	model = Store

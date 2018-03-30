@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block page %}
 <style type="text/css">
 	#pageContainer{
@@ -10,109 +11,74 @@
 	}
 </style>
 
-<div class="container" id="pageContainer">     
-	<div class="row">
-		<!-- Filter Column -->
-		<div class="col-md-2">
-			<div class="container">
-				
-			</div><!-- /Filters container -->	
-		</div><!-- /Filters Column -->
 
-		<!-- ProductsList -->
-		<div class="col-md-10">
-			{% if products %}
-					<div class="container">
-						<div class="col-md-12">
-								<h5>Showing {{ products|length }} Search Results For "{{ request.GET.q}}"</h5>
-							</div><!-- /Header -->
-						<div class="row">
-							{% for product in products %}
-							<div class="col-sm-3" style="">
-								<div class="card" style="width: 14rem; margin: 10px 10px; border:none;">
-								  {% if not product.searchproductimage_set.last %}
-								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
-								  {% else %}
-								  	<img class="card-img-top" src="{{product.searchproductimage_set.last.url}}" alt="Card image cap" style="width: 50%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
-								  {% endif %}
-								  <div class="card-body">
-								    <a href="{{product.productUrl}}" style="text-decoration: none; font-size: .9em; text-transform: uppercase;"><p class="card-title">{{product.title}}</p></a>
-								    <p class="card-text">
-								    	{% for price in product.prices.all %}
-											<div class="card" style="border:none;">
-												<div class="card-body">
-													<p class="card-title">Rs. {{price.sellingPrice}}</p>
+<!-- New Template Design -->
+<div class="container" id="pageContainer">
+	{% for store, productsList in data.items %}
+		<div class="card" style="border: none;">
+			<div class="card-header" style="border: none; text-transform: uppercase; background-color: #e0eafe66;">
+				<h5>{{store.short_name}} Search Results : Showing total {{productsList|length}} products for "{{ request.GET.q }}"</h5>
+			</div><!-- /header -->
 
-												</div>
-											</div>
-										{% endfor %}
-								    </p>
-								    <div class="buttons" style="margin: auto auto;">
-								    	<a href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
-								    <a href="#" class="btn btn-warning">Track Price</a>
-								    </div>
-								  </div>
-								</div>
+		</div><!-- Store Results Card -->
+		{% if productsList %}
+			<!--Carousel Wrapper-->
+			<div id="multi-item-example-{{store.short_name}}" class="carousel slide carousel-multi-item" data-ride="carousel">
+			    <!--Indicators-->
+			    <!-- <ol class="carousel-indicators">
+			        <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
+			        <li data-target="#multi-item-example" data-slide-to="1"></li>
+			        <li data-target="#multi-item-example" data-slide-to="2"></li>
+			    </ol> -->
+			    <!--/.Indicators-->
 
-								<div class="card-body">
-									
-								</div><!-- Chart Div for Each Product Instance -->
-							</div><!-- Product Div -->
-							<!-- <div class="col-xs-sm-1"></div> -->
-							{% if forloop.counter|divisibleby:3 %}
-								<div class="clearfix">
-									
-								</div>
-							{% endif %}
-							{% endfor %}
-						</div><!-- Row -->
-					</div><!-- Card -->
+			    <!--Slides-->
+			    <div class="carousel-inner" role="listbox" style="padding-bottom: -100px;">
 
-					<div class="clear-fix"></div>
-			{% else %}
-				<h5>No products Available</h5>
-			{% endif %}
-		</div><!-- ProductsList -->
+			        <!--Third slide-->
+			        	<!-- Product Div -->
+			        	{% for product in productsList %}
+			        	
+			        	{% if forloop.first %}<div class="carousel-item active">{% endif %}
+				        	
+				            <div class="col-md-3">
+				                <div class="card mb-2">
+				                    <img class="img-fluid" src="{{product.get_default_image.url}}" alt="Card image cap" style="overflow: hidden; display: block; height: 250px;">
+				                    <div class="card-body">
+				                        <h4 class="card-title" style="font-size: 0.8em; text-transform: uppercase;">{{product.title}}</h4>
+				                        <p class="card-text" style="font-size: 0.8em;">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+				                        <a class="btn btn-warning" href="{{product.productUrl}}" style="text-align: bottom;">Grab this deal</a>
+				                    </div>
+				                </div>
+				            </div><!-- /Product Div -->
 
-		<!-- Amazon Products List -->
-		{% for product in amazonProductsList %}
-			<div class="col-sm-3" style="">
-				<div class="card" style="width: 14rem; margin: 10px 10px; border:none;">
-				  {% if not product.searchproductimage_set.last %}
-				  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
-				  {% else %}
-				  	<img class="card-img-top" src="{{product.searchproductimage_set.last.url}}" alt="Card image cap" style="width: 50%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
-				  {% endif %}
-				  <div class="card-body">
-				    <a href="{{product.productUrl}}" style="text-decoration: none; font-size: .9em; text-transform: uppercase;"><p class="card-title">{{product.title}}</p></a>
-				    <p class="card-text">
-				    	{% for price in product.prices.all %}
-							<div class="card" style="border:none;">
-								<div class="card-body">
-									<p class="card-title">Rs. {{price.sellingPrice}}</p>
+				            {% if forloop.last %}
+				            <div class="col-sm-3 text-center" style="vertical-align: center;">
+				            	<a class="btn-floating btn-lg btn btn-primary" href="#" style="vertical-align: center; margin-top: 20%;">Browse ALL Products<i class="fa fa-chevron-right" style="margin-left: 10px;"></i><i class="fa fa-chevron-right"></i></a>	
+				            </div>
+				            {% endif %}
 
-								</div>
-							</div>
-						{% endfor %}
-				    </p>
-				    <div class="buttons" style="margin: auto auto;">
-				    	<a href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
-				    <a href="#" class="btn btn-warning">Track Price</a>
-				    </div>
-				  </div>
-				</div>
+			            {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item">{% endif %}
 
-				<div class="card-body">
-					
-				</div><!-- Chart Div for Each Product Instance -->
-			</div><!-- Product Div -->
-			<!-- <div class="col-xs-sm-1"></div> -->
-			{% if forloop.counter|divisibleby:3 %}
-				<div class="clearfix">
-					
-				</div>
-			{% endif %}
-			{% endfor %}
-	</div><!-- /Row -->
-</div><!-- /Page Container -->
+			            {% if forloop.last %}</div>{% endif %}
+			        <!--/.Third slide-->
+			        {% endfor %}
+			    </div>
+			    <!--/.Slides-->
+
+
+			    <!--Controls-->
+			    <div class="controls-bottom" style="text-align: center;">
+			        <a class="btn-floating btn btn-lg btn-primary" href="#multi-item-example-{{store.short_name}}" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
+			        <a class="btn-floating btn-lg btn btn-primary" href="#multi-item-example-{{store.short_name}}" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
+			    </div>
+			    <!--/.Controls-->
+
+			</div>
+			<!--/.Carousel Wrapper-->
+		{% else %}
+			<h5>No Products Available On this Store</h5>
+		{% endif %}
+	{% endfor %}
+</div><!-- Page container -->
 {% endblock page %}

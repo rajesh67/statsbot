@@ -51,6 +51,12 @@ class SearchProduct(models.Model):
 	def __str__(self):
 		return self.title
 
+	def get_default_image(self):
+		if self.store.short_name=='amazon':
+			return self.searchproductimage_set.filter(size='large').first()
+		else:
+			return self.searchproductimage_set.filter(size='200x200').first()
+
 class ProductDescription(models.Model):
 	content=models.TextField()
 	product=models.ForeignKey('SearchProduct', on_delete=models.CASCADE)
