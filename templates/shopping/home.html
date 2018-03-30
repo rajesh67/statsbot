@@ -8,59 +8,9 @@
 	#pageMessage{
 		margin: 60px auto;
 	}
-	/*New Template CSS*/
-	.multi-item-carousel{
-	  .carousel-inner{
-	    > .item{
-	      transition: 500ms ease-in-out left;
-	    }
-	    .active{
-	      &.left{
-	        left:-33%;
-	      }
-	      &.right{
-	        left:33%;
-	      }
-	    }
-	    .next{
-	      left: 33%;
-	    }
-	    .prev{
-	      left: -33%;
-	    }
-	    @media all and (transform-3d), (-webkit-transform-3d) {
-	      > .item{
-	        // use your favourite prefixer here
-	        transition: 500ms ease-in-out left;
-	        transition: 500ms ease-in-out all;
-	        backface-visibility: visible;
-	        transform: none!important;
-	      }
-	    }
-	  }
-	  .carouse-control{
-	    &.left, &.right{
-	      background-image: none;
-	    }
-	  }
-	}
-
-	// non-related styling:
-	body{
-	  background: #333;
-	  color: #ddd;
-	}
-	h1{
-	  
-	  font-size: 2.25em;
-	  text-align: center;
-	  margin-top: 1em;
-	  margin-bottom: 2em;
-	  text-shadow: 0px 2px 0px rgba(0, 0, 0, 1);
-	}
 </style>
 <!-- Jumbotron -->
-<div class="jumbotron" style="text-align: center;">
+<div class="jumbotron" style="text-align: center;" id="pageContainer">
   <h1 class="display-4">Welcome to Best Shopping Experience</h1>
   <!-- <p class="lead">We are here to innovate </p> -->
   <hr class="my-4">
@@ -89,341 +39,155 @@
     <a class="btn btn-primary btn-lg" href="{% url 'category-products' 'mobiles' %}" role="button">View All Products</a>
   </p> -->
 </div>
-<div class="container" id="pageContainer">
-	<div class="row">
-		<!-- The Caraousal Block-->
-		<div class="col-md-10">
-			<div class="container" id="leftContainer">
-				<!-- DODTs -->
-				<div class="card" style="border:none;">
-					<div class="card-header" style="text-transform: uppercase; border: none;">
-						<a href="{% url 'shopping-deals' %}" style="text-decoration: none;">Deals Of The Days</a>
-					</div><!-- /DODT Header -->
-					<div class="card-body">
-						<div id="carousel-example-generic-deals" class="carousel slide" data-ride="carousel" style="background-color: none;">
-						  <div class="carousel-inner" role="listbox">
-						    {% for dotd in dotdList %}
-						    {% if forloop.first %}
-						    <div class="carousel-item active" style="background-color: #fff;">
-						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 250px; width: 90%; border: none;">
-								  <a href="{{dotd.url}}"><img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;"></a>
-								  <div class="card-body">
-								  	<p class="card-title">
-								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ dotd.title }}</a>
-								  	</p>
-								    <p class="card-text">
-								  		{{ dotd.description }}
-								  	</p>
-								  	<p class="card-text" style="text-transform: uppercase;">
-								  		{{dotd.availability}}
-								  	</p>
-								  </div>
-								  <div class="card-footer">
-								  	<p class="card-text">
-								  		{{dotd.store.name}}
-								  	</p>
-								  </div>
-								</div><!-- /DOTD Card -->
-						    </div>
-						    {% else %}
-						    <div class="carousel-item" style="background-color: #fff;">
-						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 250px; width: 90%; border:none;">
-								  <a href="{{dotd.url}}">
-								  	<img class="card-img-top" src="{{dotd.dotdimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 50%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
-								  </a>
-								  <div class="card-body">
-								  	<p class="card-title">
-								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ dotd.title }}</a>
-								  	</p>
-								  	<p class="card-text">
-								  		{{ dotd.description }}
-								  	</p>
-								  	<p class="card-text" style="text-transform: uppercase;">
-								  		{{dotd.availability}}
-								  	</p>
-								  </div>
-								  <div class="card-footer">
-								  	<p class="card-text">
-								  		{{dotd.store.name}}
-								  	</p>
-								  </div>
-								</div><!-- /DOTD Card -->
-						    </div>
-						    {% endif %}
-
-						    {% endfor %}
-						  </div>
-						  <a class="left carousel-control" href="#carousel-example-generic-deals" role="button" data-slide="prev">
-						    <span class="icon-prev" aria-hidden="true"></span>
-						    <span class="sr-only">Previous</span>
-						  </a>
-						  <a class="right carousel-control" href="#carousel-example-generic-deals" role="button" data-slide="next">
-						    <span class="icon-next" aria-hidden="true"></span>
-						    <span class="sr-only">Next</span>
-						  </a>
-						</div>
-					</div><!-- /DODT BODY -->
-					<div class="card-footer" style="border:none;">
-						<p class="text-center">
-							<a href="{% url 'shopping-deals' %}" style="text-transform: uppercase; text-decoration: none;">View All</a>
-						</p>
-					</div><!-- /DODT Footer -->
-				</div><!-- /Deal Of the Day Card -->
-				<div class="clear-fix"></div>
-
-				<!-- Top Offers IN Mobiles -->
-				<div class="card" style="margin: 35px auto; border:none;">
-					<div class="card-header" style="text-transform: uppercase; border: none;">
-						<a href="{% url 'shopping-offers' %}" style="text-decoration: none;">Top Offers</a>
-					</div><!-- /DODT Header -->
-					<div class="card-body">
-						<div id="carousel-example-generic-offers" class="carousel slide" data-ride="carousel" style="background-color: none;">
-						  <div class="carousel-inner" role="listbox">
-						    {% for offer in offersList %}
-						    {% if forloop.first %}
-						    <div class="carousel-item active" style="background-color: #fff;">
-						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 300px; width: 90%; border:none;">
-								  <a href="{{offer.url}}"><img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 50%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;"></a>
-								  <div class="card-body">
-								  	<p class="card-title">
-								  		<a href="{{dotd.url}}" style="text-decoration: none; text-transform: uppercase;">{{ offer.title }}</a>
-								  	</p>
-								    <p class="card-text">
-								  		{{ offer.description }}
-								  	</p>
-								  	<p class="card-text" style="text-transform: uppercase;">
-								  		{{offer.availability}}
-								  	</p>
-								  	<p class="card-text">
-								  		Starts On : {{offer.startTime.date}}
-								  	</p>
-								  	<p class="card-text">
-								  		Ends On : {{ offer.endTime.date}}
-								  	</p>
-								  </div>
-								  <div class="card-footer">
-								  	<p class="card-text">
-								  		{{offer.store.name}}
-								  	</p>
-								  </div>
-								</div><!-- /DOTD Card -->
-						    </div>
-						    {% else %}
-						    <div class="carousel-item" style="background-color: #fff;">
-						      <!-- DOTD CARD -->
-						      	<div class="card" style="height: 250px; width: 90%; border:none;">
-								  <a href="{{offer.url}}">
-								  	<img class="card-img-top" src="{{offer.offerimage_set.last.url}}" alt="Card image cap" width="50%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
-								  </a>
-								  <div class="card-body">
-								  	<p class="card-title">
-								  		<a href="{{offer.url}}" style="text-decoration: none; text-transform: uppercase;">{{ offer.title }}</a>
-								  	</p>
-								  	<p class="card-text">
-								  		{{ offer.description }}
-								  	</p>
-								  	<p class="card-text" style="text-transform: uppercase;">
-								  		{{offer.availability}}
-								  	</p>
-								  	<p class="card-text">
-								  		Starts On : {{offer.startTime.date}}
-								  	</p>
-								  	<p class="card-text">
-								  		Ends On : {{ offer.endTime.date}}
-								  	</p>
-								  </div>
-								  <div class="card-footer">
-								  	<p class="card-text">
-								  		{{offer.store.name}}
-								  	</p>
-								  </div>
-								</div><!-- /Offer Card -->
-						    </div>
-						    {% endif %}
-
-						    {% endfor %}
-						  </div>
-						  <a class="left carousel-control" href="#carousel-example-generic-offers" role="button" data-slide="prev">
-						    <span class="icon-prev" aria-hidden="true"></span>
-						    <span class="sr-only">Previous</span>
-						  </a>
-						  <a class="right carousel-control" href="#carousel-example-generic-offers" role="button" data-slide="next">
-						    <span class="icon-next" aria-hidden="true"></span>
-						    <span class="sr-only">Next</span>
-						  </a>
-						</div>
-					</div><!-- /DODT BODY -->
-					<div class="card-footer" style="border:none;">
-						<p class="text-center">
-							<a href="{% url 'shopping-offers' %}" style="text-transform: uppercase; text-decoration: none;">View All</a>
-						</p>
-					</div><!-- /DODT Footer -->
-				</div><!-- /Deal Of the Day Card -->
-
-			</div><!-- Left Container -->
-		</div><!-- /Left Column -->
-
-		<div class="col-md-2">
-			
-		</div><!-- /Right Column -->
-
-
-	</div><!-- /Rows -->
-</div><!-- /PageContainer -->
-
 
 <!-- New Template Content for Shopping Home Page -->
 <div class="container">
   
-<!--Carousel Wrapper-->
-<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
+	<!--Carousel Wrapper-->
+	<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
 
-    <!--Indicators-->
-    <!-- <ol class="carousel-indicators">
-        <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
-        <li data-target="#multi-item-example" data-slide-to="1"></li>
-        <li data-target="#multi-item-example" data-slide-to="2"></li>
-    </ol> -->
-    <!--/.Indicators-->
+	    <!--Indicators-->
+	    <!-- <ol class="carousel-indicators">
+	        <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
+	        <li data-target="#multi-item-example" data-slide-to="1"></li>
+	        <li data-target="#multi-item-example" data-slide-to="2"></li>
+	    </ol> -->
+	    <!--/.Indicators-->
 
-    <!--Slides-->
-    <div class="carousel-inner" role="listbox" style="padding-bottom: -100px;">
+	    <!--Slides-->
+	    <div class="carousel-inner" role="listbox" style="padding-bottom: -100px;">
 
-        <!--First slide-->
-        <div class="carousel-item active">
+	        <!--First slide-->
+	        <div class="carousel-item active">
 
-            <div class="col-md-4">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(34).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-            <div class="col-md-4 clearfix d-none d-md-block">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(18).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4 clearfix d-none d-md-block">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(18).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-            <div class="col-md-4 clearfix d-none d-md-block">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(35).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4 clearfix d-none d-md-block">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(35).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-        </div>
-        <!--/.First slide-->
+	        </div>
+	        <!--/.First slide-->
 
-        <!--Second slide-->
-        <div class="carousel-item">
+	        <!--Second slide-->
+	        <div class="carousel-item">
 
-            <div class="col-md-4">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(60).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(60).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-            <div class="col-md-4 clearfix d-none d-md-block">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(47).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4 clearfix d-none d-md-block">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(47).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-            <div class="col-md-4 clearfix d-none d-md-block">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(48).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4 clearfix d-none d-md-block">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/City/4-col/img%20(48).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-        </div>
-        <!--/.Second slide-->
+	        </div>
+	        <!--/.Second slide-->
 
-        <!--Third slide-->
-        <div class="carousel-item">
+	        <!--Third slide-->
+	        <div class="carousel-item">
 
-            <div class="col-md-4">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(53).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(53).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-            <div class="col-md-4 clearfix d-none d-md-block">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(45).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4 clearfix d-none d-md-block">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(45).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-            <div class="col-md-4 clearfix d-none d-md-block">
-                <div class="card mb-2">
-                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(51).jpg" alt="Card image cap">
-                    <div class="card-body">
-                        <h4 class="card-title">Card title</h4>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a class="btn btn-primary">Button</a>
-                    </div>
-                </div>
-            </div>
+	            <div class="col-md-4 clearfix d-none d-md-block">
+	                <div class="card mb-2">
+	                    <img class="img-fluid" src="https://mdbootstrap.com/img/Photos/Horizontal/Food/4-col/img%20(51).jpg" alt="Card image cap">
+	                    <div class="card-body">
+	                        <h4 class="card-title">Card title</h4>
+	                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+	                        <a class="btn btn-primary">Button</a>
+	                    </div>
+	                </div>
+	            </div>
 
-        </div>
-        <!--/.Third slide-->
+	        </div>
+	        <!--/.Third slide-->
 
-    </div>
-    <!--/.Slides-->
+	    </div>
+	    <!--/.Slides-->
 
 
-    <!--Controls-->
-    <div class="controls-bottom" style="text-align: center;">
-        <a class="btn-floating btn btn-lg btn-primary" href="#multi-item-example" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
-        <a class="btn-floating btn-lg btn btn-primary" href="#multi-item-example" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
-    </div>
-    <!--/.Controls-->
+	    <!--Controls-->
+	    <div class="controls-bottom" style="text-align: center;">
+	        <a class="btn-floating btn btn-lg btn-primary" href="#multi-item-example" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
+	        <a class="btn-floating btn-lg btn btn-primary" href="#multi-item-example" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
+	    </div>
+	    <!--/.Controls-->
 
-</div>
-<!--/.Carousel Wrapper-->
-                        
-</div>
+	</div>
+	<!--/.Carousel Wrapper-->
+</div><!-- /PAge Container -->
 
 <!-- <script type="text/javascript">
 	 $('#carousel-example-generic-deals').on('slid.bs.carousel', function () {
