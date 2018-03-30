@@ -7,10 +7,13 @@ from shopping.models import (
 	Store,
 	SearchProduct,
 	SearchProductImage,
+	ProductLinks,
+	ProductDescription,
+	ProductPrice,
 )
 import bottlenose
 import json
-
+import datetime
 
 class AmazonSearchAPIHandler():
 	def __init__(self, *args, **kwargs):
@@ -20,6 +23,75 @@ class AmazonSearchAPIHandler():
 	def get_search_results(self, keywords):
 		resp=self.amazon_handle.ItemSearch(Keywords=keywords, SearchIndex='All', ResponseGroup='Medium')
 		return resp
+
+	def save_result_products(self, products):
+		productsList=[]
+		for product in products:
+			new_prod, created=SearchProduct.objects.get_or_create(productId=product['asin'], store=self.store)
+			if created:
+				new_prod.productUrl=product['pageUrl']
+				new_prod.title=product['Title']
+				if 'Brand' in product.keys():
+					new_prod.brand=product['Brand']
+				new_prod.inStock=True
+				if 'ProductGroup' in product.items():
+					new_prod.catName=product['ProductGroup']
+				new_prod.save()
+				# Create Product Links
+				for link in product['productLinks']:
+					for size, url in link.items():
+						prod_img=ProductLinks.objects.create(
+							product=new_prod,
+							source=size,
+							link=url,
+						)
+				# Create PriceHistory
+				if 'offers' in product.keys():
+					for off in product['offers']:
+						for key, value in off.items():
+							if key=='amount':
+								price=ProductPrice.objects.create(
+									product=new_prod,
+									updated_on=datetime.datetime.now(),
+									sellingPrice=value,
+								)
+				# Create Product Description
+				if 'reviews' in product.keys():
+					for review in product['reviews']:
+						source=review['source']
+						if source=='Product Description':
+							content=review['content']
+							desc=ProductDescription.objects.create(
+								product=new_prod,
+								content=content,
+							)
+				# Create Images for this product
+				if 'smallImage' in product.keys():
+					smallImage=product['smallImage']
+					for size, url in smallImage.items():
+						image=SearchProductImage.objects.create(
+							product=new_prod,
+							size="small",
+							url=url,
+						)
+				if 'largeImage' in product.keys():
+					largeImage=product['largeImage']
+					for size, url in largeImage.items():
+						image=SearchProductImage.objects.create(
+							product=new_prod,
+							size="large",
+							url=url,
+						)
+				if 'mediumImage' in product.keys():
+					mediumImage=product['mediumImage']
+					for size, url in mediumImage.items():
+						image=SearchProductImage.objects.create(
+							product=new_prod,
+							size="medium",
+							url=url,
+						)
+			productsList.append(new_prod)
+		return productsList
 
 	def parse_products_from_xml(self, data):
 		products=[]

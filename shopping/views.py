@@ -14,6 +14,7 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
 # Create your views here.
 from shopping.collection.flipkart import FKFeedAPIHandler, FKSearchAPIHandler
+from shopping.collection.amazon import AmazonSearchAPIHandler
 from shopping.models import (
 	Product,
 	PriceHistory, 
@@ -89,9 +90,13 @@ class SearchResultsView(View):
 		keywords=request.GET.get('q')
 		print(self.kwargs, request.GET.get('q'))
 		if keywords:
-			searchHandle=FKSearchAPIHandler()
-			productsList=searchHandle.get_search_results(keywords=keywords)
-		return render(request, self.template_name, {'products': productsList})
+			fkSearchHandle=FKSearchAPIHandler()
+			amazSearchHandle=AmazonSearchAPIHandler()
+			results=amazSearchHandle.get_search_results(keywords=keywords)
+			products=amazSearchHandle.parse_products_from_xml(results)
+			amazonProductsList=amazSearchHandle.save_result_products(products)
+			productsList=fkSearchHandle.get_search_results(keywords=keywords)
+		return render(request, self.template_name, {'products': productsList, 'amazonProductsList':amazonProductsList})
 
 class StoreDetailView(DetailView):
 	model = Store
@@ -105,7 +110,10 @@ class StoreDetailView(DetailView):
 		context=super(StoreDetailView, self).get_context_data(**kwargs)
 		store=self.get_object()
 		context['store']=store
-		context['products']=store.product_set.all()[:12]
+		if not store.product_set.all():
+			context['products']=store.search_products.all()[:12]
+		else:
+			context['products']=store.product_set.all()[:12]
 		return context
 
 class AboutUSView(TemplateView):

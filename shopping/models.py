@@ -44,11 +44,28 @@ class SearchProduct(models.Model):
 	inStock=models.BooleanField(default=False)
 	codAvailable=models.BooleanField(default=False)
 	topSeller=models.BooleanField(default=False)
+	catName=models.CharField(max_length=100, null=True, blank=True)
 
 	store=models.ForeignKey('Store', on_delete=models.CASCADE, related_name="search_products")
 
 	def __str__(self):
 		return self.title
+
+class ProductDescription(models.Model):
+	content=models.TextField()
+	product=models.ForeignKey('SearchProduct', on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.content
+
+class ProductLinks(models.Model):
+	source=models.CharField(max_length=50, null=True, blank=True)
+	link=models.URLField(max_length=2500)
+	product=models.ForeignKey('SearchProduct', on_delete=models.CASCADE)
+
+	def __str__(self):
+		return self.source
+
 
 class ProductPrice(models.Model):
 	updated_on=models.DateTimeField(auto_now_add=True)
@@ -102,7 +119,7 @@ class ProductOffer(models.Model):
 
 class BaseImage(models.Model):
 	size=models.CharField(max_length=20)
-	url=models.URLField(max_length=500)
+	url=models.URLField(max_length=2500)
 
 	class Meta:
 		abstract = True

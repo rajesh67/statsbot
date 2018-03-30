@@ -57,10 +57,10 @@
 							{% for product in products %}
 							<div class="col-xs-sm-3" style="margin: 20px 20px 20px 10px;">
 								<div class="card" style="width: 15rem; border:none;">
-								  {% if not product.productimage_set.last %}
-								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
+								  {% if product.productimage_set.last %}
+								  <img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 90%; height: 200px; overflow: hidden; margin: auto auto; display: block;">
 								  {% else %}
-								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 90%; height: 200px; overflow: hidden; margin: auto auto; display: block;">
+								  <img class="card-img-top" src="{{product.searchproductimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 90%; height: 200px; overflow: hidden; margin: auto auto; display: block;">
 								  {% endif %}
 								  <div class="card-body">
 								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
