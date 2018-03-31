@@ -1,6 +1,8 @@
 from django.db import models
 from urllib.parse import urlparse, parse_qs
+import datetime
 # Create your models here.
+
 
 class Store(models.Model):
 	name=models.CharField(max_length=100)
@@ -159,6 +161,13 @@ class Offer(models.Model):
 
 	def get_default_image(self):
 		return self.offerimage_set.get(size='high')
+
+	def is_live(self):
+		if self.endTime.date().ctime()<datetime.datetime.now().ctime():
+			self.availability='EXPIRED'
+			self.save()
+			return False
+		return True
 
 class OfferImage(BaseImage):
 	offer=models.ForeignKey('Offer', on_delete=models.CASCADE)

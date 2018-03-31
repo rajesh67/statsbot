@@ -23,7 +23,7 @@
   </style>
   <body>
 
-    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <nav class="navbar navbar-toggleable-md navbar-default fixed-top bg-inverse">
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -84,17 +84,16 @@
     {% block offerslist %}{% endblock %}
     {% block dealslist %}{% endblock %}
     {% block search_results %}{% endblock %}
-      <!-- FOOTER -->
-      <footer>
-        <p class="text-right" style="text-align: center; margin: auto 50px;">
-          <a href="#">
-            <img src="{% static 'images/back-to-top.png' %}" alt="Back to Top">
-          </a>
-          </p>
-        <p class="text-center">&copy; Statsbot Social Innovations, India. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-      </footer>
-
-    </div><!-- /.container -->
+</div><!-- /.container -->
+<!-- FOOTER -->
+<footer style="background-color: #000; margin-top: 50px; padding-bottom: 5%;" class="">
+  <p class="text-right" style="text-align: center; margin: auto 50px;">
+    <a href="#">
+      <img src="{% static 'images/back-to-top.png' %}" alt="Back to Top">
+    </a>
+    </p>
+  <p class="text-center">&copy; Statsbot Social Innovations, India. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+</footer>
 
 
     <!-- Bootstrap core JavaScript
@@ -125,31 +124,5 @@
         }());
     </script><!-- /CueLinks JS Integration -->
 
-    <!-- Vig Link JS INtegration -->
-    <script type="text/javascript">
-
-            var vglnk = { key: '5096aed9cd624cbd024fa60b62fe8bd3' };
-
-        ​
-
-            (function(d, t) {
-
-                var s = d.createElement(t);
-
-                    s.type = 'text/javascript';
-
-                    s.async = true;
-
-                    s.src = '//cdn.viglink.com/api/vglnk.js';
-
-                var r = d.getElementsByTagName(t)[0];
-
-                    r.parentNode.insertBefore(s, r);
-
-            }(document, 'script'));
-
-        </script>
-
-        
   </body>
 </html>

@@ -64,12 +64,23 @@ class OfferListView(ListView):
 	paginate_by=12
 	queryset=Offer.objects.all()
 
+	def get_queryset(self):
+		queryset=super(OfferListView, self).get_queryset()
+		offers=queryset.filter(availability='LIVE')
+		if self.kwargs.get('expired'):
+			return queryset
+		return offers
+
+
 class DOTDListView(ListView):
 	model = DOTD
 	template_name = "shopping/deals.html"
 	context_object_name = "deals"
 	paginate_by = 12
-	queryset = DOTD.objects.all()
+
+	def get_queryset(self):
+		queryset=super(DOTDListView, self).get_queryset()
+		return queryset.filter(availability='LIVE')
 
 class FeedsListView(ListView):
 	model = Product
