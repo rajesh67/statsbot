@@ -5,18 +5,73 @@
 	#pageContainer{
 		margin: 0px auto;
 	}
+	.card-title{
+		text-decoration: uppercase;
+		font-size: 0.85em;
+
+	}
 </style>
 <!-- Jumbotron -->
 <div class="jumbotron" style="text-align: center;" id="pageContainer">
-  <h5 class="display-4">Statsbot helps the next person while providing services to other next person !!</h5>
+  <h5 class="display-4" style="text-transform: uppercase; font-size: 150%;">Our Work</h5>
   <!-- <p class="lead">We are here to innovate </p> -->
   <hr class="my-2">
   <div id="featuredStores" class="container">
   	<div class="row">
-  		<div class="col-md-12">
-  			<h5><blockquote></blockquote></h5>
-  		</div>	
-			</div>
+  		<div class="col-md-2">
+  			<div class="card" style="width: 8rem;">
+			  <img class="card-img-top rounded-circle img-fluid" src="{% static 'images/howItWorks/user_icon.jpg' %}" alt="Card image cap" style="overflow: hidden; height: 80px; text-align: center;">
+			  <div class="card-body">
+			    <h5 class="card-title">Visit statsbot.org</h5>
+			  </div>
+			</div><!-- /Card -->
+			<i class="fa fa-long-arrow-alt-right" style="width: 100%; font-size:20px;transform: scale(3, 1); top:25%; left: 40%; position: absolute;"></i>
+  		</div><!-- First column -->
+  
+  		<!-- Second Column -->
+  		<div class="col-md-2">
+  			<div class="card" style="width: 8rem; ">
+			  <img class="card-img-top rounded-circle img-fluid" src="{% static 'images/howItWorks/online_stores.jpg' %}" alt="Card image cap" style="overflow: hidden; height: 80px;">
+			  <div class="card-body">
+			    <h5 class="card-title">Click on any product / deal / offer you like</h5>
+			  </div>
+			</div><!-- /Card -->
+			<i class="fa fa-long-arrow-alt-right" style="width: 100%; font-size:20px;transform: scale(3, 1); top:25%; left: 40%; position: absolute;"></i>
+  		</div><!-- Second column -->
+
+  		<!-- Third Column -->
+  		<div class="col-md-2">
+  			<div class="card" style="width: 10rem;">
+			  <img class="card-img-top rounded-circle img-fluid" src="{% static 'images/howItWorks/cart.png' %}" alt="Card image cap" width="100%" style="overflow: hidden; height: 80px;">
+			  <div class="card-body">
+			    <h5 class="card-title">Shop Normally on any Retailer</h5>
+			  </div>
+			</div><!-- /Card -->
+			<i class="fa fa-long-arrow-alt-right" style="width: 100%; font-size:20px;transform: scale(3, 1); top:25%; left: 58%; position: absolute;"></i>
+  		</div><!-- Third column -->
+
+  		<!-- Fourth column -->
+  		<div class="col-md-3">
+  			<div class="card" style="width: 10rem; float: right; margin-right: 20%;">
+			  <img class="card-img-top rounded-circle img-fluid" src="{% static 'images/howItWorks/wallet.png' %}" alt="Card image cap" style="overflow: hidden; height: 80px;">
+			  <div class="card-body">
+			    <h5 class="card-title">Retailer pays back sales comssion on your purchase</h5>
+			  </div>
+			</div><!-- /Card -->
+			<i class="fa fa-long-arrow-alt-right" style="width: 100%; font-size:20px;transform: scale(3, 1); top:25%; left: 40%; position: absolute;"></i>
+  		</div><!-- Fourth column -->
+
+  		<!-- Fifth Column -->
+  		<div class="col-md-2">
+  			<div class="card" style="width: 10rem; float: right;">
+			  <img class="card-img-top" src="{% static 'images/howItWorks/donation.jpg' %}" alt="Card image cap" style="overflow: hidden; height: 80px;">
+			  <div class="card-body">
+			    <h5 class="card-title">We donate the commision received to any social causes/ NGOs</h5>
+			  </div>
+			</div><!-- /Card -->
+  		</div><!-- Fifth column -->
+
+	</div>
   	
   	</div><!-- Featured Stores Row -->
   </div><!-- /Featured Stores -->
