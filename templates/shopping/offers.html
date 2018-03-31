@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block offerslist %} 
 <style type="text/css">
@@ -68,7 +69,8 @@
 						<div class="card" style="margin: 10px auto; border:none;">
 							<!-- Header -->
 							<div class="card-header" style="border:none;">
-							    {{offer.created_on|timesince}}
+							    <small>{{offer.created_on|timesince}} ago</small>
+							    <p class=""><img src="{{MEDIA_URL}}{{offer.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"></p>
 							  </div>
 
 						  <a href="#">
@@ -84,15 +86,13 @@
 						    
 						  </ul>
 						  <div class="card-body">
-						    <a href="{{offer.url}}" class="btn btn-block btn-warning">Grab Now</a>
-						    <a href="#" class="btn btn-block btn-info">View More</a>
-						  </div>
-
-						  <!-- Footer -->
-						  <div class="card-footer text-muted">
-						    <bold>{{offer.store.name}}</bold>
+						    <a href="{{offer.url}}" class="btn btn-block btn-warning">Grab This Offer</a>
+						    <!-- <a href="#" class="btn btn-block btn-info">View More</a> -->
 						  </div>
 						</div><!-- Card -->
+						<div class="card-footer">
+							<small>Valid Till : {{offer.endTime|naturaltime }}</small>
+						</div>
 					</div>
 					{% endfor %}
 					<br>

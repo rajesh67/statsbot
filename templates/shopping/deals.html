@@ -43,7 +43,8 @@
 						<div class="col-md-3">
 							<div class="card" style="border:none; margin: 10px auto;">
 							  <div class="card-header" style="border:none;">
-							    {{deal.created_on|timesince}}
+							    <small>{{ deal.created_on|timesince }} ago</small>
+							    <p class=""><img src="{{MEDIA_URL}}{{deal.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"></p>
 							  </div>
 							  <img class="card-img-top" src="{{deal.get_default_image.url}}" alt="Card image cap" width="80%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
 							  <div class="card-body">
@@ -51,9 +52,7 @@
 							    <p class="card-text">{{deal.description}}</p>
 							    <a href="{{deal.url}}" class="btn btn-warning btn-block">Grab this Deal</a>
 							  </div>
-							  <div class="card-footer text-muted">
-							    <bold>{{deal.store.name}}</bold>
-							  </div>
+							  
 							</div>
 						</div><!-- /Deal -->
 					{% endfor %}

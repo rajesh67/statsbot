@@ -102,6 +102,9 @@ class Product(models.Model):
 	def __str__(self):
 		return self.title
 
+	def get_default_image(self):
+		return self.productimage_set.filter(size="400x400").first()
+
 class PriceHistory(models.Model):
 	PRICE_STATUS=(
 		('-1','decreased'),
@@ -113,7 +116,7 @@ class PriceHistory(models.Model):
 	sellingPrice=models.FloatField(default=0)
 	specialPrice=models.FloatField(default=0)
 	status=models.CharField(max_length=10, choices=PRICE_STATUS,default='0')
-	product=models.ForeignKey('Product', on_delete=models.CASCADE)
+	product=models.ForeignKey('Product', on_delete=models.CASCADE, related_name="prices")
 
 	def __str__(self):
 		return self.status
@@ -160,7 +163,7 @@ class Offer(models.Model):
 		return self.title
 
 	def get_default_image(self):
-		return self.offerimage_set.get(size='high')
+		return self.offerimage_set.get(size='mid')
 
 	def is_live(self):
 		if self.endTime.date().ctime()<datetime.datetime.now().ctime():

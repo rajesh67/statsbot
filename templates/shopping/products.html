@@ -9,46 +9,38 @@
 		margin: 60px auto;
 	}
 </style>
-<div class="container" id="pageMessage">
-	<div class="card" style="border:none;">
-		<!-- <div class="card-header">
-			
-		</div> --><!-- /Store Name -->
-		<div class="card-body">
-			<div class="storeImage" style="width: 20%; float: left; display: block;">
-				<img src="{{MEDIA_URL}}{{store.logo_image}}" style="width:70%; height:100px; overflow:hidden; float: left; display: block; margin: auto auto;">
-			</div>
-			<div class="storeTitleDescription" style="width: 60%; float: left">
-				<h4>{{category.name}}</h4>
-				<h5><small>{{store.name}}</small></h5>
-				<p>Category Description</p>
-			</div>
+<!-- Store Header -->
+<div class="jumbotron jumbotron-fluid">
 
-			<div class="storeDeals" style="width: 20%; float: left;">
-				<div class="storeLink" style="margin: 10px 10px;">
-					<a class="btn btn-primary btn-block" href="{% url 'store-homepage' store.short_name %}" style="text-transform: uppercase;">Back To Home</a>
+	<nav aria-label="breadcrumb">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="/">Home</a></li>
+	    <li class="breadcrumb-item"><a href="/stores/">Stores</a></li>
+	    <li class="breadcrumb-item"><a href="{% url 'store-homepage' store.short_name %}">{{store.name}}</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">{{category.name}}</li>
+	  </ol>
+	</nav>
 
-					<a class="btn btn-warning btn-block" href="{{store.home_url}}" style="text-transform: uppercase;">Visit Store</a>
-				</div>
-			</div>
-		</div><!-- /Store Description -->
-		<!-- <div class="card-footer">
-			
-		</div> --><!-- /Store Products Found -->
-	</div><!-- Store Details Card -->
-</div><!-- Support Message -->
+  <div class="container text-center" style="">
+  	<img src="{{MEDIA_URL}}{{store.logo_image}}" width="20%">
+    <h5 class="display-4">Browse All {{category.name}} on {{store.name}} </h5>
+    <p class="lead"><a target="_blank" class="btn btn-warning btn-md" href="{{store.home_url}}" style="text-transform: uppercase;">Visit {{ store.name }}</a></p>
+  </div>
+</div><!-- /Store Jumbotron -->
 
-<div class="container" id="pageContainer">     <div class="row">         <div
-class="col-md-2">             <h5>Category List</h5>
-<ul class="nav flex-column">     
-	{% for category in store.category_set.all %}
-		<li class="nav-item">
-			<a href="{% url 'store-category' store.short_name category.name %}" class="nav-item" style="text-transform: uppercase; text-decoration: none;">{{category.name}}</a>
-		</li>
-	{% endfor %}
-</ul>
+<div class="container" id="pageContainer">
+	<div class="row">         
 
-</div><!-- /Category List -->
+	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="text-transform: uppercase;">
+		<h5>Category List</h5>
+		{% for category in store.category_set.all %}
+		{% if forloop.first %} 
+			<a class="nav-link" id="v-pills-home-tab" href="{% url 'store-category' store.short_name category.name %}" aria-selected="true">{{category.name}}</a>
+		{% else %}
+	  		<a class="nav-link" id="v-pills-profile-tab" href="{% url 'store-category' store.short_name category.name %}" aria-selected="false">{{category.name}}</a>
+	  	{% endif %}
+	  {% endfor %}
+	</div>
 
 		<!-- ProductsList -->
 		<div class="col-md-10">
@@ -58,26 +50,26 @@ class="col-md-2">             <h5>Category List</h5>
 							{% for product in products %}
 							<div class="col-xs-2" style="margin: 20px 20px 20px 10px;">
 								<div class="card" style="width: 15rem; border:none;">
-								  {% if not product.productimage_set.last %}
+								  {% if not product.get_default_image %}
 								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
 								  {% else %}
-								  	<img class="card-img-top" src="{{product.productimage_set.last.url}}" alt="Card image cap" width="70%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
+								  	<img class="card-img-top" src="{{product.get_default_image.url}}" alt="Card image cap" width="70%" style="width: 90%; text-align: center; display: block; height: 250px; overflow: hidden; margin: auto auto;">
 								  {% endif %}
 								  <div class="card-body">
 								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
-								    <p class="card-text">{{prduct.sellingPrice}}</p>
+								    <p class="card-text">Price : INR {{product.prices.last.sellingPrice}}</p>
 								    <a href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
 								    <a href="#" class="btn btn-warning">Track Price</a>
 								  </div>
 								</div>
 								<div class="card-body">
-									{% for price in product.pricehistory_set.all %}
+									<!-- {% for price in product.prices.all %}
 										<div class="card" style="border:none;">
 											<div class="card-body">
 												<p class="card-title">Rs. {{price.specialPrice}}{{price.date}}</p>
 											</div>
 										</div>
-									{% endfor %}
+									{% endfor %} -->
 								</div><!-- Chart Div for Each Product Instance -->
 							</div><!-- Product Div -->
 							<!-- <div class="col-xs-sm-1"></div> -->
