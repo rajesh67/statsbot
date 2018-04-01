@@ -146,7 +146,7 @@ class StoreDetailView(DetailView):
 	context_object_name='store'
 
 	def get(self, request, *args, **kwargs):
-		if self.request.GET.get('url'):
+		if self.request.GET:
 			url=self.request.GET.get('url')
 			base_url='https://linksredirect.com/?'
 			data={
