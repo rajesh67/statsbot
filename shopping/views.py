@@ -27,10 +27,12 @@ from shopping.models import (
 )
 import urllib
 
-def redirect_to_store(request):
-	if request.GET.get('url'):
-		pass
-	return
+def handler404(request):
+	return render(request, 'error.html', {})
+
+def handler500(request):
+	return render(request, 'error.html', {})
+
 
 def shopping_home(request):
 	storesList=Store.objects.all()

@@ -20,6 +20,10 @@ from django.conf.urls.static import static
 from django.conf import settings
 from app.views import home
 from shopping.views import AboutUSView, WhyUSView
+from django.conf.urls import handler404, handler500
+
+handler404 = 'shopping.views.handler404'
+handler500 = 'shopping.views.handler500'
 
 urlpatterns = [
     url('^admin/', admin.site.urls),

@@ -11,6 +11,8 @@ from shopping.views import (shopping_home,
 	StoreDetailView
 )
 
+
+
 urlpatterns=[
 	url('^$', shopping_home, name="shopping-home"),
 	url('^f/search/$', SearchResultsView.as_view(), name="search-products"),
