@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.template import Context
 from multiprocessing import Process, Value, Array
 import json
@@ -25,6 +25,12 @@ from shopping.models import (
 	Category,
 	Store,
 )
+import urllib
+
+def redirect_to_store(request):
+	if request.GET.get('url'):
+		pass
+	return
 
 def shopping_home(request):
 	storesList=Store.objects.all()
@@ -136,6 +142,20 @@ class StoreDetailView(DetailView):
 	model = Store
 	template_name="shopping/store.html"
 	context_object_name='store'
+
+	def get(self, request, *args, **kwargs):
+		if self.request.GET.get('url'):
+			url=self.request.GET.get('url')
+			base_url='https://linksredirect.com/?'
+			data={
+				'pub_id':'29755CL26816',
+				'subid':'statsbot',
+				'source':'linkkit',
+				'url':url,
+			}
+			newUrl=base_url+urllib.parse.urlencode(data)
+			return HttpResponseRedirect(newUrl)
+		return super(StoreDetailView, self).get(request, *args, **kwargs)
 
 	def get_object(self):
 		return Store.objects.get(short_name=self.kwargs.get('storeName'))

@@ -23,7 +23,15 @@
   <div class="container text-center" style="">
   	<img src="{{MEDIA_URL}}{{store.logo_image}}" width="20%">
     <h5 class="display-4">{{store.name}} Offers and Deals</h5>
-    <p class="lead"><a target="_blank" class="btn btn-warning btn-md" href="{{store.home_url}}" style="text-transform: uppercase;">Visit {{ store.name }}</a></p>
+    <p class="lead"><a target="_blank" class="btn btn-warning btn-md" href="{{store.home_url}}" style="text-transform: uppercase;">GO TO {{ store.name }}</a></p>
+  </div>
+
+  <div class="container text-center">
+  	<h3>OR</h3>
+  	<form class="form-inline" action="" method="get" style="left: 30%; position: absolute;">
+	    <input class="form-control" type="text" id="searchbox" name="url" placeholder="Paste product link here for any store e.g. flipkart, jabong, myntra etc." data="{{ request.GET.url }}" style="display: inline-block; max-width: 500px; width: 430px;">
+	    <button class="btn btn-outline-warning my-12 my-lg-0" type="submit">Buy Now</button>
+	  </form>
   </div>
 </div><!-- /Store Jumbotron -->
 

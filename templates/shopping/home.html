@@ -119,9 +119,9 @@
 			                    <img class="img-fluid" src="{{MEDIA_URL}}{{store.logo_image}}" alt="Card image cap" style="overflow: hidden; display: block; height: 50px; width: 100%;">
 			                    <div class="card-body">
 			                        <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{store.short_name|truncatechars:30}}</h4>
-			                        {% if store.search_products.all %}
+			                        
 			                        <a class="btn btn-warning btn-block" href="{% url 'store-homepage' store.short_name %}" style="text-align: bottom;">Browse Products</a>
-			                        {% endif %}
+			                        
 			                        <a class="btn btn-primary btn-block" href="{{store.home_url}}" style="text-align: bottom; text-transform: uppercase;">Shop on {{ store.name }}</a>
 			                    </div>
 			                </div>
