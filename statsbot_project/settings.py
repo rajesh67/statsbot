@@ -25,7 +25,7 @@ SECRET_KEY = 'f57s+v#&#75*8)bxmiwr^#sk#=k$e%ef(-@65slmljx=p3ic+y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '*', 'statsbot.org']
+ALLOWED_HOSTS = ['localhost', '*', 'statsbot.org','127.0.0.1']
 
 
 # Application definition
@@ -150,7 +150,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-STATICFILES_STORAGE = 'whitenoise.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR, "staticfiles/")
 STATICFILES_DIRS=[
