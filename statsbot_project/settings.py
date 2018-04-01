@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f57s+v#&#75*8)bxmiwr^#sk#=k$e%ef(-@65slmljx=p3ic+y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','statsbot.org','127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '*', 'statsbot.org','127.0.0.1']
 
 
 # Application definition
