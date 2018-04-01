@@ -22,25 +22,24 @@
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <a class="navbar-brand" href="#">Statsbot</a>
+      <a class="navbar-brand" href="/">Statsbot</a>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" href="{% url 'shopping-home' %}">Shopping</a>
           </li>
           
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Buses</a>
-          </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Hotels</a>
+            <a class="nav-link" href="/flights/">Flights</a>
           </li>
+          
           <li class="nav-item">
-            <a class="nav-link" href="#">Food and Grocery</a>
+            <a class="nav-link" href="{% url 'hotels-home' %}">Hotels</a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link" href="#">Bill Payment</a>
-          </li> -->
+            <a class="nav-link" href="{% url 'buses-home' %}">Buses</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'shopping-offers' %}">Offers</a>
           </li>
