@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     #third-party apps
     'graphos',
     'whitenoise',
+    #Search
+    'haystack',
 ]
 
 MIDDLEWARE = [
@@ -75,9 +77,9 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.static',
+                'django.template.context_processors.media',
                 'django.template.context_processors.csrf',
                 'django.template.context_processors.request',
-                'django.template.context_processors.media',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -112,6 +114,15 @@ DATABASES = {
     }
 }
 
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.solr_backend.SolrEngine',
+        'URL': 'http://localhost:8983/solr/'
+        # ...or for multicore...
+        # 'URL': 'http://127.0.0.1:8983/solr/mysite',
+    },
+}
 
 #==============================================================
 # Password validation

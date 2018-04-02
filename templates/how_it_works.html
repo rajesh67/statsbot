@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page %}
+<!-- Jumbotron -->
+<div class="jumbotron" style="text-align: center; background-color: #0b0c28;">
+  <h2 style="text-transform: uppercase; color: #f2eeee; font-weight: bold;">Donate your cashback </h2>
+  <h3 style="text-transform: uppercase;color: #f2eeee; ">Every time you shop online</h3>
+</div>
+
+
+<!-- Marketing messaging and featurettes
+================================================== -->
+<!-- Wrap the rest of the page in another container to center all the content. -->
+
+<div class="container marketing">
+
+  <!-- START THE FEATURETTES -->
+
+  <div class="row featurette">
+    <div class="col-md-7 push-md-5">
+      <h2 class="featurette-heading">Visit / Join statsbot.org<span class="text-muted"></span></h2>
+      <p class="lead">
+      	It's 100% Free. Join using Facebook or Email ID. Remember, if you don't sign in your donation will not be tracked.
+      </p>
+    </div>
+    <div class="col-md-5 pull-md-7">
+      <img class="featurette-image img-fluid mx-auto" src="{% static 'images/howItWorks/step1.jpg' %}" alt="Generic placeholder image">
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row featurette">
+    <div class="col-md-7">
+      <h2 class="featurette-heading">Click on any Product / Deal / Offer you like<span class="text-muted"></span></h2>
+      <p class="lead">
+      	Search for the retailer you want & just click on the 'Activate Cashback Donation' button. You will be taken to the retailer's site. Coupon Codes are shown automatically for extra savings.
+      </p>
+    </div>
+    <div class="col-md-5">
+      <img class="featurette-image img-fluid mx-auto" src="{% static 'images/howItWorks/step2.jpg' %}" alt="Generic placeholder image">
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row featurette">
+    <div class="col-md-7 push-md-5">
+      <h2 class="featurette-heading">Shop At the Retailer<span class="text-muted"></span></h2>
+      <p class="lead">
+      	Shop like you always do. Statsbot will automatically track your donation made on your purchase.
+      </p>
+    </div>
+    <div class="col-md-5 pull-md-7">
+      <img class="featurette-image img-fluid mx-auto" src="{% static 'images/howItWorks/step3.jpg' %}" alt="Generic placeholder image">
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row featurette">
+    <div class="col-md-7">
+      <h2 class="featurette-heading">Your Shopping Gives US Donation <span class="text-muted"></span></h2>
+      <p class="lead">
+      	The total donation made is credited towards your statsbot user account. you can select your preferred cause of donation.
+      </p>
+    </div>
+    <div class="col-md-5">
+      <img class="featurette-image img-fluid mx-auto" src="{% static 'images/howItWorks/step4.png' %}" alt="Generic placeholder image">
+    </div>
+  </div>
+
+  <hr class="featurette-divider">
+
+  <div class="row featurette">
+    <div class="col-md-7 push-md-5">
+      <h2 class="featurette-heading">We Feed the Poor<span class="text-muted"></span></h2>
+      <p class="lead">
+      	We donate and use this money to feed the poor, education etc.
+      </p>
+    </div>
+    <div class="col-md-5 pull-md-7">
+      <img class="featurette-image img-fluid mx-auto" src="{% static 'images/howItWorks/step5.jpg' %}" alt="Generic placeholder image">
+    </div>
+  </div>
+
+  <!-- /END THE FEATURETTES -->
+{% endblock %}

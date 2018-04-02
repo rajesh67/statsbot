@@ -108,6 +108,23 @@ class CategoryListView(ListView):
 		# cat=Category.objects.get(name=self.kwargs.get('categoryName'))
 		return Product.objects.filter(category__name=self.kwargs.get('categoryName'), store__short_name=self.kwargs.get('storeName'))
 
+	def get(self, request, *args, **kwargs):
+		if self.request.GET:
+			url=self.request.GET.get('url')
+			if not url:
+				return super(StoreDetailView, self).get(request, *args, **kwargs)
+			else:
+				base_url='https://linksredirect.com/?'
+				data={
+					'pub_id':'29755CL26816',
+					'subid':'statsbot',
+					'source':'linkkit',
+					'url':url,
+				}
+				newUrl=base_url+urllib.parse.urlencode(data)
+				return HttpResponseRedirect(newUrl)
+		return super(StoreDetailView, self).get(request, *args, **kwargs)
+
 	def get_context_data(self, **kwargs):
 		context=super(CategoryListView, self).get_context_data(**kwargs)
 		context['category']=Category.objects.get(name=self.kwargs.get('categoryName'))
@@ -148,15 +165,18 @@ class StoreDetailView(DetailView):
 	def get(self, request, *args, **kwargs):
 		if self.request.GET:
 			url=self.request.GET.get('url')
-			base_url='https://linksredirect.com/?'
-			data={
-				'pub_id':'29755CL26816',
-				'subid':'statsbot',
-				'source':'linkkit',
-				'url':url,
-			}
-			newUrl=base_url+urllib.parse.urlencode(data)
-			return HttpResponseRedirect(newUrl)
+			if not url:
+				return super(StoreDetailView, self).get(request, *args, **kwargs)
+			else:
+				base_url='https://linksredirect.com/?'
+				data={
+					'pub_id':'29755CL26816',
+					'subid':'statsbot',
+					'source':'linkkit',
+					'url':url,
+				}
+				newUrl=base_url+urllib.parse.urlencode(data)
+				return HttpResponseRedirect(newUrl)
 		return super(StoreDetailView, self).get(request, *args, **kwargs)
 
 	def get_object(self):
@@ -180,7 +200,7 @@ class AboutUSView(TemplateView):
 		return context
 
 class WhyUSView(TemplateView):
-	template_name="index.html"
+	template_name="how_it_works.html"
 
 	def get_context_data(self, **kwargs):
 		context=super(WhyUSView, self).get_context_data(**kwargs)

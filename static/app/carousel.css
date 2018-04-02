@@ -69,12 +69,12 @@ nav ul li.nav-item{
 ------------------------- */
 
 .featurette-divider {
-  margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+  margin: 2rem 0; /* Space out the Bootstrap <hr> more */
 }
 
 /* Thin out the marketing headings */
 .featurette-heading {
-  font-weight: 300;
+  font-weight: 200;
   line-height: 1;
   letter-spacing: -.05rem;
 }

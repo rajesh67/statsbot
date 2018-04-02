@@ -9,6 +9,7 @@ Django==2.0
 django-bootstrap3==9.1.0
 django-froala-editor==2.7.3
 django-graphos==0.3.41
+django-haystack==2.8.0
 django-social-share==1.1.2
 django-summernote==0.8.8.5
 django-tinymce==2.6.0
@@ -26,6 +27,7 @@ Pillow==4.3.0
 prompt-toolkit==1.0.15
 psycopg2==2.7.3.2
 Pygments==2.2.0
+pysolr==3.7.0
 python-amazon-simple-product-api==2.2.11
 python-dateutil==2.6.1
 pytz==2013b0
