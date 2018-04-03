@@ -46,7 +46,7 @@ def shopping_home(request):
 	today_end=datetime.datetime.combine(tomorrow, datetime.time())
 	for store in Store.objects.all():
 		deals_data.update({store:store.dotd_set.filter(created_on__lte=today_end, created_on__gte=today_start)[:11]})
-		offers_data.update({store:store.offer_set.all()[:11]})
+		offers_data.update({store:store.offer_set.filter(availability='LIVE')[:11]})
 		products_data.update({store:store.search_products.all()[:11]})
 	return render(request, 'shopping/home.html', {
 		'storesList':storesList,

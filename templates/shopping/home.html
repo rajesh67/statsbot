@@ -57,7 +57,7 @@
 			                        
 			                        <a class="btn btn-warning btn-block" href="{% url 'store-homepage' store.short_name %}" style="text-align: bottom;">Browse Products</a>
 			                        
-			                        <a class="btn btn-primary btn-block" href="{{store.home_url}}" style="text-align: bottom; text-transform: uppercase;">Shop on {{ store.name }}</a>
+			                        <a target="_blank" class="btn btn-primary btn-block" href="{{store.home_url}}" style="text-align: bottom; text-transform: uppercase;">Shop on {{ store.name }}</a>
 			                    </div>
 			                </div>
 			            </div><!-- /Product Div -->
@@ -108,7 +108,7 @@
 			                        <p class="card-text" style="font-size: 0.8em;">
 			                        	<p style="font-size: 0.8em;">LIVE Period : {{offer.startTime.date}} - {{offer.endTime.date}}</p>
 			                        </p>
-			                        <a class="btn btn-warning btn-block" href="{{offer.url}}" style="text-align: bottom;">Grab this offer</a>
+			                        <a target="_blank" class="btn btn-warning btn-block" href="{{offer.url}}" style="text-align: bottom;">Grab this offer</a>
 			                    </div>
 			                </div>
 			            </div><!-- /Product Div -->
@@ -176,7 +176,7 @@
 			                        	<p style="font-size: 0.8em;">status : {{deal.availability}}</p>
 			                        </p>
 
-			                        <a class="btn btn-warning btn-block" href="{{deal.url}}" style="text-align: bottom;">Grab this deal</a>
+			                        <a target="_blank" class="btn btn-warning btn-block" href="{{deal.url}}" style="text-align: bottom;">Grab this deal</a>
 			                    </div>
 			                </div>
 			            </div><!-- /Product Div -->
@@ -243,7 +243,7 @@
 			                        	<p style="font-size: 0.8em;">Price : INR {{product.prices.last.sellingPrice }}</p>
 			                        </p>
 
-			                        <a class="btn btn-warning btn-block" href="{{product.productUrl}}" style="text-align: bottom;">Buy Now</a>
+			                        <a target="_blank" class="btn btn-warning btn-block" href="{{product.productUrl}}" style="text-align: bottom;">Buy Now</a>
 			                    </div>
 			                </div>
 			            </div><!-- /Product Div -->

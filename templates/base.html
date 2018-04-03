@@ -82,7 +82,7 @@
           {% block searchbox %}
             <li class="nav-item navbar-right">
               <form class="form-inline" action="{% url 'search-products' %}" method="get">
-                <input class="form-control" type="text" id="searchbox" name="q" placeholder="{{ request.GET.q}} || 'Search Here'" data="{{ request.GET.q}}" style="display: inline-block; max-width: 500px; width: 430px;">
+                <input class="form-control" type="text" id="searchbox" name="q" placeholder="Search for any product on flipkart and amazon etc.." style="display: inline-block; max-width: 500px; width: 430px;">
                 <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
               </form>
             </li>
