@@ -66,7 +66,11 @@ def shopping_mobiles(request):
 	return render(request,"shopping/products.html", {})
 
 def shopping_deals(request):
-	deals=DOTD.objects.filter(created_on=datetime.datetime.now())
+	today=datetime.datetime.now().date()
+	tomorrow=today+datetime.timedelta(1)
+	today_start=datetime.datetime.combine(today, datetime.time())
+	today_end=datetime.datetime.combine(tomorrow, datetime.time())
+	deals=DOTD.objects.filter(created_on__lte=today_end, created_on__gte=today_start)
 	return render(request, "shopping/deals.html", {'dealsList': deals,})
 
 class OfferListView(ListView):
@@ -78,10 +82,18 @@ class OfferListView(ListView):
 
 	def get_queryset(self):
 		queryset=super(OfferListView, self).get_queryset()
+		today=datetime.datetime.now().date()
+		tomorrow=today+datetime.timedelta(1)
+		today_start=datetime.datetime.combine(today, datetime.time())
+		today_end=datetime.datetime.combine(tomorrow, datetime.time())
 		offers=queryset.filter(availability='LIVE')
+		liveOffers=[]
+		for offer in offers:
+			if offer.is_live():
+				liveOffers.append(offer)
 		if self.kwargs.get('expired'):
 			return queryset
-		return offers
+		return liveOffers
 
 
 class DOTDListView(ListView):
@@ -92,7 +104,11 @@ class DOTDListView(ListView):
 
 	def get_queryset(self):
 		queryset=super(DOTDListView, self).get_queryset()
-		return queryset.filter(availability='LIVE')
+		today=datetime.datetime.now().date()
+		tomorrow=today+datetime.timedelta(1)
+		today_start=datetime.datetime.combine(today, datetime.time())
+		today_end=datetime.datetime.combine(tomorrow, datetime.time())
+		return queryset.filter(created_on__lte=today_end, created_on__gte=today_start)
 
 class FeedsListView(ListView):
 	model = Product
