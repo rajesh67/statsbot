@@ -40,8 +40,12 @@ def shopping_home(request):
 	offers_data={}
 	products_data={}
 	output_data={}
+	today=datetime.datetime.now().date()
+	tomorrow=today+datetime.timedelta(1)
+	today_start=datetime.datetime.combine(today, datetime.time())
+	today_end=datetime.datetime.combine(tomorrow, datetime.time())
 	for store in Store.objects.all():
-		deals_data.update({store:store.dotd_set.all()[:11]})
+		deals_data.update({store:store.dotd_set.filter(created_on__lte=today_end, created_on__gte=today_start)[:11]})
 		offers_data.update({store:store.offer_set.all()[:11]})
 		products_data.update({store:store.search_products.all()[:11]})
 	return render(request, 'shopping/home.html', {
@@ -62,7 +66,7 @@ def shopping_mobiles(request):
 	return render(request,"shopping/products.html", {})
 
 def shopping_deals(request):
-	deals=DOTD.objects.all()
+	deals=DOTD.objects.filter(created_on=datetime.datetime.now())
 	return render(request, "shopping/deals.html", {'dealsList': deals,})
 
 class OfferListView(ListView):
