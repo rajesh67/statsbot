@@ -51,7 +51,7 @@ def shopping_home(request):
 		offers_data.update({store:store.offer_set.filter(availability='LIVE')[:11]})
 		products_data.update({store:store.search_products.all()[:11]})
 	return render(request, 'shopping/home.html', {
-		'storesList':storesList,
+		'stores':storesList,
 		'offers_data':offers_data,
 		'deals_data' : deals_data,
 		'products_data':products_data,
@@ -296,4 +296,5 @@ class WhyUSView(TemplateView):
 
 	def get_context_data(self, **kwargs):
 		context=super(WhyUSView, self).get_context_data(**kwargs)
+		context['stores']=Store.objects.all()
 		return context
