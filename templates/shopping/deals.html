@@ -31,9 +31,9 @@
 		<!-- Filters Column -->
 		<div class="col-md-3">
 					<div class="stores">
-						<input type="text" id="storeInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name">
+						<input type="text" id="myInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name">
 
-						<ul id="storeUL">
+						<ul id="myUL">
 						  {% for store in stores %}
 						  	<li><a href="?store={{store.name}}">{{store.name}}</a></li>
 						  {% endfor %}
@@ -41,7 +41,7 @@
 					</div>
 
 					<div class="categories">
-						<input type="text" id="catInput" onkeyup="categoryFunction()" placeholder="Search for names.." title="Type in a name">
+						<input type="text" id="catsInput" onkeyup="categoryFunction()" placeholder="Search for names.." title="Type in a name">
 						<ul id="catsUL">
 						  {% for category in categories %}
 						  	<li><a href="?category={{category.categories}}">{{category.categories}}</a></li>
@@ -52,9 +52,9 @@
 		<script type="text/javascript">
 			function storeFunction() {
 			    var input, filter, ul, li, a, i;
-			    input = document.getElementById("storeInput");
+			    input = document.getElementById("myInput");
 			    filter = input.value.toUpperCase();
-			    ul = document.getElementById("storesUL");
+			    ul = document.getElementById("myUL");
 			    li = ul.getElementsByTagName("li");
 			    for (i = 0; i < li.length; i++) {
 			        a = li[i].getElementsByTagName("a")[0];
@@ -65,11 +65,11 @@
 
 			        }
 			    }
-			}
+			};
 
 			function categoryFunction() {
 			    var input, filter, ul, li, a, i;
-			    input = document.getElementById("catInput");
+			    input = document.getElementById("catsInput");
 			    filter = input.value.toUpperCase();
 			    ul = document.getElementById("catsUL");
 			    li = ul.getElementsByTagName("li");
@@ -82,7 +82,7 @@
 
 			        }
 			    }
-			}
+			};
 			</script>
 		<!-- Offers Listing -->
 		<div class="col-md-9">
