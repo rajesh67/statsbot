@@ -33,11 +33,11 @@ urlpatterns = [
     # Online Shopping App
     url(r'^shopping/', include('shopping.urls')),
     # Online trael App
-    url(r'^flights/', include('flights.urls')),
+    url(r'^travels/', include('flights.urls')),
     # Online Bus Bookings
     url(r'^buses/', include('busses.urls')),
     # Online Hotel Bookings
-    url(r'^hotels/', include('hotels.urls')),
+    url(r'^food/', include('hotels.urls')),
 ]
 
 if settings.DEBUG:

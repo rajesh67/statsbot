@@ -24,7 +24,10 @@ from shopping.models import (
 	DOTD,
 	Category,
 	Store,
+	CuelinkOffer,
 )
+import string
+from django.core.paginator import InvalidPage, EmptyPage
 import urllib
 
 def handler404(request):
@@ -32,7 +35,6 @@ def handler404(request):
 
 def handler500(request):
 	return render(request, 'error.html', {})
-
 
 def shopping_home(request):
 	storesList=Store.objects.all()
@@ -132,6 +134,39 @@ class CategoryListView(ListView):
 		if self.request.GET:
 			url=self.request.GET.get('url')
 			if not url:
+				return super(CategoryListView, self).get(request, *args, **kwargs)
+			else:
+				base_url='https://linksredirect.com/?'
+				data={
+					'pub_id':'29755CL26816',
+					'subid':'statsbot',
+					'source':'linkkit',
+					'url':url,
+				}
+				newUrl=base_url+urllib.parse.urlencode(data)
+				return HttpResponseRedirect(newUrl)
+		return super(CategoryListView, self).get(request, *args, **kwargs)
+
+	def get_context_data(self, **kwargs):
+		context=super(CategoryListView, self).get_context_data(**kwargs)
+		context['category']=Category.objects.get(name=self.kwargs.get('categoryName'))
+		context['store']=Store.objects.get(short_name=self.kwargs.get('storeName'))
+		return context
+
+class CategoryDetailView(DetailView):
+	model = Category
+	template_name="shopping/products.html"
+	context_object_name='products'
+	paginate_by=12
+
+	def get_queryset(self):
+		# cat=Category.objects.get(name=self.kwargs.get('categoryName'))
+		return Category.objects.filter(name=self.kwargs.get('categoryName'), store__short_name=self.kwargs.get('storeName'))
+
+	def get(self, request, *args, **kwargs):
+		if self.request.GET:
+			url=self.request.GET.get('url')
+			if not url:
 				return super(StoreDetailView, self).get(request, *args, **kwargs)
 			else:
 				base_url='https://linksredirect.com/?'
@@ -143,10 +178,10 @@ class CategoryListView(ListView):
 				}
 				newUrl=base_url+urllib.parse.urlencode(data)
 				return HttpResponseRedirect(newUrl)
-		return super(StoreDetailView, self).get(request, *args, **kwargs)
+		return super(CategoryDetailView, self).get(request, *args, **kwargs)
 
 	def get_context_data(self, **kwargs):
-		context=super(CategoryListView, self).get_context_data(**kwargs)
+		context=super(CategoryDetailView, self).get_context_data(**kwargs)
 		context['category']=Category.objects.get(name=self.kwargs.get('categoryName'))
 		context['store']=Store.objects.get(short_name=self.kwargs.get('storeName'))
 		return context
@@ -160,22 +195,35 @@ class SearchResultsView(View):
 		print(self.kwargs, request.GET.get('q'))
 		if keywords:
 			output_data={}
+			search_results_products=[]
 			try:
 				fkSearchHandle=FKSearchAPIHandler()
 				productsList=fkSearchHandle.get_search_results(keywords=keywords)
-				output_data.update({Store.objects.get(short_name='flipkart'):productsList})
+				search_results_products.append({Store.objects.get(short_name='flipkart'):productsList})
 			except Exception as e:
-				output_data.update({Store.objects.get(short_name='flipkart'):[]})
+				search_results_products.append({Store.objects.get(short_name='flipkart'):[]})
 
 			try:
 				amazSearchHandle=AmazonSearchAPIHandler()
 				results=amazSearchHandle.get_search_results(keywords=keywords)
 				products=amazSearchHandle.parse_products_from_xml(results)
 				amazonProductsList=amazSearchHandle.save_result_products(products)
-				output_data.update({Store.objects.get(short_name='amazon'):amazonProductsList})
+				search_results_products.append({Store.objects.get(short_name='amazon'):amazonProductsList})
 			except Exception as e:
-				output_data.update({Store.objects.get(short_name='amazon'):[]})
-		return render(request, self.template_name, {'data':output_data})
+				search_results_products.append({Store.objects.get(short_name='amazon'):[]})
+		return render(request, self.template_name, {'data':search_results_products, 'stores':Store.objects.all()})
+
+class StoreListView(ListView):
+	model=Store
+	template_name='shopping/store_list.html'
+	context_object_name='stores'
+	queryset=Store.objects.all()
+	paginate_by=10
+
+	def get_context_data(self, *args, **kwargs):
+		context=super(StoreListView, self).get_context_data(*args, **kwargs)
+		# context['stores']=Store.objects.all()
+		return context
 
 class StoreDetailView(DetailView):
 	model = Store
@@ -210,7 +258,31 @@ class StoreDetailView(DetailView):
 			context['products']=store.search_products.all()[:12]
 		else:
 			context['products']=store.product_set.all()[:12]
+		context['offers']=CuelinkOffer.objects.filter(store=self.get_object())
+		context['stores']=Store.objects.all()
 		return context
+
+class AllOfferListView(ListView):
+	model = CuelinkOffer
+	template_name = "shopping/deals.html"
+	context_object_name = "offers"
+	paginate_by = 12
+	queryset=CuelinkOffer.objects.all()
+
+	def get_queryset(self):
+		queryset=self.queryset
+		filters=self.request.GET.keys()
+		if 'category' in filters:
+			queryset=queryset.filter(categories=self.request.GET.get('category'))
+		if 'store' in filters:
+			queryset=queryset.filter(store__name=self.request.GET.get('store'))
+		return queryset
+
+	def get_context_data(self, **kwargs):
+		context=super(AllOfferListView, self).get_context_data(**kwargs)
+		context['stores']=Store.objects.all()
+		context['categories']=CuelinkOffer.objects.values('categories').distinct()
+		return context	
 
 class AboutUSView(TemplateView):
 	template_name="index.html"

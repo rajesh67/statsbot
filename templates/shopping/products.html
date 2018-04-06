@@ -36,9 +36,14 @@
   </div>
 </div><!-- /Store Jumbotron -->
 
+
+
+
+
 <div class="container" id="pageContainer">
 	<div class="row">         
 
+	<div class="col-md-2"></div>
 	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="text-transform: uppercase;">
 		<h5>Category List</h5>
 		{% for category in store.category_set.all %}
@@ -49,19 +54,19 @@
 	  	{% endif %}
 	  {% endfor %}
 	</div>
-
+</div>
 		<!-- ProductsList -->
-		<div class="col-md-10">
+		<div class="col-md-12">
 			{% if products %}
 					<div class="container">
 						<div class="row" style="">
 							{% for product in products %}
-							<div class="col-xs-2" style="margin: 20px 20px 20px 10px;">
+							<div class="col-sm-2" style="margin: 20px 20px 20px 10px;">
 								<div class="card" style="width: 15rem; border:none;">
 								  {% if not product.get_default_image %}
 								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
 								  {% else %}
-								  	<img class="card-img-top" src="{{product.get_default_image.url}}" alt="Card image cap" width="70%" style="width: 90%; text-align: center; display: block; height: 250px; overflow: hidden; margin: auto auto;">
+								  	<img class="card-img-top" src="{{product.get_default_image.url}}" alt="Card image cap" style="width: auto; max-width: 50%; text-align: center; display: block; height: 250px; overflow: hidden; margin: auto auto;">
 								  {% endif %}
 								  <div class="card-body">
 								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>

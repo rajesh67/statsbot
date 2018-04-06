@@ -2,89 +2,105 @@
 {% load static %}
 
 {% block page %}
+
+<!-- List View -->
 <style type="text/css">
-	#pageContainer{
+	#page{
 		margin: 60px auto;
 	}
-	#pageMessage{
-		margin: 60px auto;
+	.productCard:hover{
+		border:2px solid grey;
 	}
 </style>
+<div class="container" id="page">
+	<!-- OffersRow -->
+	<div class="row">
+		<!-- Filters Column -->
+		<div class="col-md-1">
+			<!-- <div class="container">
+				<form class="form-inline">
+				    <input class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search" style="width: 200%;">
+				  </form>
+			</div> --><!-- Search  -->
+			
 
+			<div class="container">
+				<div id="accordion">
+				  
+				  
+				</div>
+			</div><!-- Categories  -->
+		</div><!-- Filters Column End -->
 
-<!-- New Template Design -->
-<div class="container" id="pageContainer">
-	{% for store, productsList in data.items %}
-		<div class="card" style="border: none;">
-			<div class="card-header" style="border: none; text-transform: uppercase; background-color: #e0eafe66;">
-				<h5>{{store.short_name}} Search Results : Showing total {{productsList|length}} products for "{{ request.GET.q }}"</h5>
-			</div><!-- /header -->
+		<!-- Offers Listing -->
+		<div class="col-md-11">
+			<div class="container-fluid" id="offersListingContainer">
+				<!-- Listing container Inner Rows  -->
+				<div class="row">
+					<div class="col-md-12">
+						<h5>Showing Results Only for {{data|length}} Stores</h5>
+					</div><!-- Applied Filters List -->
 
-		</div><!-- Store Results Card -->
-		{% if productsList %}
-			<!--Carousel Wrapper-->
-			<div id="multi-item-example-{{store.short_name}}" class="carousel slide carousel-multi-item" data-ride="carousel">
-			    <!--Indicators-->
-			    <!-- <ol class="carousel-indicators">
-			        <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
-			        <li data-target="#multi-item-example" data-slide-to="1"></li>
-			        <li data-target="#multi-item-example" data-slide-to="2"></li>
-			    </ol> -->
-			    <!--/.Indicators-->
+					<!-- Main columns of The Offers Grids -->
+					{% for store_data in data %}
 
-			    <!--Slides-->
-			    <div class="carousel-inner" role="listbox" style="padding-bottom: -100px; height: 32rem;">
+					
+					{% for store, productsList in store_data.items %}
+					{% for product in productsList %}
+					<div class="col-md-3" style="margin:auto;">
+						<!-- Card -->
+						<div class="card productCard" style="margin: 10px auto; border:none;">
+							<!-- Header -->
+							<div class="card-header" style="border:none;">
+							    <p class="card-text"><img src="{{MEDIA_URL}}{{product.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"></p>
+							  </div>
 
-			        <!--Third slide-->
-			        	<!-- Product Div -->
-			        	{% for product in productsList %}
-			        	
-			        	{% if forloop.first %}<div class="carousel-item active">{% endif %}
-				        	
-				            <div class="col-md-3">
-				                <div class="card mb-2">
-				                    <div class="card-header" style="border:none;">
-									    <p class=""><img src="{{MEDIA_URL}}{{product.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"></p>
-									  </div><!-- /Card header -->
-				                    <img class="img-fluid" src="{{product.get_default_image.url}}" alt="Card image cap" style="overflow: hidden; display: block; height: 250px;">
-				                    <div class="card-body">
-				                        <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{product.title|truncatechars:100}}</h4>
-				                        <p class="card-text" style="font-size: 0.8em;">
-				                        	<h5 style="font-size: 0.8em;">Price : INR {{product.prices.last.sellingPrice}}</h5>
-				                        </p>
-				                        <a target="_blank" class="btn btn-warning btn-block" href="{{product.productUrl}}" style="text-align: bottom;">Buy Now</a>
-				                    </div>
-				                </div>
-				            </div><!-- /Product Div -->
+						  
+						  	<img class="card-img-top img-responsive" src="{{product.get_default_image.url}}" alt="Card image cap" width="100px" style="width: auto; max-width: 80%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
+						  
+						  <div class="card-body text-center">
+						    <a target="_blank" href="{{product.productUrl}}" style="text-transform: uppercase; text-decoration: none;">{{product.title|truncatechars:100}}</a>
+						    <p class="card-text">{{product.product_description.last.content|truncatechars:100}}</p>
+						  </div>
 
-				            {% if forloop.last %}
-				            <!-- <div class="col-sm-3 text-center" style="vertical-align: center;">
-				            	<a class="btn-floating btn-md btn btn-block btn-primary" href="#" style="vertical-align: center; margin-top: 20%;">Browse ALL Products<i class="fa fa-chevron-right" style="margin-left: 10px;"></i><i class="fa fa-chevron-right"></i></a>	
-				            </div> -->
-				            {% endif %}
+						  <p class="card-text" style="text-align: center; border: 2px dotted grey;">Price : INR {{product.prices.last.sellingPrice}}</p>
+						  <div class="card-body">
+						    <a target="_blank" style="position: relative; bottom: 5px;" href="{{offer.url}}" class="btn btn-block btn-success">Buy this item</a>
+						    <!-- <a href="#" class="btn btn-block btn-info">View More</a> -->
+						  </div>
+						</div><!-- Card -->
+						
+					</div>
+					{% endfor %}
+					{% empty %}
 
-			            {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item">{% endif %}
-
-			            {% if forloop.last %}</div>{% endif %}
-			        <!--/.Third slide-->
-			        {% endfor %}
-			    </div>
-			    <!--/.Slides-->
-
-
-			    <!--Controls-->
-			    <div class="controls-bottom" style="text-align: center;">
-			        <a class="btn-floating btn btn-md btn-primary" href="#multi-item-example-{{store.short_name}}" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
-			        <a class="btn-floating btn-md btn btn-primary" href="#multi-item-example-{{store.short_name}}" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
-			    </div>
-			    <!--/.Controls-->
-
-			</div>
-			<!--/.Carousel Wrapper-->
-		{% else %}
-			<h5>No Products Available On this Store</h5>
-		{% endif %}
-	{% endfor %}
-</div><!-- Page container -->
-
+					{% endfor %}
+					{% endfor %}
+					<br>
+				</div><!-- Inner Rows -->
+				{% if is_paginated %}
+					  <ul class="pagination" style="text-align: center;">
+					    {% if page_obj.has_previous %}
+					      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+					    {% else %}
+					      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
+					    {% endif %}
+					    {% for i in paginator.page_range %}
+					      {% if page_obj.number == i %}
+					        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+					      {% else %}
+					        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+					      {% endif %}
+					    {% endfor %}
+					    {% if page_obj.has_next %}
+					      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+					    {% else %}
+					      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+					    {% endif %}
+					  </ul>
+					{% endif %}
+			</div><!-- Container -->
+		</div><!-- Offers Listing End -->
+	</div><!-- Offers Rows -->
+</div><!-- Container -->
 {% endblock %}

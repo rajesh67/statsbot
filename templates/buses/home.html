@@ -1,45 +1,265 @@
 {% extends "base.html" %}
 {% load static %}
-
-{% block searchbox %} {% endblock %}
-
 {% block page %}
 <style type="text/css">
-	#pageContainer{
-		margin: 60px auto;
-	}
-	#pageMessage{
-		margin: 60px auto;
-	}
+  #pageContainer{
+    margin: 60px auto;
+  }
+  #mainContainer{
+    margin: 60px auto;
+    background-color: #0b0c28;
+    font-size: 1.3em;
+  }
+  .card-title{
+    text-decoration: uppercase;
+    font-size: 0.85em;
+
+  }
 </style>
 <!-- Jumbotron -->
-<div class="jumbotron" style="text-align: center;">
-  <h1 class="display-4">Feel the Social Booking Experience</h1>
+<div class="jumbotron" style="text-align: center;" id="mainContainer">
+  <h1 class="display-4" style="font-size: 1.2em; color: #fff; font-weight: bold; text-transform: uppercase;">support the unpriviliged one via your Bus bookings</h1>
   <!-- <p class="lead">We are here to innovate </p> -->
-  <hr class="my-4">
-  <div id="featuredStores" class="container">
-  	<div class="row">
-  		<div class="col-md-12">
-  			<h5><blockquote>Featured Stores For Bus Bookings</blockquote></h5>
-  		</div>
-  		{% for store in storesList %}
-  		<div class="col-md-4">
-  			<div class="card" style="width: 16rem; margin: 50px 50px;">
-			  <img class="card-img-top" src="{{MEDIA_URL}}{{store.logo_image}}" alt="Card image cap" style="width: 100%; height: 100px; overflow: hidden;">
-			  <div class="card-body">
-			    <h5 class="card-title">{{store.name}}</h5>
-			    <p class="card-text"></p>
-			    <a target="_blank" href="{{store.home_url}}" class="btn btn-warning btn-block" style="text-transform: uppercase;">Book Now on {{store.short_name }}</a>
-			  </div>
-			</div>
-  		</div><!-- /Flipkart -->
-  		{% endfor %}
-  	
-  	</div><!-- Featured Stores Row -->
-  </div><!-- /Featured Stores -->
-  <!-- <p class="lead">
-    <a class="btn btn-primary btn-lg" href="{% url 'category-products' 'mobiles' %}" role="button">View All Products</a>
-  </p> -->
 </div><!-- /Jumbotron -->
+
+
+<div class="container" id="">
+  <div class="card" style="margin-top: 30px; border: none;">
+    <div class="card-header" style="border: none; background-color: #fff;">
+      <h5>Featured Stores</h5>
+    </div>
+    <div class="card-body">
+      <div id="multi-item-stores" class="carousel slide carousel-multi-item" data-ride="carousel">
+        <div class="carousel-inner" role="listbox" style="padding-bottom: 100px;">
+        {% for store in storesList %}
+            <!--Slides-->
+            {% if forloop.first %}
+              <div class="carousel-item active" style="height:4rem;">
+            {% endif %} 
+                  <div class="col-md-3">
+                      <div class="card mb-2">
+                          <img class="img-fluid img-responsive" src="{{MEDIA_URL}}{{store.logo_image}}" alt="Card image cap" style="overflow: hidden; display: block; height: 50px; width: 100%;">
+                          <div class="card-body">
+                              <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{store.short_name|truncatechars:30}}</h4>
+                              
+                              <a class="btn btn-warning btn-block" href="{% url 'store-homepage' store.short_name %}" style="text-align: bottom;">Browse Products</a>
+                              
+                              <a target="_blank" class="btn btn-primary btn-block" href="{{store.home_url}}" style="text-align: bottom; text-transform: uppercase;">Shop on {{ store.name }}</a>
+                          </div>
+                      </div>
+                  </div><!-- /Product Div -->
+                {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height: 4rem;">{% endif %}
+                {% if forloop.last %}</div>{% endif %}
+                {% endfor%}
+          </div>
+          <!--/.Slides-->
+
+          <a class="carousel-control-prev btn-dark btn btn-sm" href="#multi-item-stores" data-slide="prev" role="button" style="width: 2%; background-color: #000;"><i class="fa fa-chevron-left"></i>
+            <span class="sr-only">Previous</span></a>
+
+          <a class="carousel-control-next btn-dark btn btn-sm" href="#multi-item-stores" data-slide="next" role="button" style="width: 2%; background-color: #000;"><i class="fa fa-chevron-right"></i>
+            <span class="sr-only">Next</span>
+          </a>
+      </div><!-- /Carousal -->
+    </div><!-- /Card body -->
+  </div><!-- /Card -->
+</div><!-- /Container -->
+
+<!-- New Template Content for Shopping Home Page -->
+<!-- StoreWise Offers Container -->
+{% for store, offersList in offers_data.items %}
+<div class="container" id="storeContainer" style="margin-top: 25px;">
+  {% if offersList %}
+  <div class="card" style="border: none;">
+    <div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
+      <h5 style="text-transform: uppercase;">Top Offers on {{ store.short_name }} 
+        <img class="img-fluid" src="{{MEDIA_URL}}{{store.logo_image}}" style="overflow: hidden; height: 50px;">
+        <a href="{% url 'shopping-deals' %}" class="btn btn-primary btn-sm" style="margin-left: 10px;">Browse All Offers</a>
+      </h5>
+    </div>
+    <!-- Offers List -->
+    <div class="card-body">
+      <!--Carousel Wrapper-->
+      <div id="multi-item-offers-{{store.short_name}}" class="carousel slide carousel-multi-item" data-ride="carousel">
+        <div class="carousel-inner" role="listbox" style="padding-bottom: 100px;">
+        {% for offer in offersList %}
+            <!--Slides-->
+            {% if forloop.first %}
+              <div class="carousel-item active" style="height:20rem;">
+            {% endif %} 
+                  <div class="col-md-3">
+                      <div class="card mb-2">
+                          <img class="img-fluid" src="{{offer.get_default_image.url}}" alt="Card image cap" style="overflow: hidden; display: block; height: 250px; width: auto; max-width: 80%;">
+                          <div class="card-body">
+                              <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{offer.title|truncatechars:100}}</h4>
+                              <p class="card-text" style="font-size: 0.8em;">
+                                <p style="font-size: 0.8em;">LIVE Period : {{offer.startTime.date}} - {{offer.endTime.date}}</p>
+                              </p>
+                              <a target="_blank" class="btn btn-warning btn-block" href="{{offer.url}}" style="text-align: bottom;">Grab this offer</a>
+                          </div>
+                      </div>
+                  </div><!-- /Product Div -->
+                  {% if forloop.last %}
+                    <div class="col-md-3">
+                        <div class="card mb-2 text-center" style="border: none;">
+                          <a href="{% url 'shopping-offers' %}" class="btn btn-primary btn-block" style="margin-top: 50%;">Browse Top Offers</a>
+                        </div>
+                      </div>
+                  {% endif %}
+
+                {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height:20rem;">{% endif %}
+                {% if forloop.last %}</div>{% endif %}
+                {% endfor%}
+          </div>
+          <!--/.Slides-->
+
+          <!--Controls-->
+          <div class="controls-bottom" style="text-align: center;">
+              <a class="btn-floating btn btn-md btn-primary" href="#multi-item-offers-{{store.short_name}}" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
+              <a class="btn-floating btn-md btn btn-primary" href="#multi-item-offers-{{store.short_name}}" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
+          </div>
+          <!--/.Controls-->
+      </div>
+      <!--/.Carousel Wrapper-->
+    </div><!-- /OffersListCaraousal -->
+  </div>
+  {% endif %}
+</div><!-- /OffersContainer -->
+{% endfor %}
+
+
+<!-- StoreWise Deals Container -->
+{% for store, dealsList in deals_data.items %}
+<div class="container" id="storeContainer" style="margin-top: 20px;">
+  {% if dealsList %}
+  <div class="card" style="border: none;">
+    <div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
+      <h5 style="text-transform: uppercase;">Top Deals of The Day on {{ store.short_name }}
+        <img class="img-fluid" src="{{MEDIA_URL}}{{store.logo_image}}" style="overflow: hidden; height: 50px;">
+        <a href="{% url 'shopping-deals' %}" class="btn btn-primary btn-sm" style="margin-left: 10px;">Browse Top Deals</a>
+      </h5>
+      
+    </div>
+    <!-- Offers List -->
+    <div class="card-body">
+      <!--Carousel Wrapper-->
+      <div id="multi-item-deals-{{store.short_name}}" class="carousel slide carousel-multi-item" data-ride="carousel">
+        <div class="carousel-inner" role="listbox" style="padding-bottom: 100px;">
+        {% for deal in dealsList %}
+            <!--Slides-->
+            {% if forloop.first %}
+              <div class="carousel-item active" style="height:20rem;">
+            {% endif %} 
+                  <div class="col-md-3">
+                      <div class="card mb-2">
+                          <img class="img-fluid" src="{{deal.get_default_image.url}}" alt="Card image cap" style="overflow: hidden;width: auto; max-width: 80%; display: block; height: 250px;">
+                          <div class="card-body">
+                              <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{offer.title|truncatechars:100}}</h4>
+                              <p class="card-text" style="font-size: 0.8em;">
+                                <p style="font-size: 0.8em;"> {{deal.description}}</p>
+                              </p>
+
+                              <p class="card-text" style="font-size: 0.8em;">
+                                <p style="font-size: 0.8em;">status : {{deal.availability}}</p>
+                              </p>
+
+                              <a target="_blank" class="btn btn-warning btn-block" href="{{deal.url}}" style="text-align: bottom;">Grab this deal</a>
+                          </div>
+                      </div>
+                  </div><!-- /Product Div -->
+                  {% if forloop.last %}
+                    <div class="col-md-3">
+                        <div class="card mb-2 text-center" style="border: none;">
+                          <a href="{% url 'shopping-deals' %}" class="btn btn-primary btn-block" style="margin-top: 50%;">Browse Top Deals</a>
+                        </div>
+                      </div>
+                  {% endif %}
+
+                {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height:20rem;">{% endif %}
+                {% if forloop.last %}</div>{% endif %}
+                {% endfor%}
+          </div>
+          <!--/.Slides-->
+
+          <!--Controls-->
+          <div class="controls-bottom" style="text-align: center;">
+              <a class="btn-floating btn btn-md btn-primary" href="#multi-item-deals-{{store.short_name}}" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
+              <a class="btn-floating btn-md btn btn-primary" href="#multi-item-deals-{{store.short_name}}" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
+          </div>
+          <!--/.Controls-->
+      </div>
+      <!--/.Carousel Wrapper-->
+    </div><!-- /OffersListCaraousal -->
+  </div>
+  {% endif %}
+</div><!-- /OffersContainer -->
+{% endfor %}
+
+
+
+<!-- StoreWise Deals Container -->
+{% for store, productsList in products_data.items %}
+<div class="container" id="storeContainer" style="margin-top: 20px;">
+  {% if productsList %}
+  <div class="card" style="border: none;">
+    <div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
+      <h5 style="text-transform: uppercase;">Top Product Being Searched on {{ store.short_name }} 
+        <img class="img-fluid" src="{{MEDIA_URL}}{{store.logo_image}}" style="overflow: hidden; height: 50px;">
+        <a href="{% url 'store-homepage' store.short_name %}" class="btn btn-success btn-md" style="margin-left: 10px;">Browse All</a> </h5>
+    </div>
+    <!-- Offers List -->
+    <div class="card-body">
+      <!--Carousel Wrapper-->
+      <div id="multi-item-products-{{store.short_name}}" class="carousel slide carousel-multi-item" data-ride="carousel">
+        <div class="carousel-inner" role="listbox" style="padding-bottom: 100px;">
+        {% for product in productsList %}
+            <!--Slides-->
+            {% if forloop.first %}
+              <div class="carousel-item active" style="height:20rem;">
+            {% endif %} 
+                  <div class="col-md-3">
+                      <div class="card mb-2">
+                          <img class="img-fluid" src="{{product.get_default_image.url}}" alt="Card image cap" style="overflow: width: auto; max-width: 80%;hidden; display: block; height: 250px;">
+                          <div class="card-body">
+                              <h4 class="card-title" style="font-size: 0.9em; text-transform: uppercase;">{{product.title|truncatechars:100}}</h4>
+                              <p class="card-text" style="font-size: 0.8em;">
+                                <p style="font-size: 0.8em;">Brand : {{product.brand}}</p>
+                              </p>
+
+                              <p class="card-text" style="font-size: 0.8em;">
+                                <p style="font-size: 0.8em;">Price : INR {{product.prices.last.sellingPrice }}</p>
+                              </p>
+
+                              <a target="_blank" class="btn btn-warning btn-block" href="{{product.productUrl}}" style="text-align: bottom;">Buy Now</a>
+                          </div>
+                      </div>
+                  </div><!-- /Product Div -->
+                  {% if forloop.last %}
+                    <div class="col-md-3">
+                        <div class="card mb-2 text-center" style="border: none;">
+                          <a href="{% url 'store-homepage' store.short_name %}" class="btn btn-primary btn-block" style="margin-top: 50%;">Browse All Products</a>
+                        </div>
+                      </div>
+                  {% endif %}
+
+                {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height:20rem;">{% endif %}
+                {% if forloop.last %}</div>{% endif %}
+                {% endfor%}
+          </div>
+          <!--/.Slides-->
+
+          <!--Controls-->
+          <div class="controls-bottom" style="text-align: center;">
+              <a class="btn-floating btn btn-md btn-primary" href="#multi-item-products-{{store.short_name}}" data-slide="prev"><i class="fa fa-chevron-left"></i>Previous</a>
+              <a class="btn-floating btn-md btn btn-primary" href="#multi-item-products-{{store.short_name}}" data-slide="next"><i class="fa fa-chevron-right"></i>Next</a>
+          </div>
+          <!--/.Controls-->
+      </div>
+      <!--/.Carousel Wrapper-->
+    </div><!-- /ProductsListCaraousal -->
+  </div>
+  {% endif %}
+</div><!-- /ProductsContainer -->
+{% endfor %}
 
 {% endblock page %}

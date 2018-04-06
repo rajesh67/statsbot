@@ -59,6 +59,7 @@ class FKOffersAPIHandler():
 		return dotdList
 
 	def save_offers_feeds(self, offersList):
+		offers=[]
 		for offer in offersList:
 			new_offer=Offer(
 				startTime=datetime.datetime.fromtimestamp(offer['startTime']/1000.0),
@@ -76,9 +77,11 @@ class FKOffersAPIHandler():
 			offerImages=offer['imageUrls']
 			for image in offerImages:
 				off_img=OfferImage.objects.create(size=image.get('resolutionType'), url=image.get('url'), offer=new_offer)
-			print(new_offer.startTime.date, new_offer.endTime.date)
+			offers.append(new_offer)
+		return offers
 			
 	def save_dotd_feeds(self, dotdList):
+		deals=[]
 		for dotd in dotdList:
 			new_dotd=DOTD(
 				title=dotd['title'],
@@ -91,7 +94,8 @@ class FKOffersAPIHandler():
 			new_dotd.save()
 			for image in dotd['imageUrls']:
 				img=DOTDImage.objects.create(size=image['resolutionType'], url=image['url'], dotd=new_dotd)
-			print(new_dotd.title)
+			deals.append(new_dotd)
+		return deals
 
 
 class FKFeedAPIHandler():

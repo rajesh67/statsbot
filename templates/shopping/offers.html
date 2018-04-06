@@ -4,28 +4,37 @@
 
 {% block offerslist %} 
 <style type="text/css">
-	#page{
+	#mainContainer{
 		margin: 60px auto;
+		background-color: #0b0c28;
+    	font-size: 1.3em;
 	}
 </style>
+
+<!-- Jumbotron -->
+<div class="jumbotron" style="text-align: center;" id="mainContainer">
+  <h1 class="display-4" style="font-size: 1.2em; color: #fff; font-weight: bold; text-transform: uppercase;">Exclusive Offers</h1>
+  <!-- <p class="lead">We are here to innovate </p> -->
+</div><!-- /Jumbotron -->
+
 <div class="container" id="page">
 	<!-- OffersRow -->
 	<div class="row">
 		<!-- Filters Column -->
-		<div class="col-md-2">
+		<div class="col-md-3">
 			<div class="container">
 				<form class="form-inline">
-				    <input class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search" style="width: 175px;">
+				    <input class="form-control mr-sm-1" type="search" placeholder="Search store name" aria-label="Search" style="width: 175px;">
 				  </form>
 			</div><!-- Search  -->
 			<div class="container">
 				<ul class="nav nav-pills nav-fill" style="text-transform: uppercase; text-decoration: none;">
-				  <li class="nav-item">
+				  <!-- <li class="nav-item">
 				    <a class="nav-link active" href="#">Running</a>
 				  </li>
 				  <li class="nav-item">
 				    <a class="nav-link" href="?all=True" method="get">Expired</a>
-				  </li>
+				  </li> -->
 				</ul>
 			</div><!-- /Availability  -->
 
@@ -54,7 +63,7 @@
 		</div><!-- Filters Column End -->
 
 		<!-- Offers Listing -->
-		<div class="col-md-10">
+		<div class="col-md-9">
 			<div class="container-fluid" id="offersListingContainer">
 				<!-- Listing container Inner Rows  -->
 				<div class="row">
@@ -66,32 +75,32 @@
 					{% for offer in offers %}
 					<div class="col-md-3" style="margin:auto;">
 						<!-- Card -->
-						<div class="card" style="margin: 10px auto; border:none;">
+						<div class="card" style="margin: 10px auto; border:none; height: 32rem;">
 							<!-- Header -->
 							<div class="card-header" style="border:none;">
-							    <small>{{offer.created_on|timesince}} ago</small>
+							    <small style="font-size: ">{{offer.created_on|timesince}} ago</small>
 							    <p class=""><img src="{{MEDIA_URL}}{{offer.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"></p>
 							  </div>
 
 						  <a href="#">
-						  	<img class="card-img-top img-responsive" src="{{offer.offerimage_set.first.url}}" alt="Card image cap" width="100px" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
+						  	<img class="card-img-top img-responsive" src="{{offer.offerimage_set.first.url}}" alt="Card image cap" width="100px" style="width: auto; max-width: 80%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
 						  </a>
 						  <div class="card-body">
-						    <a href="#" style="text-transform: uppercase; text-decoration: none;">{{offer.title}}</a>
-						    <p class="card-text">{{offer.description}}</p>
+						    <a href="{{offer.url}}" style="text-transform: uppercase; text-decoration: none; font-family: Calibri; text-align: center;">{{offer.title}}</a>
+						    <p class="card-text text-center" style="font-family: Calibri;">{{offer.description}}</p>
 						  </div>
 						  <ul class="list-group list-group-flush">
 
-						    <li class="list-group-item"><small>In category : {{offer.category}}</small></li>
+						    <li class="list-group-item" style="font-family: Calibri; text-align: center;"><small>Category : {{offer.category}}</small></li>
 						    
 						  </ul>
 						  <div class="card-body">
-						    <a target="_blank" href="{{offer.url}}" class="btn btn-block btn-warning">Grab This Offer</a>
+						    <a target="_blank" href="{{offer.url}}" class="btn btn-block btn-success" style="position: absolute; bottom: 5px;">Grab This Offer</a>
 						    <!-- <a href="#" class="btn btn-block btn-info">View More</a> -->
 						  </div>
 						</div><!-- Card -->
 						<div class="card-footer">
-							<small>Valid Till : {{offer.endTime|naturaltime }}</small>
+							<!-- <small style="font-size: .75em;">Valid Till : {{offer.endTime|naturaltime }}</small> -->
 						</div>
 					</div>
 					{% endfor %}

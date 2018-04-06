@@ -13,4 +13,5 @@ class FlightsHomeView(TemplateView):
 	def get_context_data(self, **kwargs):
 		context=super(FlightsHomeView, self).get_context_data(**kwargs)
 		context['storesList']=Store.objects.all()
+		context['offers_data']=[{store: store.cuelink_offers.all()} for store in Store.objects.all()]
 		return context

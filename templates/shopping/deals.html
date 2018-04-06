@@ -3,58 +3,119 @@
 
 {% block dealslist %} 
 <style type="text/css">
-	#page{
+	#mainContainer{
 		margin: 60px auto;
+		background-color: #0b0c28;
+    	font-size: 1.3em;
+	}
+
+	#storeUL{
+		list-style: none;
+		display: block;
+	}
+	#catsUL{
+		list-style: none;
+		display: block;
 	}
 </style>
+
+<!-- Jumbotron -->
+<div class="jumbotron" style="text-align: center;" id="mainContainer">
+  <h1 class="display-4" style="font-size: 1.2em; color: #fff; font-weight: bold; text-transform: uppercase;">Coupouns and Exclusive deals</h1>
+  <!-- <p class="lead">We are here to innovate </p> -->
+</div><!-- /Jumbotron -->
+
 <div class="container" id="page">
 	<!-- OffersRow -->
 	<div class="row">
 		<!-- Filters Column -->
-		<div class="col-md-2">
-			<div class="container">
-				<form class="form-inline">
-				    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width: 175px;">
-				  </form>
-			</div><!-- Search  -->
-			<div class="container">
-				<ul class="nav nav-pills nav-fill" style="text-transform: uppercase; text-decoration: none;">
-				  <li class="nav-item">
-				    <a class="nav-link active" href="#">Running</a>
-				  </li>
-				  <li class="nav-item">
-				    <a class="nav-link" href="#">Expired</a>
-				  </li>
-				</ul>
-			</div><!-- /Availability  -->
-		</div><!-- Filters Column End -->
+		<div class="col-md-3">
+					<div class="stores">
+						<input type="text" id="storeInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name">
 
+						<ul id="storeUL">
+						  {% for store in stores %}
+						  	<li><a href="?store={{store.name}}">{{store.name}}</a></li>
+						  {% endfor %}
+						</ul>
+					</div>
+
+					<div class="categories">
+						<input type="text" id="catInput" onkeyup="categoryFunction()" placeholder="Search for names.." title="Type in a name">
+						<ul id="catsUL">
+						  {% for category in categories %}
+						  	<li><a href="?category={{category.categories}}">{{category.categories}}</a></li>
+						  {% endfor %}
+						</ul>
+					</div>
+		</div><!-- Filters Column End -->
+		<script type="text/javascript">
+			function storeFunction() {
+			    var input, filter, ul, li, a, i;
+			    input = document.getElementById("storeInput");
+			    filter = input.value.toUpperCase();
+			    ul = document.getElementById("storesUL");
+			    li = ul.getElementsByTagName("li");
+			    for (i = 0; i < li.length; i++) {
+			        a = li[i].getElementsByTagName("a")[0];
+			        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			            li[i].style.display = "";
+			        } else {
+			            li[i].style.display = "none";
+
+			        }
+			    }
+			}
+
+			function categoryFunction() {
+			    var input, filter, ul, li, a, i;
+			    input = document.getElementById("catInput");
+			    filter = input.value.toUpperCase();
+			    ul = document.getElementById("catsUL");
+			    li = ul.getElementsByTagName("li");
+			    for (i = 0; i < li.length; i++) {
+			        a = li[i].getElementsByTagName("a")[0];
+			        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			            li[i].style.display = "";
+			        } else {
+			            li[i].style.display = "none";
+
+			        }
+			    }
+			}
+			</script>
 		<!-- Offers Listing -->
-		<div class="col-md-10">
+		<div class="col-md-9">
 			<div class="container-fluid" id="offersListingContainer">
 				<!-- Listing container Inner Rows  -->
 				<div class="row">
 					<div class="col-md-12">
-						<h5>Showing {{ deals|length }} Total Deals</h5>
+						<h5>Showing {{ offers|length }} Total Deals</h5>
 					</div><!-- Applied Filters List -->
 
 					<!-- Main columns of The Offers Grids -->
-					{% for deal in deals %}
-						<div class="col-md-3">
-							<div class="card" style="border:none; margin: 10px auto;">
-							  <div class="card-header" style="border:none;">
-							    <small>{{ deal.created_on|timesince }} ago</small>
-							    <p class=""><img src="{{MEDIA_URL}}{{deal.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"></p>
-							  </div>
-							  <img class="card-img-top" src="{{deal.get_default_image.url}}" alt="Card image cap" width="80%" style="width: 90%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
-							  <div class="card-body">
-							    <h5 class="card-title">{{deal.title}}</h5>
-							    <p class="card-text">{{deal.description}}</p>
-							    <a target="_blank" href="{{deal.url}}" class="btn btn-warning btn-block">Grab this Deal</a>
-							  </div>
-							  
+					{% for offer in offers %}
+							<div class="col-md-6" style="margin-top: 1rem; border: none;">
+								<div class="card" style="height: 22rem;">
+									<div class="card-header" style="">
+									    	<h5 class="card-title text-center" style="font-family: Calibri;"><img src="{{MEDIA_URL}}{{offer.store.logo_image}}" class="img-fluid img-responsive" style="overflow: hidden; width: 100px; height: 50px;"> {{offer.title}}</h5>
+									    	<small style="text-align: center;">Period : {{ offer.startTime.date }} to {{ offer.endTime.date }}</small>
+
+									    
+									  </div>
+									  <div class="card-body">
+									    
+									    <p class="card-text text-center">{{offer.description}}</p>
+									    {% if offer.coupoun_code %}
+									    	<p class="card-text text-center" style="border: 2px dotted grey;">Coupoun Code : {{offer.coupoun_code}}</p>
+									    {% else %}
+									    	<p class="card-text text-center" style="border: 2px dotted grey;">No Coupoun Code Required</p>
+									    {% endif %}
+									  </div>
+									  <a target="_blank" href="{{offer.url}}" class="btn btn-success btn-block btn-md" style="position: absolute; bottom: 50px;">Activate this deal</a>
+									  <a target="_blank" href="{{offer.url}}" class="btn btn-primary btn-block btn-md" style="position: absolute; bottom: 10px;">Shop on {{ offer.store.name }}</a>
+								</div>
 							</div>
-						</div><!-- /Deal -->
 					{% endfor %}
 				</div><!-- Inner Rows -->
 				{% if is_paginated %}

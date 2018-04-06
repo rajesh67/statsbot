@@ -29,6 +29,7 @@
     <link href="{% static 'app/carousel.css' %}" rel="stylesheet">
     <link href="{% static 'shopping/shopping.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.9.2.custom.css' %}"> -->
   </head>
   <style>
     #searchbox input[type=text]{width:430px !important;}
@@ -48,16 +49,16 @@
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" href="/flights/">Flights</a>
+            <a class="nav-link" href="/travels/">Travels</a>
           </li>
           
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'hotels-home' %}">Hotels</a>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="{% url 'hotels-home' %}">food & beverage</a>
           </li>
 
           <li class="nav-item">
             <a class="nav-link" href="{% url 'buses-home' %}">Buses</a>
-          </li>
+          </li> -->
 
           <!-- <li class="nav-item">
             <a class="nav-link" href="#">Cabs</a>
@@ -67,9 +68,9 @@
             <a class="nav-link" href="#">Food and Grocery</a>
           </li> -->
           
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="{% url 'shopping-offers' %}">Offers</a>
-          </li>
+          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="{% url 'shopping-deals' %}">Deals</a>
           </li>
@@ -81,10 +82,24 @@
           </li> -->
           {% block searchbox %}
             <li class="nav-item navbar-right">
-              <form class="form-inline" action="{% url 'search-products' %}" method="get">
+              <!-- <form class="form-inline" action="{% url 'search-products' %}" method="get">
                 <input class="form-control" type="text" id="searchbox" name="q" placeholder="Search for any product on flipkart and amazon etc.." style="display: inline-block; max-width: 500px; width: 430px;">
                 <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
-              </form>
+              </form> -->
+              <form class="form-inline" role="form" action="{% url 'search-products' %}" method="get">
+              <div class="form-group">
+                <div class="col-md-12" style=" max-width: 430px;">
+                  <!-- <input type="text" class="autocomplete form-control" id="sampleAutocomplete" data-toggle="dropdown" /> -->
+                  <input class="form-control" type="text" class="autocomplete form-control" id="sampleAutocomplete" data-toggle="dropdown" name="q" placeholder="Search for any product on flipkart and amazon etc.." style="display: inline-block; max-width: 430px; width: 300px;">
+                  <button class="btn btn-outline-success my-12 my-lg-0" type="submit" style="display: inline-block;">Search</button>
+                  <ul class="dropdown-menu" role="menu">
+                      {% for store in stores %}
+                        <li><a href="{% url 'store-homepage' store.short_name %}">{{store.name}}</a></li>
+                      {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            <form>
             </li>
           {% endblock %}
         </ul>
@@ -105,7 +120,7 @@
     <div class="col-md-3">
       
       <ul style="list-style: none;">
-        <h5>About Us</h5>
+        <h5 style="color:#fff;">About Us</h5>
         <li>
           <a href="#" style="text-decoration: none;">
             <i class="fas fa-caret-right"></i> About US
@@ -139,7 +154,7 @@
     <div class="col-md-3">
       
       <ul style="list-style: none;">
-        <h5>Useful Reads</h5>
+        <h5 style="color:#fff;">Useful Reads</h5>
         <li>
           <a href="#" style="text-decoration: none;">
             <i class="fas fa-caret-right"></i> Terms and Conditions
@@ -164,15 +179,10 @@
     <div class="col-md-3">
       
       <ul style="list-style: none;">
-        <h5>Special Pages</h5>
+        <h5 style="color:#fff;">Special Pages</h5>
         <li>
           <a href="#" style="text-decoration: none;">
-            <i class="fas fa-caret-right"></i> Donation Drives
-          </a>
-        </li>
-        <li>
-          <a href="https://www.linkedin.com/company/13674010/" style="text-decoration: none;">
-            <i class="fas fa-caret-right"></i>Refer and Earn
+            <i class="fas fa-caret-right"></i> Social Campaigns
           </a>
         </li>
         <li>
@@ -194,15 +204,15 @@
     <div class="col-md-3">
       
       <ul style="list-style: none;">
-        <h5>Connect With Us</h5>
+        <h5 style="color:#fff;">Connect With Us</h5>
         <li>
           <a href="https://www.facebook.com/statsbotSocialInnovations/" style="text-decoration: none;">
-            <i class="fas fa-caret-right"></i><i class="fab fa-facebook-f"></i> Facebook
+            <i class="fas fa-caret-right"></i> <i class="fab fa-facebook-f"></i> Facebook
           </a>
         </li>
         <li>
           <a href="https://www.linkedin.com/company/13674010/" style="text-decoration: none;">
-            <i class="fas fa-caret-right"></i><i class="fab fa-linkedin"></i> LinkedIn
+            <i class="fas fa-caret-right"></i> <i class="fab fa-linkedin"></i> LinkedIn
           </a>
         </li>
         
@@ -235,7 +245,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
-    <script>window.jQuery || document.write('<script src="{% static "js/jquery-3.2.1.min.js" %}"><\/script>')</script>
+    <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'jquery-ui-bootstrap/js/jquery-ui-1.9.2.custom.min.js' %}"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
@@ -257,5 +268,41 @@
         }());
     </script><!-- /CueLinks JS Integration -->
 
+    <!-- Auto Compelete -->
+    <script type="text/javascript">
+      $(document).on("focus keyup", "input.autocomplete", function() {
+        // Cache useful selectors
+        var $input = $(this);
+        var $dropdown = $input.next("ul.dropdown-menu");
+
+        // Create the no matches entry if it does not exists yet
+        if (!$dropdown.data("containsNoMatchesEntry")) {
+          $("input.autocomplete + ul.dropdown-menu").append('<li class="no-matches hidden"><a>No matches</a></li>');
+          $dropdown.data("containsNoMatchesEntry", true);
+        }
+
+        // Show only matching values
+        $dropdown.find("li:not(.no-matches)").each(function(key, li) {
+          var $li = $(li);
+          $li[new RegExp($input.val(), "i").exec($li.text()) ? "removeClass" : "addClass"]("hidden");
+        });
+
+        // Show a specific entry if we have no matches
+        $dropdown.find("li.no-matches")[$dropdown.find("li:not(.no-matches):not(.hidden)").length > 0 ? "addClass" : "removeClass"]("hidden");
+      });
+      $(document).on("click", "input.autocomplete + ul.dropdown-menu li", function(e) {
+        // Prevent any action on the window location
+        e.preventDefault();
+
+        // Cache useful selectors
+        $li = $(this);
+        $input = $li.parent("ul").prev("input");
+
+        // Update input text with selected entry
+        if (!$li.is(".no-matches")) {
+          $input.val($li.text());
+        }
+      });
+    </script>
   </body>
 </html>
