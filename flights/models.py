@@ -21,7 +21,7 @@ class Store(models.Model):
 	cuelink_name=models.CharField(max_length=128, null=True, blank=True)
 
 	def __str__(self):
-		return self.cuelink_name
+		return self.cuelink_name or self.name
 
 class Category(models.Model):
 	name=models.CharField(max_length=30)
@@ -83,8 +83,8 @@ class OfferUpdate(models.Model):
 					if off.endTime.ctime()<datetime.datetime.now().ctime():
 						off.status='expired'
 						off.save()
-		f.close()
 
 @receiver(post_save, sender=OfferUpdate)
 def save_profile(sender, instance, **kwargs):
     instance.save_offers()
+

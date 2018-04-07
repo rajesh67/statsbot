@@ -44,7 +44,7 @@
                               
                               <a class="btn btn-warning btn-block" href="#" style="text-align: bottom; text-transform: uppercase;">Visit Store</a>
                               
-                              <a target="_blank" class="btn btn-primary btn-block" href="{{store.home_url}}" style="text-align: bottom; text-transform: uppercase;">Shop on {{ store.name }}</a>
+                              <a target="_blank" class="btn btn-primary btn-block" href="{{store.home_url}}" style="text-align: bottom; text-transform: uppercase;">Book on {{ store.name }}</a>
                           </div>
                       </div>
                   </div><!-- /Product Div -->
@@ -70,6 +70,7 @@
 {% for offer in offers_data %}
 <div class="container" id="storeContainer" style="margin-top: 25px;">
   {% for store, offersList in offer.items %}
+  {% if offersList %}
   <div class="card" style="border: none;">
     <div class="card-header" style="background-color: #fff; border: none; padding-bottom: 20px;">
       <h5 style="text-transform: uppercase;">Top Offers on {{ store.short_name }} 
@@ -108,6 +109,7 @@
         </div>
       </div>
     </div><!-- /OffersListCaraousal -->
+    {% endif %}
     {% endfor %}
 </div><!-- /OffersContainer -->
 {% endfor %}
