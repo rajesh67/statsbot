@@ -209,6 +209,7 @@ class SearchResultsView(View):
 	def get(self, request, *args, **kwargs):
 		keywords=request.GET.get('q')
 		if keywords:
+			print(keywords)
 			output_data={}
 			search_results_products=[]
 			try:
@@ -227,7 +228,8 @@ class SearchResultsView(View):
 			except Exception as e:
 				search_results_products.append({Store.objects.get(short_name='amazon'):[]})
 			# found_products=search.search(keywords)
-		return render(request, self.template_name, {'data':search_results_products, 'stores':Store.objects.all()})
+			return render(request, self.template_name, {'data':search_results_products, 'stores':Store.objects.all()})
+		return super(SearchResultsView, self).get(request, *args, **kwargs)
 
 class StoreListView(ListView):
 	model=Store

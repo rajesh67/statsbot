@@ -8,7 +8,7 @@ from elasticsearch.helpers import bulk
 from elasticsearch import Elasticsearch
 from . import models
 
-connections.create_connection()
+# connections.create_connection()
 
 
 def search(title):
