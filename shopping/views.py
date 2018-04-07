@@ -29,6 +29,7 @@ from shopping.models import (
 import string
 from django.core.paginator import InvalidPage, EmptyPage
 import urllib
+from . import search
 
 def handler404(request):
 	return render(request, 'error.html', {})
@@ -97,6 +98,10 @@ class OfferListView(ListView):
 			return queryset
 		return liveOffers
 
+	def get_context_data(self, **kwargs):
+		context=super(OfferListView, self).get_context_data(**kwargs)
+		context['stores']=Store.objects.all()
+		return context
 
 class DOTDListView(ListView):
 	model = DOTD
@@ -124,11 +129,20 @@ class CategoryListView(ListView):
 	model = Product
 	template_name="shopping/products.html"
 	context_object_name='products'
-	paginate_by=12
+	paginate_by=20
 
 	def get_queryset(self):
 		# cat=Category.objects.get(name=self.kwargs.get('categoryName'))
-		return Product.objects.filter(category__name=self.kwargs.get('categoryName'), store__short_name=self.kwargs.get('storeName'))
+		queryset=Product.objects.filter(category__name=self.kwargs.get('categoryName'))
+		brandName=self.request.GET.get('brand', None)
+		storeName=self.request.GET.get('store', None)
+		if brandName and storeName:
+			queryset=queryset.filter(brand=brandName, store__name=storeName)
+		elif brandName:
+			queryset=queryset.filter(brand=brandName)
+		elif storeName:
+			queryset=queryset.filter(store__name=storeName)
+		return queryset
 
 	def get(self, request, *args, **kwargs):
 		if self.request.GET:
@@ -150,7 +164,9 @@ class CategoryListView(ListView):
 	def get_context_data(self, **kwargs):
 		context=super(CategoryListView, self).get_context_data(**kwargs)
 		context['category']=Category.objects.get(name=self.kwargs.get('categoryName'))
-		context['store']=Store.objects.get(short_name=self.kwargs.get('storeName'))
+		context['stores']=Store.objects.all()
+		context['brands']=Product.objects.values('brand').distinct()
+		context['total']=Product.objects.filter(category__name=self.kwargs.get('categoryName')).count()
 		return context
 
 class CategoryDetailView(DetailView):
@@ -161,7 +177,7 @@ class CategoryDetailView(DetailView):
 
 	def get_queryset(self):
 		# cat=Category.objects.get(name=self.kwargs.get('categoryName'))
-		return Category.objects.filter(name=self.kwargs.get('categoryName'), store__short_name=self.kwargs.get('storeName'))
+		return Category.objects.filter(name=self.kwargs.get('categoryName'))
 
 	def get(self, request, *args, **kwargs):
 		if self.request.GET:
@@ -192,7 +208,6 @@ class SearchResultsView(View):
 
 	def get(self, request, *args, **kwargs):
 		keywords=request.GET.get('q')
-		print(self.kwargs, request.GET.get('q'))
 		if keywords:
 			output_data={}
 			search_results_products=[]
@@ -211,6 +226,7 @@ class SearchResultsView(View):
 				search_results_products.append({Store.objects.get(short_name='amazon'):amazonProductsList})
 			except Exception as e:
 				search_results_products.append({Store.objects.get(short_name='amazon'):[]})
+			# found_products=search.search(keywords)
 		return render(request, self.template_name, {'data':search_results_products, 'stores':Store.objects.all()})
 
 class StoreListView(ListView):
@@ -252,14 +268,13 @@ class StoreDetailView(DetailView):
 
 	def get_context_data(self, **kwargs):
 		context=super(StoreDetailView, self).get_context_data(**kwargs)
-		store=self.get_object()
-		context['store']=store
-		if not store.product_set.all():
-			context['products']=store.search_products.all()[:12]
-		else:
-			context['products']=store.product_set.all()[:12]
-		context['offers']=CuelinkOffer.objects.filter(store=self.get_object())
+		offers=CuelinkOffer.objects.filter(store=self.get_object())
+		catName=self.request.GET.get('category', None)
+		if catName:
+			offers=offers.filter(categories=catName)
+		context['offers']=offers
 		context['stores']=Store.objects.all()
+		context['categories']=CuelinkOffer.objects.values('categories').distinct()
 		return context
 
 class AllOfferListView(ListView):
@@ -270,12 +285,15 @@ class AllOfferListView(ListView):
 	queryset=CuelinkOffer.objects.all()
 
 	def get_queryset(self):
-		queryset=self.queryset
-		filters=self.request.GET.keys()
-		if 'category' in filters:
-			queryset=queryset.filter(categories=self.request.GET.get('category'))
-		if 'store' in filters:
-			queryset=queryset.filter(store__name=self.request.GET.get('store'))
+		queryset=CuelinkOffer.objects.all()
+		catName=self.request.GET.get('category', None)
+		storeName=self.request.GET.get('store', None)
+		if catName and storeName:
+			queryset=queryset.filter(categories=catName, store__name=storeName)
+		elif catName:
+			queryset=queryset.filter(categories=catName)
+		elif storeName:
+			queryset=queryset.filter(store__name=storeName)
 		return queryset
 
 	def get_context_data(self, **kwargs):

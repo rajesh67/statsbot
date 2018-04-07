@@ -44,8 +44,83 @@
       <a href="/" class="navbar-brand">statsbot.org</a>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="/shopping/">Shopping</a>
+          <li class="dropdown">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Shopping
+              </a>
+
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <div class="text-center">
+                    <a href="/shopping/" class="btn btn-primary btn-md">Shopping Home</a>
+                </div>
+                <div class="row" style="width: 32rem;">
+                  <div class="col-md-6">
+                    <div class="card" style="border: none;">
+                        <div class="card-header" style="background-color: #fff; border: none;">
+                          <small>Shop By Category</small>
+                        </div>
+                        <div class="card-body">
+                              <ul style="list-style: none;">
+                                <!-- <li>
+                                  <a href="{% url 'category-products'  'mobiles' %}">Mobiles</a>
+                                </li> -->
+                                <li>
+                                  <a href="{% url 'category-products'  'tablets' %}">Tablets</a>
+                                </li>
+                                <li>
+                                  <a href="{% url 'category-products'  'cameras' %}">Cameras</a>
+                                </li>
+                                <li>
+                                  <a href="{% url 'category-products'  'laptops' %}">Laptops</a>
+                                </li>
+                                <li>
+                                  <a href="{% url 'category-products'  'desktops' %}">Desktops</a>
+                                </li>
+                              </ul>
+                        </div>
+                    </div>
+
+                    <!-- OFfers and deals card -->
+                    <div class="card" style="border: none;">
+                        <div class="card-header" style="background-color: #fff; border: none;">
+                          <small>Deals and Offers</small>
+                        </div>
+                        <div class="card-body">
+                              <ul style="list-style: none;">
+                                
+                                <li>
+                                  <a href="{% url 'shopping-deals' %}">Coupouns & Deals</a>
+                                </li>
+
+                                <li>
+                                  <a href="{% url 'shopping-offers' %}">Offers</a>
+                                </li>
+                                
+                              </ul>
+                        </div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-6">
+                    <div class="card" style="border: none;">
+                        <div class="card-header" style="background-color: #fff; border: none;">
+                          <small>Browse Stores</small>
+                        </div>
+                        <div class="card-body">
+                              <ul style="list-style: none;">
+                                {% for store in stores %}
+                                <li>
+                                  <a href="{% url 'store-homepage'  store.short_name %}">{{store.name}}</a>
+                                </li>
+                                {% endfor %}
+                              </ul>
+                        </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
           </li>
           
           <li class="nav-item">
@@ -72,7 +147,7 @@
             <a class="nav-link" href="{% url 'shopping-offers' %}">Offers</a>
           </li> -->
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'shopping-deals' %}">Deals</a>
+            <a class="nav-link" href="{% url 'shopping-deals' %}">Coupouns & Deals</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'why-us' %}">How It Works</a>

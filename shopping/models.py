@@ -6,6 +6,7 @@ import csv
 import io
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
+from . import search
 
 class Store(models.Model):
 	name=models.CharField(max_length=100, null=True, blank=True)
@@ -58,6 +59,26 @@ class SearchProduct(models.Model):
 	def __str__(self):
 		return self.title
 
+	def indexing(self):
+		image=self.get_default_image()
+		price=self.prices.last()
+		obj = search.ProductIndex(
+			meta={'id': self.id},
+			store_name=self.store.name,
+			productId=self.productId,
+			title=self.title,
+			productUrl=self.productUrl,
+			brand=self.brand,
+			inStock=self.inStock,
+			codAvailable=self.codAvailable,
+			topSeller=self.topSeller,
+			catName=self.catName,
+			imageUrl=image.url if image else None,
+			sellingPrice=price.sellingPrice if price else 0,
+		)
+		obj.save()
+		return obj.to_dict(include_meta=True)
+
 	def get_default_image(self):
 		if self.store.short_name=='amazon':
 			return self.searchproductimage_set.filter(size='large').first()
@@ -109,6 +130,26 @@ class Product(models.Model):
 
 	def get_default_image(self):
 		return self.productimage_set.filter(size="400x400").first()
+
+	def indexing(self):
+		image=self.get_default_image()
+		price=self.prices.last()
+		obj = search.ProductIndex(
+			meta={'id': self.id},
+			store_name=self.store.name,
+			productId=self.productId,
+			title=self.title,
+			productUrl=self.productUrl,
+			brand=self.brand,
+			inStock=self.inStock,
+			codAvailable=self.codAvailable,
+			topSeller=self.topSeller,
+			catName=self.category.name,
+			imageUrl=image.url if image else None,
+			sellingPrice=price.sellingPrice if price else 0,
+		)
+		obj.save()
+		return obj.to_dict(include_meta=True)
 
 class PriceHistory(models.Model):
 	PRICE_STATUS=(
@@ -267,3 +308,7 @@ class OfferUpdate(models.Model):
 @receiver(post_save, sender=OfferUpdate)
 def save_profile(sender, instance, **kwargs):
     instance.save_offers()
+
+@receiver(post_save, sender=SearchProduct)
+def index_post(sender, instance, **kwargs):
+    instance.indexing()

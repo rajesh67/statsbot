@@ -29,63 +29,94 @@
 	<!-- OffersRow -->
 	<div class="row">
 		<!-- Filters Column -->
-		<div class="col-md-3">
-					<div class="stores">
-						<input type="text" id="myInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name">
+		<div class="col-md-2 pull-md-1">
+			<h5>Filter By</h5>
+			<!-- Accordian -->
+			<div id="accordion" style="display: inline-block;">
 
-						<ul id="myUL">
+				  <div class="card" style="width: 20rem;">
+				    <div class="card-header" id="headingOne">
+				      <h5 class="mb-0">
+				        <button class="btn btn-block btn-secondary btn-lg" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="text-align: left;">
+				          Store
+				        </button>
+				      </h5>
+				    </div>
+
+				    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+				      <div class="card-body">
+				        <input type="text" id="myInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name" style="display: block; width: 90%; border-radius: 5px; text-align: center; margin-left: 10px;">
+
+						<ul id="myUL" style="height: 150px; overflow-y: auto; list-style: none;">
 						  {% for store in stores %}
 						  	<li><a href="?store={{store.name}}">{{store.name}}</a></li>
 						  {% endfor %}
 						</ul>
-					</div>
+						<script type="text/javascript">
+							function storeFunction() {
+							    var input, filter, ul, li, a, i;
+							    input = document.getElementById("myInput");
+							    filter = input.value.toUpperCase();
+							    ul = document.getElementById("myUL");
+							    li = ul.getElementsByTagName("li");
+							    for (i = 0; i < li.length; i++) {
+							        a = li[i].getElementsByTagName("a")[0];
+							        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+							            li[i].style.display = "";
+							        } else {
+							            li[i].style.display = "none";
 
-					<div class="categories">
-						<input type="text" id="catsInput" onkeyup="categoryFunction()" placeholder="Search for names.." title="Type in a name">
-						<ul id="catsUL">
+							        }
+							    }
+							};
+						</script>
+				      </div>
+				    </div>
+				  </div>
+				  
+				  <div class="card">
+				    <div class="card-header" id="headingThree">
+				      <h5 class="mb-0">
+				        <button class="btn btn-block btn-secondary btn-lg" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+				          Category
+				        </button>
+				      </h5>
+				    </div>
+				    <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion">
+				      <div class="card-body">
+				      		<input type="text" id="catsInput" onkeyup="brandFunction()" placeholder="Search for names.." title="Type in a name" style="display: block; width: 90%; border-radius: 5px; text-align: center; margin-left: 10px;">
+
+						<ul id="catsUL" style="height: 150px; overflow-y: auto; list-style: none;">
 						  {% for category in categories %}
-						  	<li><a href="?category={{category.categories}}">{{category.categories}}</a></li>
+						  	<li><a href="?category={{category.categories}}&page={{request.GET.page}}&store={{request.GET.store}}">{{category.categories}}</a></li>
 						  {% endfor %}
 						</ul>
-					</div>
+						<script type="text/javascript">
+							function brandFunction() {
+							    var input, filter, ul, li, a, i;
+							    input = document.getElementById("catsInput");
+							    filter = input.value.toUpperCase();
+							    ul = document.getElementById("catsUL");
+							    li = ul.getElementsByTagName("li");
+							    for (i = 0; i < li.length; i++) {
+							        a = li[i].getElementsByTagName("a")[0];
+							        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+							            li[i].style.display = "";
+							        } else {
+							            li[i].style.display = "none";
+
+							        }
+							    }
+							};
+						</script>
+				      </div>
+				    </div>
+				  </div>
+				</div>
 		</div><!-- Filters Column End -->
-		<script type="text/javascript">
-			function storeFunction() {
-			    var input, filter, ul, li, a, i;
-			    input = document.getElementById("myInput");
-			    filter = input.value.toUpperCase();
-			    ul = document.getElementById("myUL");
-			    li = ul.getElementsByTagName("li");
-			    for (i = 0; i < li.length; i++) {
-			        a = li[i].getElementsByTagName("a")[0];
-			        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-			            li[i].style.display = "";
-			        } else {
-			            li[i].style.display = "none";
-
-			        }
-			    }
-			};
-
-			function categoryFunction() {
-			    var input, filter, ul, li, a, i;
-			    input = document.getElementById("catsInput");
-			    filter = input.value.toUpperCase();
-			    ul = document.getElementById("catsUL");
-			    li = ul.getElementsByTagName("li");
-			    for (i = 0; i < li.length; i++) {
-			        a = li[i].getElementsByTagName("a")[0];
-			        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-			            li[i].style.display = "";
-			        } else {
-			            li[i].style.display = "none";
-
-			        }
-			    }
-			};
-			</script>
+	
 		<!-- Offers Listing -->
-		<div class="col-md-9">
+		<div class="col-md-10 push-md-1">
 			<div class="container-fluid" id="offersListingContainer">
 				<!-- Listing container Inner Rows  -->
 				<div class="row">
@@ -133,7 +164,7 @@
 				      {% endif %}
 				    {% endfor %}
 				    {% if page_obj.has_next %}
-				      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+				      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}&category={{request.GET.category}}&store={{request.GET.store}}">Next Page&raquo;</a></li>
 				    {% else %}
 				      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
 				    {% endif %}

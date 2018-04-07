@@ -15,75 +15,141 @@
 	<nav aria-label="breadcrumb">
 	  <ol class="breadcrumb">
 	    <li class="breadcrumb-item"><a href="/">Home</a></li>
+	    <li class="breadcrumb-item"><a href="/shopping/">Shopping</a></li>
 	    <li class="breadcrumb-item"><a href="{% url 'store-directory' %}">Stores</a></li>
 	    <li class="breadcrumb-item active" aria-current="page">{{store.name}}</li>
 	  </ol>
 	</nav>
 
-  <div class="container text-center" style="">
+  <div class="container text-center" style=" position: relative;top:0;">
   	<img src="{{MEDIA_URL}}{{store.logo_image}}" width="20%">
-    <h5 class="display-6">{{store.name}} Offers and Deals</h5>
-    <p class="lead"><a target="_blank" class="btn btn-primary btn-lg" href="{{store.home_url}}" style="text-transform: uppercase;">SHOP ON {{ store.name }}</a></p>
+    <h5 class="display-8">Offers and Deals</h5>
+
+    <p class="lead"><a target="_blank" class="btn btn-success btn-md" href="{{store.home_url}}" style="text-transform: uppercase;">Buy ON {{ store.name }}</a></p>
+
+    <p class="lead"><a class="btn btn-primary btn-md" href="/shopping/" style="text-transform: uppercase;"> Go To Home</a></p>
 
   </div>
 
-  <div class="container text-center">
-  	<h3>OR</h3>
-  	<form class="form-inline" action="" method="get" style="left: 30%; position: absolute;">
+  <div class="container text-center" style="margin-top: 20px; position: relative; display: block;">
+  		<!-- <ul style="list-style: none; display: block;">
+			<li style="width: 20%; display: inline-block; float: center;">
+				<a href="{% url 'category-products' 'desktops' %}"><i class="fas fa-desktop" style="transform: scale(4);"></i></a>
+			</li>
+			<li style="width: 20%; display: inline-block; float: center;">
+				<a href="{% url 'category-products'  'cameras' %}"><i class="fas fa-camera" style="transform:  scale(4);"></i></a>
+			</li>
+			<li style="width: 20%; display: inline-block; float: center;">
+				<a href="#"><i class="fas fa-mobile" style="transform:  scale(4);"></i></a>
+			</li>
+			<li style="width: 20%; display: inline-block; float: center;">
+				<a href="#"><i class="fas fa-tablet" style="transform:  scale(4);"></i></a>
+			</li>
+		</ul> -->
+  	<!-- <form class="form-inline" action="" method="get" style="left: 30%; position: absolute;">
 	    <input class="form-control" type="text" id="searchbox" name="url" placeholder="Paste product link here ......" data="{{ request.GET.url }}" style="display: inline-block; max-width: 500px; width: 430px;">
 	    <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Buy Now</button>
-	  </form>
+	  </form> -->
   </div>
 </div><!-- /Store Jumbotron -->
 
 <!-- Offers and Deals Section -->
-<div class="container-fluid tab-content" id="nav-tabContent">
+<div class="container-fluid" id="nav-tabContent">
 		<h1 style="font-size: 1.5em; color: #6d1d0a00;">All Available Offers</h1>
 		<div class="row">
-			{% for offer in offers %}
-				<div class="card col-md-3" style="margin-top: 2rem; border: none;">
-				  <div class="card-header" style="">
-				    <h5 class="card-title" style="font-family: Calibri; text-align: center;">{{offer.title}}</h5>
+			<div class="col-md-3">
+				<div id="accordion" style="display: inline-block;">
+
+				  <div class="card" style="width: 20rem;">
+				    <div class="card-header" id="headingOne">
+				      <h5 class="mb-0">
+				        <button class="btn btn-block btn-secondary btn-lg" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="text-align: left;">
+				          Category
+				        </button>
+				      </h5>
+				    </div>
+
+				    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+				      <div class="card-body">
+				        <input type="text" id="myInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name" style="display: block; width: 90%; border-radius: 5px; text-align: center; margin-left: 10px;">
+
+						<ul id="myUL" style="height: 150px; overflow-y: auto; list-style: none;">
+						  {% for category in categories %}
+						  	<li><a href="?category={{category.categories}}">{{category.categories}}</a></li>
+						  {% endfor %}
+						</ul>
+						<script type="text/javascript">
+							function storeFunction() {
+							    var input, filter, ul, li, a, i;
+							    input = document.getElementById("myInput");
+							    filter = input.value.toUpperCase();
+							    ul = document.getElementById("myUL");
+							    li = ul.getElementsByTagName("li");
+							    for (i = 0; i < li.length; i++) {
+							        a = li[i].getElementsByTagName("a")[0];
+							        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+							            li[i].style.display = "";
+							        } else {
+							            li[i].style.display = "none";
+
+							        }
+							    }
+							};
+						</script>
+				      </div>
+				    </div>
 				  </div>
-				  <div class="card-body">
-				    <p class="card-text text-center">Period : {{ offer.startTime.date }} to {{ offer.endTime.date }}</p>
-				    <p class="card-text">{{offer.description}}</p>
-				    {% if offer.coupoun_code %}
-				    	<p class="card-text push-md-2 text-center" style="border: 2px dotted grey;">Coupoun Code : {{offer.coupoun_code}}</p>
+				</div>
+			</div>
+
+
+			<div class="col-md-9">
+				<div class="container-fluid">
+					<div class="row push-md-1">
+						{% for offer in offers %}
+							<div class="card col-md-4" style="margin-top: 2rem; border: none;">
+							  <div class="card-header" style="">
+							    <h5 class="card-title" style="font-family: Calibri; text-align: center;">{{offer.title}}</h5>
+							  </div>
+							  <div class="card-body">
+							    <p class="card-text text-center">Period : {{ offer.startTime.date }} to {{ offer.endTime.date }}</p>
+							    <p class="card-text">{{offer.description}}</p>
+							    {% if offer.coupoun_code %}
+							    	<p class="card-text push-md-2 text-center" style="border: 2px dotted grey;">Coupoun Code : {{offer.coupoun_code}}</p>
+							    {% else %}
+							    	<p class="card-text push-md-2 text-center" style="border: 2px dotted grey;">No Coupoun Code Required</p>
+							    {% endif %}
+
+							    <a target="_blank" href="{{offer.url}}" class="btn btn-success btn-block btn-md" style="position: relative; bottom: 5px; text-transform: uppercase;">Activate this deal</a>
+							    <a target="_blank" href="{{offer.url}}" class="btn btn-primary btn-block btn-md" style="position: relative; bottom: 5px; text-transform: uppercase;">Shop on {{ offer.store.name }}</a>
+							  </div>
+					</div>
+					{% endfor %}
+					</div>
+				</div><!-- /Container -->
+				{% if is_paginated %}
+				  <ul class="pagination" style="text-align: center;">
+				    {% if page_obj.has_previous %}
+				      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&category={{request.GET.category}}">Previous Page&laquo;</a></li>
 				    {% else %}
-				    	<p class="card-text push-md-2 text-center" style="border: 2px dotted grey;">No Coupoun Code Required</p>
+				      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
 				    {% endif %}
-
-				    <a target="_blank" href="{{offer.url}}" class="btn btn-success btn-block btn-md" style="position: relative; bottom: 5px; text-transform: uppercase;">Activate this deal</a>
-				    <a target="_blank" href="{{offer.url}}" class="btn btn-primary btn-block btn-md" style="position: relative; bottom: 5px; text-transform: uppercase;">Shop on {{ offer.store.name }}</a>
-				  </div>
+				    {% for i in paginator.page_range %}
+				      {% if page_obj.number == i %}
+				        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+				      {% else %}
+				        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+				      {% endif %}
+				    {% endfor %}
+				    {% if page_obj.has_next %}
+				      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}&category={{request.GET.category}}">Next Page&raquo;</a></li>
+				    {% else %}
+				      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+				    {% endif %}
+				  </ul>
+				{% endif %}
+			</div>
 		</div>
-		{% endfor %}
-		</div>
-
-	<div class="col-md-6 push-md-2" style="float: center;">
-    {% if is_paginated %}
-	  <ul class="pagination" style="text-align: center;">
-	    {% if page_obj.has_previous %}
-	      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
-	    {% else %}
-	      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
-	    {% endif %}
-	    {% for i in paginator.page_range %}
-	      {% if page_obj.number == i %}
-	        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
-	      {% else %}
-	        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
-	      {% endif %}
-	    {% endfor %}
-	    {% if page_obj.has_next %}
-	      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
-	    {% else %}
-	      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
-	    {% endif %}
-	  </ul>
-	{% endif %}
-</div><!-- /Pagination -->
 </div><!-- /Offers and Deals Section -->
 
 {% endblock page %}

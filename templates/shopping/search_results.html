@@ -37,9 +37,6 @@
 			<div class="container-fluid" id="offersListingContainer">
 				<!-- Listing container Inner Rows  -->
 				<div class="row">
-					<div class="col-md-12">
-						<h5>Showing Results Only for {{data|length}} Stores</h5>
-					</div><!-- Applied Filters List -->
 
 					<!-- Main columns of The Offers Grids -->
 					{% for store_data in data %}
@@ -103,4 +100,40 @@
 		</div><!-- Offers Listing End -->
 	</div><!-- Offers Rows -->
 </div><!-- Container -->
+
+
+<div class="container">
+	<div class="row">
+		{% if found_products %}
+			{% for hit in found_products %}
+					<div class="col-md-3" style="margin:auto;">
+						<!-- Card -->
+						<div class="card productCard" style="margin: 10px auto; border:none;">
+							<!-- Header -->
+							<div class="card-header" style="border:none;">
+							    <p class="card-text" style="font-family: Calibri; font-weight: bold; text-align: center;"><!-- <img src="{{MEDIA_URL}}{{product.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"> -->
+							    	{{hit.store_name}}
+							    </p>
+							  </div>
+
+						  
+						  	<img class="card-img-top img-responsive" src="{{hit.imageUrl}}" alt="Card image cap" width="100px" style="width: auto; max-width: 80%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
+						  
+						  <div class="card-body text-center">
+						    <a target="_blank" href="{{hit.productUrl}}" style="text-transform: uppercase; text-decoration: none;">{{hit.title|truncatechars:100}}</a>
+						    <p class="card-text">{{product.product_description.last.content|truncatechars:100}}</p>
+						  </div>
+
+						  <p class="card-text" style="text-align: center; border: 2px dotted grey;">Price : INR {{hit.sellingPrice}}</p>
+						  <div class="card-body">
+						    <a target="_blank" style="position: relative; bottom: 5px;" href="{{hit.url}}" class="btn btn-block btn-success">Buy this item</a>
+						    <!-- <a href="#" class="btn btn-block btn-info">View More</a> -->
+						  </div>
+						</div><!-- Card -->
+						
+					</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
 {% endblock %}

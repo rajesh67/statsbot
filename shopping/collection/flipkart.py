@@ -101,7 +101,7 @@ class FKOffersAPIHandler():
 class FKFeedAPIHandler():
 	def __init__(self,category,*args,**kwargs):
 		self.store=Store.objects.get(short_name="flipkart")
-		self.category, created=Category.objects.get_or_create(name=category, store=self.store)
+		self.category, created=Category.objects.get_or_create(name=category)
 		self.headers={'Fk-Affiliate-Id':self.store.affiliate_id,'Fk-Affiliate-Token':self.store.affiliate_token}
 		self.nextUrl=''
 		return super(FKFeedAPIHandler, self).__init__(*args, **kwargs)
@@ -118,8 +118,9 @@ class FKFeedAPIHandler():
 		category_vars=apiListings[self.category.name]
 		base_url=category_vars['availableVariants']['v1.1.0']['get']
 		self.category.baseApiURL=base_url
+		print(category_vars['availableVariants']['v1.1.0'].keys())
 		self.category.deltaGetURL=category_vars['availableVariants']['v1.1.0']['deltaGet']
-		self.category.topFeedsURL=category_vars['availableVariants']['v1.1.0']['top']
+		# self.category.topFeedsURL=category_vars['availableVariants']['v1.1.0']['top']
 		self.category.save()
 		return base_url
 
@@ -134,6 +135,7 @@ class FKFeedAPIHandler():
 		if resp.status_code==200:
 			data=json.loads(resp.content)
 			self.category.catId=data['category']
+			self.category.last_version=data['version']
 			self.category.current_version=data['version']
 			self.category.feedsListed=True
 			self.category.last_updated_on=datetime.datetime.now()
@@ -219,9 +221,9 @@ class FKDeltaFeedAPIHandler():
 				history.product=product
 				history.status="-1"
 				history.save()
-				print("Price Changed For: %s"%(product.title))
-				print("Last Price : %d"%(lastPrice.specialPrice))
-				print("Current Price : %d, specialPrice : %d"%(lastPrice.specialPrice, specialPrice))
+				# print("Price Changed For: %s"%(product.title))
+				# print("Last Price : %d"%(lastPrice.specialPrice))
+				# print("Current Price : %d, specialPrice : %d"%(lastPrice.specialPrice, specialPrice))
 			
 		# Update Stock Information
 		def update_availability(data):
@@ -252,7 +254,7 @@ class FKDeltaFeedAPIHandler():
 			version=data['version']
 			if version!=self.category.current_version:
 				DELTA_URL=settings.FLIPKART_DELTA_FEEDS_JSON_URL.format(
-					version=self.category.current_version, 
+					version=self.category.last_version, 
 					catId=self.category.catId
 					)
 				# resp=requests.get(DELTA_URL, headers=self.headers, params=data.query)

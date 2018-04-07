@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'whitenoise',
     #Search
     'haystack',
-    'elasticsearch',
+    'elasticsearch_dsl',
 ]
 
 MIDDLEWARE = [

@@ -21,49 +21,55 @@
 	<!-- OffersRow -->
 	<div class="row">
 		<!-- Filters Column -->
-		<div class="col-md-3">
-			<div class="container">
-				<form class="form-inline">
-				    <input class="form-control mr-sm-1" type="search" placeholder="Search store name" aria-label="Search" style="width: 175px;">
-				  </form>
-			</div><!-- Search  -->
-			<div class="container">
-				<ul class="nav nav-pills nav-fill" style="text-transform: uppercase; text-decoration: none;">
-				  <!-- <li class="nav-item">
-				    <a class="nav-link active" href="#">Running</a>
-				  </li>
-				  <li class="nav-item">
-				    <a class="nav-link" href="?all=True" method="get">Expired</a>
-				  </li> -->
-				</ul>
-			</div><!-- /Availability  -->
+		<div class="col-md-2 pull-md-1">
+			<h5>Filter By</h5>
+			<!-- Accordian -->
+			<div id="accordion" style="display: inline-block;">
 
-			<div class="container">
-				<div id="accordion">
-				  {% for cat in categories %}
-				  	<div class="card">
-					    <div class="card-header" id="headingOne">
-					      <h5 class="mb-0">
-					        <button class="btn btn-link" data-toggle="collapse" data-target="#{{offer.category}}" aria-expanded="true" aria-controls="{{offer.category}}">
-					          Collapsible Group Item #1
-					        </button>
-					      </h5>
-					    </div>
+				  <div class="card" style="width: 20rem;">
+				    <div class="card-header" id="headingOne">
+				      <h5 class="mb-0">
+				        <button class="btn btn-block btn-secondary btn-lg" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="text-align: left;">
+				          Store
+				        </button>
+				      </h5>
+				    </div>
 
-					    <div id="{{offer.category}}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-					      <div class="card-body">
-					        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-					      </div>
-					    </div>
-					  </div>
-				  {% endfor %}
-				  
-				</div>
-			</div><!-- Categories  -->
+				    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+				      <div class="card-body">
+				        <input type="text" id="myInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name" style="display: block; width: 90%; border-radius: 5px; text-align: center; margin-left: 10px;">
+
+						<ul id="myUL" style="height: 150px; overflow-y: auto; list-style: none;">
+						  {% for store in stores %}
+						  	<li><a href="?store={{store.name}}&brand={{request.GET.brand}}&page={{request.GET.page}}">{{store.name}}</a></li>
+						  {% endfor %}
+						</ul>
+						<script type="text/javascript">
+							function storeFunction() {
+							    var input, filter, ul, li, a, i;
+							    input = document.getElementById("myInput");
+							    filter = input.value.toUpperCase();
+							    ul = document.getElementById("myUL");
+							    li = ul.getElementsByTagName("li");
+							    for (i = 0; i < li.length; i++) {
+							        a = li[i].getElementsByTagName("a")[0];
+							        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+							            li[i].style.display = "";
+							        } else {
+							            li[i].style.display = "none";
+
+							        }
+							    }
+							};
+						</script>
+				      </div>
+				    </div>
+				  </div>
+				</div><!-- Card -->
 		</div><!-- Filters Column End -->
 
 		<!-- Offers Listing -->
-		<div class="col-md-9">
+		<div class="col-md-10 push-md-1">
 			<div class="container-fluid" id="offersListingContainer">
 				<!-- Listing container Inner Rows  -->
 				<div class="row">

@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page %}
+<style type="text/css">
+	#pageContainer{
+		margin: 60px auto;
+	}
+	#pageMessage{
+		margin: 60px auto;
+	}
+</style>
+<!-- Store Header -->
+<div class="jumbotron jumbotron-fluid">
+
+	<nav aria-label="breadcrumb">
+	  <ol class="breadcrumb">
+	    <li class="breadcrumb-item"><a href="/">Home</a></li>
+	    <li class="breadcrumb-item"><a href="/stores/">Stores</a></li>
+	    <li class="breadcrumb-item"><a href="{% url 'store-homepage' store.short_name %}">{{store.name}}</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">{{category.name}}</li>
+	  </ol>
+	</nav>
+
+  <div class="container text-center" style="">
+  	<img src="{{MEDIA_URL}}{{store.logo_image}}" width="20%">
+    <h5 class="display-4">Browse All {{category.name}} on {{store.name}} </h5>
+    <p class="lead"><a target="_blank" class="btn btn-warning btn-md" href="{{store.home_url}}" style="text-transform: uppercase;">Visit {{ store.name }}</a></p>
+  </div>
+
+  <div class="container text-center">
+  	<h3>OR</h3>
+  	<form class="form-inline" action="" method="get" style="left: 30%; position: absolute;">
+	    <input class="form-control" type="text" id="searchbox" name="url" placeholder="Paste product link here from {{ store.short_name website}}" data="{{ request.GET.url }}" style="display: inline-block; max-width: 500px; width: 430px;">
+	    <button class="btn btn-outline-warning my-12 my-lg-0" type="submit">Buy Now</button>
+	  </form>
+  </div>
+</div><!-- /Store Jumbotron -->
+
+
+
+
+
+<div class="container" id="pageContainer">
+	<div class="row">         
+
+	<div class="col-md-2"></div>
+	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="text-transform: uppercase;">
+		<h5>Category List</h5>
+		{% for category in store.category_set.all %}
+		{% if forloop.first %} 
+			<a class="nav-link" id="v-pills-home-tab" href="{% url 'store-category' store.short_name category.name %}" aria-selected="true">{{category.name}}</a>
+		{% else %}
+	  		<a class="nav-link" id="v-pills-profile-tab" href="{% url 'store-category' store.short_name category.name %}" aria-selected="false">{{category.name}}</a>
+	  	{% endif %}
+	  {% endfor %}
+	</div>
+</div>
+		<!-- ProductsList -->
+		<div class="col-md-12">
+			{% if products %}
+					<div class="container">
+						<div class="row" style="">
+							{% for product in products %}
+							<div class="col-sm-2" style="margin: 20px 20px 20px 10px;">
+								<div class="card" style="width: 15rem; border:none;">
+								  {% if not product.get_default_image %}
+								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
+								  {% else %}
+								  	<img class="card-img-top" src="{{product.get_default_image.url}}" alt="Card image cap" style="width: auto; max-width: 50%; text-align: center; display: block; height: 250px; overflow: hidden; margin: auto auto;">
+								  {% endif %}
+								  <div class="card-body">
+								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
+								    <p class="card-text">Price : INR {{product.prices.last.sellingPrice}}</p>
+								    <a target="_blank" href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
+								    <a href="#" class="btn btn-warning">Track Price</a>
+								  </div>
+								</div>
+								<div class="card-body">
+									<!-- {% for price in product.prices.all %}
+										<div class="card" style="border:none;">
+											<div class="card-body">
+												<p class="card-title">Rs. {{price.specialPrice}}{{price.date}}</p>
+											</div>
+										</div>
+									{% endfor %} -->
+								</div><!-- Chart Div for Each Product Instance -->
+							</div><!-- Product Div -->
+							<!-- <div class="col-xs-sm-1"></div> -->
+							{% if forloop.counter|divisibleby:3 %}
+								<div class="clearfix">
+									
+								</div>
+							{% endif %}
+							{% endfor %}
+							<!-- Paginations -->
+							<div class="col-md-12">
+								{% if is_paginated %}
+								  <ul class="pagination" style="text-align: center;">
+								    {% if page_obj.has_previous %}
+								      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+								    {% else %}
+								      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
+								    {% endif %}
+								    {% for i in paginator.page_range %}
+								      {% if page_obj.number == i %}
+								        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+								      {% else %}
+								        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+								      {% endif %}
+								    {% endfor %}
+								    {% if page_obj.has_next %}
+								      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+								    {% else %}
+								      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+								    {% endif %}
+								  </ul>
+								{% endif %}
+							</div><!-- /Pagination -->
+						</div><!-- Row -->
+					</div><!-- Card -->
+					<div class="clear-fix"></div>
+			{% else %}
+				<h5>No products Available</h5>
+			{% endif %}
+		</div><!-- ProductsList -->
+		
+	</div><!-- /Row -->
+</div><!-- /Page Container -->
+{% endblock page %}

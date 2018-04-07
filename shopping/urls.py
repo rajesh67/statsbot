@@ -24,6 +24,6 @@ urlpatterns=[
 	url('^h/(?P<storeName>[a-zA-Z0-9-_]+)/l/(?P<categoryName>[a-zA-Z0-9]+)/$', CategoryListView.as_view(), name="store-category"),
 	# url('^h/(?P<storeName>[a-zA-Z0-9]+)/l/(?P<categoryName>[a-zA-Z0-9]+)/(?P<productId>[a-zA-Z0-9]+)/$', CategoryListView.as_view(), name="store-category"),
 	url('^(?P<categoryName>[a-zA-Z-_]+)/$', CategoryListView.as_view(), name="category-products"),
-	url('^p/offers/$', OfferListView.as_view(), name="shopping-offers"),
-	url('^p/deals/$', AllOfferListView.as_view(), name="shopping-deals"),
+	url('^p/deals/$', OfferListView.as_view(), name="shopping-offers"),
+	url('^p/offers/$', AllOfferListView.as_view(), name="shopping-deals"),
 ]

@@ -10,30 +10,37 @@
 	}
 </style>
 <!-- Store Header -->
-<div class="jumbotron jumbotron-fluid">
+<div class="jumbotron jumbotron-fluid" style="background-color:  #0b0c28;">
 
 	<nav aria-label="breadcrumb">
-	  <ol class="breadcrumb">
+	  <ol class="breadcrumb" style="background-color:  #0b0c28;">
 	    <li class="breadcrumb-item"><a href="/">Home</a></li>
-	    <li class="breadcrumb-item"><a href="/stores/">Stores</a></li>
-	    <li class="breadcrumb-item"><a href="{% url 'store-homepage' store.short_name %}">{{store.name}}</a></li>
+	    <li class="breadcrumb-item"><a href="/shopping/">Shopping</a></li>
+	    <li class="breadcrumb-item"><a href="/stores/">Categories</a></li>
 	    <li class="breadcrumb-item active" aria-current="page">{{category.name}}</li>
 	  </ol>
 	</nav>
 
-  <div class="container text-center" style="">
-  	<img src="{{MEDIA_URL}}{{store.logo_image}}" width="20%">
-    <h5 class="display-4">Browse All {{category.name}} on {{store.name}} </h5>
-    <p class="lead"><a target="_blank" class="btn btn-warning btn-md" href="{{store.home_url}}" style="text-transform: uppercase;">Visit {{ store.name }}</a></p>
-  </div>
-
-  <div class="container text-center">
-  	<h3>OR</h3>
-  	<form class="form-inline" action="" method="get" style="left: 30%; position: absolute;">
-	    <input class="form-control" type="text" id="searchbox" name="url" placeholder="Paste product link here from {{ store.short_name website}}" data="{{ request.GET.url }}" style="display: inline-block; max-width: 500px; width: 430px;">
-	    <button class="btn btn-outline-warning my-12 my-lg-0" type="submit">Buy Now</button>
-	  </form>
-  </div>
+	<div class="display-8 text-center" style="font-family: Calibri; font-weight: bold; color:#fff; text-transform: uppercase;">
+		<h5>Buy {{category.name}} at Lowest Prices in India</h5>
+		<small>Get Extra Cashback & Coupons from Statsbot.org</small>
+	</div>
+	<div class="text-center" style="padding-top: 5%;">
+		<ul style="list-style: none; display: block;">
+		<li style="width: 20%; display: inline-block; float: center;">
+			<a href="{% url 'category-products' 'desktops' %}"><i class="fas fa-desktop" style="transform: scale(4);"></i></a>
+		</li>
+		<li style="width: 20%; display: inline-block; float: center;">
+			<a href="{% url 'category-products'  'cameras' %}"><i class="fas fa-camera" style="transform:  scale(4);"></i></a>
+		</li>
+		<li style="width: 20%; display: inline-block; float: center;">
+			<a href="#"><i class="fas fa-laptop" style="transform:  scale(4);"></i></a>
+		</li>
+		<li style="width: 20%; display: inline-block; float: center;">
+			<a href="{% url 'category-products'  'tablets' %}"><i class="fas fa-tablet" style="transform:  scale(4);"></i></a>
+		</li>
+	</ul>
+	</div>
 </div><!-- /Store Jumbotron -->
 
 
@@ -43,61 +50,154 @@
 <div class="container" id="pageContainer">
 	<div class="row">         
 
-	<div class="col-md-2"></div>
-	<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical" style="text-transform: uppercase;">
-		<h5>Category List</h5>
-		{% for category in store.category_set.all %}
-		{% if forloop.first %} 
-			<a class="nav-link" id="v-pills-home-tab" href="{% url 'store-category' store.short_name category.name %}" aria-selected="true">{{category.name}}</a>
-		{% else %}
-	  		<a class="nav-link" id="v-pills-profile-tab" href="{% url 'store-category' store.short_name category.name %}" aria-selected="false">{{category.name}}</a>
-	  	{% endif %}
-	  {% endfor %}
-	</div>
-</div>
+	<div class="col-md-2 pull-md-1">
+			<h5>Filter By</h5>
+			<!-- Accordian -->
+			<div id="accordion" style="display: inline-block;">
+
+				  <div class="card" style="width: 20rem;">
+				    <div class="card-header" id="headingOne">
+				      <h5 class="mb-0">
+				        <button class="btn btn-block btn-secondary btn-lg" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="text-align: left;">
+				          Store
+				        </button>
+				      </h5>
+				    </div>
+
+				    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+				      <div class="card-body">
+				        <input type="text" id="myInput" onkeyup="storeFunction()" placeholder="Search for names.." title="Type in a name" style="display: block; width: 90%; border-radius: 5px; text-align: center; margin-left: 10px;">
+
+						<ul id="myUL" style="height: 150px; overflow-y: auto; list-style: none;">
+						  {% for store in stores %}
+						  	<li><a href="?store={{store.name}}&brand={{request.GET.brand}}">{{store.name}}</a></li>
+						  {% endfor %}
+						</ul>
+						<script type="text/javascript">
+							function storeFunction() {
+							    var input, filter, ul, li, a, i;
+							    input = document.getElementById("myInput");
+							    filter = input.value.toUpperCase();
+							    ul = document.getElementById("myUL");
+							    li = ul.getElementsByTagName("li");
+							    for (i = 0; i < li.length; i++) {
+							        a = li[i].getElementsByTagName("a")[0];
+							        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+							            li[i].style.display = "";
+							        } else {
+							            li[i].style.display = "none";
+
+							        }
+							    }
+							};
+						</script>
+				      </div>
+				    </div>
+				  </div>
+
+				  <div class="card">
+				    <div class="card-header" id="headingTwo">
+				      <h5 class="mb-0">
+				        <button class="btn btn-block btn-secondary btn-lg" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+				          Price Range
+				        </button>
+				      </h5>
+				    </div>
+				    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+				      <div class="card-body">
+				        <p>Enter a price range</p>
+				        
+				        	<div class="input-group">
+							  <input type="text" class="form-control" placeholder="0" name="starting_price">
+							  <span> - </span>
+							  <input type="text" class="form-control" placeholder="5000" name="ending_price">
+							</div>
+							<span><!-- <button class="btn btn-md btn-block btn-success" style="margin-top: 10px; margin-bottom: 10px;">Go</button></span> -->
+				        
+				      </div>
+				    </div>
+				  </div>
+				  
+				  <div class="card">
+				    <div class="card-header" id="headingThree">
+				      <h5 class="mb-0">
+				        <button class="btn btn-block btn-secondary btn-lg" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+				          Brand
+				        </button>
+				      </h5>
+				    </div>
+				    <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordion">
+				      <div class="card-body">
+				      		<input type="text" id="brandInput" onkeyup="brandFunction()" placeholder="Search for names.." title="Type in a name" style="display: block; width: 90%; border-radius: 5px; text-align: center; margin-left: 10px;">
+
+						<ul id="brandUL" style="height: 150px; overflow-y: auto; list-style: none;">
+						  {% for brand in brands %}
+						  	<li><a href="?brand={{brand.brand}}&store={{request.GET.store}}">{{brand.brand}}</a></li>
+						  {% endfor %}
+						</ul>
+						<script type="text/javascript">
+							function brandFunction() {
+							    var input, filter, ul, li, a, i;
+							    input = document.getElementById("brandInput");
+							    filter = input.value.toUpperCase();
+							    ul = document.getElementById("brandUL");
+							    li = ul.getElementsByTagName("li");
+							    for (i = 0; i < li.length; i++) {
+							        a = li[i].getElementsByTagName("a")[0];
+							        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+							            li[i].style.display = "";
+							        } else {
+							            li[i].style.display = "none";
+
+							        }
+							    }
+							};
+						</script>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+	</div><!-- /Col-md-3 -->
+
+
 		<!-- ProductsList -->
-		<div class="col-md-12">
+		<div class="col-md-10 push-md-1">
 			{% if products %}
 					<div class="container">
+						<h5>Total {{total }} products in {{category}} </h5>
 						<div class="row" style="">
 							{% for product in products %}
-							<div class="col-sm-2" style="margin: 20px 20px 20px 10px;">
-								<div class="card" style="width: 15rem; border:none;">
-								  {% if not product.get_default_image %}
-								  	<img class="card-img-top" src="{{MEDIA_URL}}images/no_image.jpg" alt="" width="100">
-								  {% else %}
-								  	<img class="card-img-top" src="{{product.get_default_image.url}}" alt="Card image cap" style="width: auto; max-width: 50%; text-align: center; display: block; height: 250px; overflow: hidden; margin: auto auto;">
-								  {% endif %}
-								  <div class="card-body">
-								    <a href="{{product.productUrl}}"><p class="card-title">{{product.title}}</p></a>
-								    <p class="card-text">Price : INR {{product.prices.last.sellingPrice}}</p>
-								    <a target="_blank" href="{{product.productUrl}}" class="btn btn-primary">Buy Now</a>
-								    <a href="#" class="btn btn-warning">Track Price</a>
+							<div class="col-md-3" style="margin:auto;">
+								<!-- Card -->
+								<div class="card" style="margin: 10px auto; border:none; height: 32rem;">
+									<!-- Header -->
+									<div class="card-header" style="border:none;">
+									    <img src="{{MEDIA_URL}}{{product.store.logo_image}}" class="img-fluid" style="overflow:hidden; width: 60%; float: center; top:10; position: relative;"></p>
+									  </div>
+
+								  <a href="#">
+								  	<img class="card-img-top img-responsive" src="{{product.get_default_image.url}}" alt="Card image cap" width="100px" style="width: auto; max-width: 80%; text-align: center; display: block; height: 200px; overflow: hidden; margin: auto auto;">
+								  </a>
+								  <div class="card-body text-center">
+								    <a href="{{product.productUrl}}" style="text-transform: uppercase; text-decoration: none; font-family: Calibri; text-align: center;">{{product.title|truncatechars:100}}</a>
+								    <p class="card-text text-center" style="font-family: Calibri;">Brand : {{product.brand}}</p>
+								    <p style="font-family: Calibri; border: 2px dotted grey; position: relative;bottom: 5px;" class="text-center">Price : {{product.prices.last.sellingPrice}}</p>
 								  </div>
-								</div>
-								<div class="card-body">
-									<!-- {% for price in product.prices.all %}
-										<div class="card" style="border:none;">
-											<div class="card-body">
-												<p class="card-title">Rs. {{price.specialPrice}}{{price.date}}</p>
-											</div>
-										</div>
-									{% endfor %} -->
-								</div><!-- Chart Div for Each Product Instance -->
-							</div><!-- Product Div -->
-							<!-- <div class="col-xs-sm-1"></div> -->
-							{% if forloop.counter|divisibleby:3 %}
-								<div class="clearfix">
-									
-								</div>
-							{% endif %}
+
+								  <div class="card-body">
+								    <a target="_blank" href="{{product.productUrl}}" class="btn btn-block btn-success" style="position: absolute; bottom: 5px;">Buy Now</a>
+								    <!-- <a href="#" class="btn btn-block btn-info">View More</a> -->
+								  </div>
+								</div><!-- Card -->
+								
+							</div>
 							{% endfor %}
 							<!-- Paginations -->
-							<div class="col-md-12">
+							<div class="col-md-12" style="margin-top: 25px;">
 								{% if is_paginated %}
-								  <ul class="pagination" style="text-align: center;">
+								  <ul class="pagination text-center" style="text-align: center;">
 								    {% if page_obj.has_previous %}
-								      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+								      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&brand={{request.GET.brand}}&store={{request.GET.store}}">Previous Page&laquo;</a></li>
 								    {% else %}
 								      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
 								    {% endif %}
@@ -109,7 +209,7 @@
 								      {% endif %}
 								    {% endfor %}
 								    {% if page_obj.has_next %}
-								      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+								      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}&brand={{request.GET.brand}}&store={{request.GET.store}}">Next Page&raquo;</a></li>
 								    {% else %}
 								      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
 								    {% endif %}
