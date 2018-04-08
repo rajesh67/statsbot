@@ -309,6 +309,6 @@ class OfferUpdate(models.Model):
 def save_profile(sender, instance, **kwargs):
     instance.save_offers()
 
-@receiver(post_save, sender=SearchProduct)
-def index_post(sender, instance, **kwargs):
-    instance.indexing()
+# @receiver(post_save, sender=SearchProduct)
+# def index_post(sender, instance, **kwargs):
+#     instance.indexing()

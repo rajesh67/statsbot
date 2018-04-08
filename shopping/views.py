@@ -14,7 +14,7 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import DetailView
 # Create your views here.
 from shopping.collection.flipkart import FKFeedAPIHandler, FKSearchAPIHandler
-from shopping.collection.amazon import AmazonSearchAPIHandler
+from shopping.collection.amazon import AmazonSearchAPIHandler, parse_products_from_xml, save_result_products
 from shopping.models import (
 	Product,
 	PriceHistory, 
@@ -218,12 +218,12 @@ class SearchResultsView(View):
 				search_results_products.append({Store.objects.get(short_name='flipkart'):productsList})
 			except Exception as e:
 				search_results_products.append({Store.objects.get(short_name='flipkart'):[]})
-
+			
 			try:
 				amazSearchHandle=AmazonSearchAPIHandler()
 				results=amazSearchHandle.get_search_results(keywords=keywords)
-				products=amazSearchHandle.parse_products_from_xml(results)
-				amazonProductsList=amazSearchHandle.save_result_products(products)
+				products=parse_products_from_xml(results)
+				amazonProductsList=save_result_products(handle.store,products)
 				search_results_products.append({Store.objects.get(short_name='amazon'):amazonProductsList})
 			except Exception as e:
 				search_results_products.append({Store.objects.get(short_name='amazon'):[]})
