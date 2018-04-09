@@ -34,7 +34,7 @@
         {% for store in storesList %}
             <!--Slides-->
             {% if forloop.first %}
-              <div class="carousel-item active" style="height:8rem;">
+              <div class="carousel-item active" style="height:5rem;">
             {% endif %} 
                   <div class="col-md-3">
                       <div class="card mb-2">
@@ -42,13 +42,13 @@
                           <div class="card-body">
                               <h4 class="card-title text-center" style="font-size: 0.9em; text-transform: uppercase;">{{store.name|truncatechars:30}}</h4>
                               
-                              <a class="btn btn-warning btn-block" href="#" style="text-align: bottom; text-transform: uppercase;">Visit Store</a>
+                              <!-- <a class="btn btn-warning btn-block" href="#" style="text-align: bottom; text-transform: uppercase;">Visit Store</a> -->
                               
-                              <a target="_blank" class="btn btn-primary btn-block" href="{{store.home_url}}" style="text-align: bottom; text-transform: uppercase;">Book on {{ store.name }}</a>
+                              <a class="btn btn-primary btn-block" href="{% url 'select-campaign' %}?store={{store.short_name}}" style="text-align: bottom; text-transform: uppercase;">Book on {{ store.name }}</a>
                           </div>
                       </div>
                   </div><!-- /Product Div -->
-                {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height: 8rem;">{% endif %}
+                {% if forloop.counter|divisibleby:4 %}</div><div class="carousel-item" style="height: 5rem;">{% endif %}
                 {% if forloop.last %}</div>{% endif %}
                 {% endfor%}
           </div>

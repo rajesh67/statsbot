@@ -18,7 +18,7 @@ from django.urls import path
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.conf import settings
-from app.views import home
+from app.views import home, redirectToStore, selectCampaign
 from shopping.views import AboutUSView, WhyUSView
 from django.conf.urls import handler404, handler500
 
@@ -38,6 +38,9 @@ urlpatterns = [
     url(r'^buses/', include('busses.urls')),
     # Online Hotel Bookings
     url(r'^food/', include('hotels.urls')),
+
+    url(r'^select$', selectCampaign, name="select-campaign"),
+    url(r'^redirect$', redirectToStore, name="redirect-to-store")
 ]
 
 if settings.DEBUG:

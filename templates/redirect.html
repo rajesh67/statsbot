@@ -1,0 +1,151 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <meta name="og_site_name" property="og:site_name" content="statsbot.org"/>
+
+    <!-- SEO Contents -->
+    <meta name="og_title" property="og:title" content="Online Shopping Site for Mobiles, Fashion, Books, Electronics, Home Appliances, Flight Bookings, Hotel Bookings, Bus Bookings, Online Bookings, Movie Tickets  and More"/>
+
+        <meta name="Keywords" content="Online Shopping in India,online Shopping store,Online Shopping Site,Buy Online,Shop Online,Online Shopping,Statsbot, Flight Bookings, Hotel Bookings, Hotel Bookings, Flight Bookings, Non-Profit, Charity, Charity, Organization, Social Organization, Donation Accepted, Donation by generating revenue"/>
+
+      <meta name="Description" content="India&#x27;s biggest online store for Mobiles,Fashion(Cloths/Shoes),Electronics,Home Appliances,Books,Jewelry,Home,Furniture,Sporting goods,Beauty &amp; personal care and more! Largest selection from all brands at lowest price.Payment options - COD,EMI,Credit card,Debit card &amp; more. Buy Now!"/>
+
+          <link rel="canonical" href="http://www.statsbot.org"/>
+
+      <meta name="og_url" property="og:url" content="http://www.statsbot.org"/>
+
+    <link rel="icon" href="{{MEDIA_URL}}favicon.ico">
+
+    <title>Statsbot - Social Shopping Assistant, Online Shopping, Flight Booking in india, Hotel booking in India, etc., Statsbot Social Innovations, India</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'app/carousel.css' %}" rel="stylesheet">
+    <link href="{% static 'shopping/shopping.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'jquery-ui-bootstrap/css/custom-theme/jquery-ui-1.9.2.custom.css' %}"> -->
+  </head>
+  <style>
+    #searchbox input[type=text]{width:430px !important;}
+  </style>
+  <body>
+
+<style type="text/css">
+  #mainContainer{
+      margin-top: 60px;
+    },
+    div.row>div.col-lg-4>a:hover{
+      border:3px solid #000;
+    },
+</style>
+
+  <!-- Jumbotron -->
+<div class="container" style="text-align: center;" id="mainContainer">
+  <h5 class="" style="font-size: 1em; color: #fff; font-weight: bold; text-transform: uppercase; color: #000; font-weight: bold;">Thank You for supporting us, You are only a step away to earn good karma by supporting unpriviliged.</h5>
+  <!-- <p class="lead">We are here to innovate </p> -->
+
+  <div class="card">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+          <a href="/">
+            <img src="{% static 'images/statsbotLogo.png' %}" class="img-fluid" style="height: 50px; overflow: hidden;margin-top: 5%;">
+          </a>
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/redirect.gif' %}" class="img-fluid" style="overflow: hidden; transform: scale(2); opacity: 0.3; margin-top: 10%;">
+        </div>
+        <div class="col-md-4">
+          <img src="{% static 'images/flipkart_logo.png' %}" class="img-fluid" style="height: 50px; overflow: hidden; margin-top: 5%;">
+        </div>
+      </div>
+    </div>
+  </div>
+  <h5 class="lead" style="color:#000; font-weight: bold;">click on a social campaign which you wanna support</h5>
+  <!-- Campaigns -->
+  <div class="row" id="campaigns">
+    <div class="col-lg-4">
+      <a href="{% url 'redirect-to-store' %}?url={{store.home_url}}&campId=food" style="text-decoration: none; text-transform: uppercase; color: #000;">
+        <div class="card" style=" margin-top: 25px; height: 20rem;">
+          <img class="card-img-top img-fluid" src="{% static 'images/campaigns/feed_the_world.png' %}" alt="Card image cap" style="height: 250px; overflow: hidden;">
+          <div class="card-body">
+            <h5 class="card-title">Feed the world with every online purchase</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+
+
+    <div class="col-lg-4">
+      <a href="{% url 'redirect-to-store' %}?url={{store.home_url}}&campId=education" style="text-transform: uppercase; text-decoration: none; color: #000;">
+        <div class="card" style=" margin-top: 25px; height: 20rem;">
+          <img class="card-img-top img-fluid" src="{% static 'images/campaigns/educate_a_child.jpg' %}" alt="Card image cap" style="height: 250px; overflow: hidden;">
+          <div class="card-body">
+            <h5 class="card-title">Educate A Child</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+
+
+    <div class="col-lg-4">
+      <a href="{% url 'redirect-to-store' %}?url={{store.home_url}}&campId=animals" style="text-transform: uppercase; text-decoration: none; color: #000;">
+        <div class="card" style=" margin-top: 25px; height: 20rem;">
+          <img class="card-img-top img-fluid" src="{% static 'images/campaigns/support_animals_large.png' %}" alt="Card image cap" style="height: 250px; overflow: hidden;">
+          <div class="card-body">
+            <h5 class="card-title">Stop Animal Cruelty and Save Animals</h5>  
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="text-center" style=" margin-top: 5%;">
+    <div class="row">
+      <div class="col-md-4"></div>
+      <div class="col-md-4">
+        <a href="{% url 'redirect-to-store' %}?url={{store.home_url}}" class="btn btn-primary btn-lg btn-block " style="float: center;">Skip This Step</a>
+      </div>
+      <div class="col-md-4"></div>
+    </div>
+  </div>
+
+</div><!-- /Jumbotron -->
+
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
+    <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'jquery-ui-bootstrap/js/jquery-ui-1.9.2.custom.min.js' %}"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+    <!-- Fusion Charts JS FILES -->
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart"]});
+    </script>
+    <script src="{% static 'js/flot/jquery.flot.js' %}"></script>
+    
+    <!-- CueLInks JS Integration -->
+    <script type='text/javascript'>
+        var pubID = '29755CL26816';
+
+        (function(d, t) {
+        var s = document.createElement('script');s.type = 'text/javascript';
+        s.async = true;s.src = (document.location.protocol == 'https:' ? 'https://cdn0.cuelinks.com/js/' : 'http://cdn0.cuelinks.com/js/')  + 'cuelinksv1.js';
+        document.getElementsByTagName('body')[0].appendChild(s);
+        }());
+    </script><!-- /CueLinks JS Integration -->
+
+  </body>
+</html>
