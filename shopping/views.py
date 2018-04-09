@@ -218,15 +218,22 @@ class SearchResultsView(View):
 				search_results_products.append({Store.objects.get(short_name='flipkart'):productsList})
 			except Exception as e:
 				search_results_products.append({Store.objects.get(short_name='flipkart'):[]})
-			
+
 			try:
-				amazSearchHandle=AmazonSearchAPIHandler()
-				results=amazSearchHandle.get_search_results(keywords=keywords)
+				import time
+				time.sleep(2)
+				handle=AmazonSearchAPIHandler()
+				# print("Could not make connection")
+				results=handle.get_search_results(keywords=keywords)
+				# print("Results Fetched")
 				products=parse_products_from_xml(results)
-				amazonProductsList=save_result_products(handle.store,products)
+				# print("Results Parsed")
+				amazonProductsList=save_result_products(handle.store, products)
+				# print("Results Saved")
 				search_results_products.append({Store.objects.get(short_name='amazon'):amazonProductsList})
 			except Exception as e:
 				search_results_products.append({Store.objects.get(short_name='amazon'):[]})
+				# print("Error While Fetching Amazon Products")
 			# found_products=search.search(keywords)
 			return render(request, self.template_name, {'data':search_results_products, 'stores':Store.objects.all()})
 		return super(SearchResultsView, self).get(request, *args, **kwargs)
