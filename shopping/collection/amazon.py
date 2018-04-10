@@ -14,6 +14,29 @@ from shopping.models import (
 import bottlenose
 import json
 import datetime
+import random
+import time
+from urllib3.exceptions import HTTPError
+
+class AmazonNode():
+	def __init__(self, nodeName, nodeId,*args, **kwargs):
+		self.nodeName=''
+		self.nodeId=''
+		self.parentNode=''
+		super(AmazonNode, self).__init__(*args, **kwargs)
+
+	def to_dict(self):
+		return {
+			'name':self.nodeName,
+			'Id':self.nodeId,
+			'parentNode':self.parentNode.to_dict()
+		}
+
+def error_handler(err):
+    ex = err['exception']
+    if isinstance(ex, HTTPError) and ex.code == 503:
+        time.sleep(random.expovariate(0.1))
+        return True
 
 class AmazonSearchAPIHandler():
 	def __init__(self, *args, **kwargs):
@@ -21,8 +44,16 @@ class AmazonSearchAPIHandler():
 		self.amazon_handle=bottlenose.Amazon(self.store.affiliate_id, self.store.affiliate_token, "statsbot.org-21", Region= 'IN')
 
 	def get_search_results(self, keywords):
-		resp=self.amazon_handle.ItemSearch(Keywords=keywords, SearchIndex='All', ResponseGroup='Medium')
+		resp=self.amazon_handle.ItemSearch(Keywords=keywords, SearchIndex='All', ResponseGroup='Medium', ErrorHandler=error_handler)
 		return resp
+
+	def get_item_lookup_browse_node(self, productId):
+		resp=self.amazon_handle.ItemLookup(ItemId=productId, ResponseGroup="BrowseNodes",IdType="ASIN", ErrorHandler=error_handler)
+		return resp
+
+def parse_save_browse_nodes(store, resp):
+	pass
+
 
 def save_result_products(store,products):
 	productsList=[]
