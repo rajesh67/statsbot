@@ -150,7 +150,7 @@
             <a class="nav-link" href="{% url 'shopping-deals' %}">Coupouns & Deals</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'why-us' %}">How It Works</a>
+            <a class="nav-link" href="{% url 'how-it-works' %}">How It Works</a>
           </li>
           <!-- <li class="nav-item">
             <a class="nav-link" href="{% url 'about-us' %}">About US</a>
@@ -197,8 +197,8 @@
       <ul style="list-style: none;">
         <h5 style="color:#fff;">About Us</h5>
         <li>
-          <a href="#" style="text-decoration: none;">
-            <i class="fas fa-caret-right"></i> About US
+          <a href="{% url 'how-it-works' %}" style="text-decoration: none;">
+            <i class="fas fa-caret-right"></i> How It works
           </a>
         </li>
         <li>
@@ -261,12 +261,12 @@
           </a>
         </li>
         <li>
-          <a href="https://www.linkedin.com/company/13674010/" style="text-decoration: none;">
+          <a href="#" style="text-decoration: none;">
             <i class="fas fa-caret-right"></i> Supported Causes
           </a>
         </li>
         <li>
-          <a href="https://www.linkedin.com/company/13674010/" style="text-decoration: none;">
+          <a href="#" style="text-decoration: none;">
             <i class="fas fa-caret-right"></i> Partener NGO's
           </a>
         </li>
@@ -292,6 +292,7 @@
         </li>
         
       </ul>
+      <a href="{% url 'contact-us' %}" class="btn btn-info btn-md btn-block" style="width: 80%;">Contact US</a>
     </div>
     <!-- /Connect With US -->
   </div>

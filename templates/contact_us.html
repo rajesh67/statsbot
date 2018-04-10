@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% load static %}
+
+{% block page %}
+<style type="text/css">
+	#mainPage{
+		margin-top: 60px;
+	}
+</style>
+<div class="container" id="mainPage">
+	<div class="row">
+		<div class="col-md-8">
+			<div class="card" style="border: none;">
+				<div class="card-header" style="background-color: #fff; border-bottom: none;">
+					<h3>Say hello!</h3>
+				</div>
+				<div class="card-body">
+					<p class="card-title">
+						Our customer service team is always available to answer your questions or to receive your feedback. Please do get in touch with us anytime via the form below and we’ll endeavour to get back to you as soon as possible!
+					</p>
+					<p class="card-text">
+						<form class="form-responsive form" action="{% url 'home' %}" method="post">
+							{% csrf_token %}
+						    {% bootstrap_form form %}
+						    {% buttons %}
+						        <button type="submit" class="btn btn-primary btn-md btn-block" role="submit">
+						            {% bootstrap_icon "star" %} Submit
+						        </button>
+						    {% endbuttons %}
+						</form>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4">
+			<div class="card" style="border: none;">
+				<div class="card-header" style="background-color: #fff; border: none;">
+					<h3>How It Works?</h3>
+				</div>
+				<div class="card-body">
+					<p class="card-title"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

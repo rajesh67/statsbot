@@ -5,7 +5,9 @@ from graphos.renderers import flot
 # Create your views here.
 from shopping.models import Product, PriceHistory, Store
 from flights.models import Store as TravelStore
+from .models import Contact
 from shopping.models import Store as ShoppingStore
+from django.views.generic.edit import CreateView
 import urllib
 
 def home(request):
@@ -39,3 +41,8 @@ def redirectToStore(request):
 		}
 		link=base_url+urllib.parse.urlencode(params)
 		return HttpResponseRedirect(link)
+
+class ContactView(CreateView):
+	model=Contact
+	template_name="contact_us.html"
+	fields=['subject', 'name', 'email', 'message']

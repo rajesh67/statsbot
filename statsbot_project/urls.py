@@ -18,7 +18,7 @@ from django.urls import path
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.conf import settings
-from app.views import home, redirectToStore, selectCampaign
+from app.views import home, redirectToStore, selectCampaign, ContactView
 from shopping.views import AboutUSView, WhyUSView
 from django.conf.urls import handler404, handler500
 
@@ -29,7 +29,8 @@ urlpatterns = [
     url('^admin/', admin.site.urls),
     url('^$', home ,name="home"),
     url('^about-us/$', AboutUSView.as_view(),name="about-us"),
-    url('^why-us/$', WhyUSView.as_view(),name="why-us"),
+    url('^how-it-works/$', WhyUSView.as_view(),name="how-it-works"),
+    url('^contact-us/$', ContactView.as_view(),name="contact-us"),
     # Online Shopping App
     url(r'^shopping/', include('shopping.urls')),
     # Online trael App
