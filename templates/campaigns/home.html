@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block page %}
+
+<!-- Jumbotron -->
+<div class="jumbotron jumbotron-fluid" style="margin-top: 60px; background-color: #0b0c28;">
+  <div class="container text-center" style="color: #fff; font-weight: bold;">
+    <h1 class="display-8">Earn Good Karma. Donate through Your Shopping or Booking Online.</h1>
+    <p class="lead">You can donate money through your every online shopping to Charity. When you go to shopping through us , just select which Charity you'd like to donate to and how much. We will transfer the money to the selected Charitable Organization.</p>
+  </div>
+</div>
+
+<div class="container" id="campaignsList">
+	<div class="card" style="border: none;">
+		<div class="card-header text-center" style="border: none; background-color: #fff;">
+			<h3 style="text-transform: uppercase;">Running Campaigns</h3>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				{% for campaign in campaigns %}
+					<div class="col-md-3">
+						<div class="card">
+							<div class="card-header">
+								{{campaign.title}}
+							</div>
+							<div class="card-body">
+								<p class="card-title">{{campaign.category.name}}</p>
+								<p class="card-text">
+									{{campaign.description}}
+								</p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

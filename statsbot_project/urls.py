@@ -40,10 +40,11 @@ urlpatterns = [
     # Online Hotel Bookings
     url(r'^food/', include('hotels.urls')),
 
+    url(r'^campaigns/', include('campaigns.urls')),
     url(r'^select$', selectCampaign, name="select-campaign"),
     url(r'^redirect$', redirectToStore, name="redirect-to-store")
 ]
 
-if settings.DEBUG:
-	urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if not settings.DEBUG:
+	# urlpatterns+=static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 	urlpatterns+=static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

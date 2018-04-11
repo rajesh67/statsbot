@@ -207,7 +207,7 @@ class SearchResultsView(View):
 	template_name = "shopping/search_results.html"
 
 	def get(self, request, *args, **kwargs):
-		keywords=request.GET.get('q')
+		keywords=request.GET.get('keywords')
 		if keywords:
 			print(keywords)
 			output_data={}

@@ -3,7 +3,7 @@
 
 {% load static %}
 
-{% block page %}
+{% block contact_us %}
 <style type="text/css">
 	#mainPage{
 		margin-top: 60px;
@@ -21,14 +21,13 @@
 						Our customer service team is always available to answer your questions or to receive your feedback. Please do get in touch with us anytime via the form below and we’ll endeavour to get back to you as soon as possible!
 					</p>
 					<p class="card-text">
-						<form class="form-responsive form" action="{% url 'home' %}" method="post">
+						<form class="form" action="{% url 'contact-us' %}" method="post">
 							{% csrf_token %}
 						    {% bootstrap_form form %}
-						    {% buttons %}
-						        <button type="submit" class="btn btn-primary btn-md btn-block" role="submit">
-						            {% bootstrap_icon "star" %} Submit
+						        <button type="submit" class="btn" role="submit">
+						             Submit
 						        </button>
-						    {% endbuttons %}
+						    
 						</form>
 					</p>
 				</div>

@@ -155,37 +155,16 @@
           <!-- <li class="nav-item">
             <a class="nav-link" href="{% url 'about-us' %}">About US</a>
           </li> -->
-          {% block searchbox %}
-            <li class="nav-item navbar-right">
-              <!-- <form class="form-inline" action="{% url 'search-products' %}" method="get">
-                <input class="form-control" type="text" id="searchbox" name="q" placeholder="Search for any product on flipkart and amazon etc.." style="display: inline-block; max-width: 500px; width: 430px;">
-                <button class="btn btn-outline-success my-12 my-lg-0" type="submit">Search</button>
-              </form> -->
-              <form class="form-inline" role="form" action="{% url 'search-products' %}" method="get">
-              <div class="form-group">
-                <div class="col-md-12" style=" max-width: 430px;">
-                  <!-- <input type="text" class="autocomplete form-control" id="sampleAutocomplete" data-toggle="dropdown" /> -->
-                  <input class="form-control" type="text" class="autocomplete form-control" id="sampleAutocomplete" data-toggle="dropdown" name="q" placeholder="Search for any product on flipkart and amazon etc.." style="display: inline-block; max-width: 430px; width: 300px;">
-                  <button class="btn btn-outline-success my-12 my-lg-0" type="submit" style="display: inline-block;">Search</button>
-                  <ul class="dropdown-menu" role="menu">
-                      {% for store in stores %}
-                        <li><a href="{% url 'store-homepage' store.short_name %}">{{store.name}}</a></li>
-                      {% endfor %}
-                  </ul>
-                </div>
-              </div>
-            <form>
-            </li>
-          {% endblock %}
+          
         </ul>
       </div>
     </nav><!-- End of Navigation Bar -->
-    {% block page %}
-    {% endblock %}
+    {% block page %}{% endblock %}
     {% block productslist %}{% endblock %}
     {% block offerslist %}{% endblock %}
     {% block dealslist %}{% endblock %}
     {% block search_results %}{% endblock %}
+    {% block contact_us %} {% endblock %}
 </div><!-- /.container -->
 <!-- FOOTER -->
 <footer style="background-color: #999; margin-top: 50px; padding-bottom: 5%;" class="">
@@ -256,7 +235,7 @@
       <ul style="list-style: none;">
         <h5 style="color:#fff;">Special Pages</h5>
         <li>
-          <a href="#" style="text-decoration: none;">
+          <a href="{% url 'campaigns-home' %}" style="text-decoration: none;">
             <i class="fas fa-caret-right"></i> Social Campaigns
           </a>
         </li>
