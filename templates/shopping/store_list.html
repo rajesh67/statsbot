@@ -7,8 +7,9 @@
 </style>
 <div class="container" id="page">
 	<nav aria-label="breadcrumb">
-	  <ol class="breadcrumb">
+	  <ol class="breadcrumb" style="background-color: #fff;">
 	    <li class="breadcrumb-item"><a href="/">Home</a></li>
+	    <li class="breadcrumb-item"><a href="{% url 'shopping-home' %}">Shopping</a></li>
 	    <li class="breadcrumb-item active" aria-current="page">All Stores</li>
 	  </ol>
 	</nav>
@@ -22,7 +23,9 @@
 						<div class="card-title text-center">
 							<img src="{{MEDIA_URL}}{{store.logo_image}}" style="overflow: hidden; width: auto; max-width: 60%; height: 50px;">
 							<h5>{{store.name}}</h5>
-							<a href="{% url 'store-homepage' store.short_name %}" class="btn btn-primary btn-block btn-md">Visit Store</a>
+							<a href="{% url 'store-homepage' store.short_name %}" class="btn btn-primary btn-block btn-md" style="text-transform: uppercase;">Visit {{store.name}}</a>
+
+							<a href="{{store.home_url}}" class="btn btn-success btn-block btn-md" style="text-transform: uppercase;">shop on {{store.name}}</a>
 						</div>
 					</div><!-- Card -->
 				{% empty %}

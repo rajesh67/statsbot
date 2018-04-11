@@ -122,12 +122,12 @@
 							<!-- <h1>Travel</h1> -->
 							<div class="content">
 								<div class="upper">
-									<span><a href="{% url 'flights-home' %}" class="btn btn-success btn-lg">Flights</a></span>
-									<span><a href="{% url 'flights-home' %}" class="btn btn-success btn-lg">Hotels</a></span>
+									<span><a href="{% url 'travels-home' %}" class="btn btn-success btn-lg">Flights</a></span>
+									<span><a href="{% url 'travels-home' %}" class="btn btn-success btn-lg">Hotels</a></span>
 								</div>
 								<div class="lower" style="margin-top: 10px;">
-									<span><a href="{% url 'flights-home' %}" class="btn btn-success btn-lg">Cabs/Cars</a></span>
-									<span><a href="{% url 'flights-home' %}" class="btn btn-success btn-lg">Buses</a></span>
+									<span><a href="{% url 'travels-home' %}" class="btn btn-success btn-lg">Cabs/Cars</a></span>
+									<span><a href="{% url 'travels-home' %}" class="btn btn-success btn-lg">Buses</a></span>
 								</div>
 							</div>
 						</div>
@@ -212,12 +212,14 @@
 		</div>
 		<div class="card-body">
 			<div class="row">
+				{% for campaign in campaigns %}
 				<div class="col-lg-4">
 					<div class="card" style="width: 22rem; margin-top: 25px; height: 30rem;">
-					  <img class="card-img-top img-fluid" src="{% static 'images/campaigns/feed_the_world.png' %}" alt="Card image cap" style="height: 250px; overflow: hidden;">
-					  <div class="card-body">
-					    <h5 class="card-title">Feed the world with every online purchase</h5>
-					    <p class="card-text">Help us feed the hungry world.</p>
+					  <img class="card-img-top img-fluid" src="{{MEDIA_URL}}{{campaign.image}}" alt="Card image cap" style="height: 250px; overflow: hidden;">
+					  <div class="card-body text-center">
+					    <a href="{% url 'campaign-detail' campaign.pk %}" style="text-transform: uppercase; font-weight: bold; text-decoration: none;">{{campaign.title}}</a>
+
+					    <p class="card-text" style="font-size: 0.85em;">{{campaign.short_description}}</p>
 					  </div>
 					  <ul class="list-group list-group-flush">
 					    <!-- <li class="list-group-item">Friends For Animal</li>
@@ -225,53 +227,17 @@
 					    <!-- <li class="list-group-item">Scrap Things Donation</li> -->
 					  </ul>
 					  <div class="card-body">
-					    <a href="#" class="card-link btn btn-block btn-primary" style="border: grey solid 2px; margin: 5px auto; text-transform: uppercase; position: absolute; bottom: 5px;"> Support this campaign</a>
+					    <a href="{% url 'campaign-detail' campaign.pk %}" class="card-link btn btn-success" style="border: grey solid 2px; margin: 5px auto; text-transform: uppercase; position: absolute; bottom: 5px;">View more</a>
 					    <!-- <a href="#" class="card-link">See More</a> -->
 					  </div>
 					</div>
 				</div>
-
-
-				<div class="col-lg-4">
-					<div class="card" style="width: 22rem; margin-top: 25px; height: 30rem;">
-					  <img class="card-img-top img-fluid" src="{% static 'images/campaigns/educate_a_child.jpg' %}" alt="Card image cap" style="height: 250px; overflow: hidden;">
-					  <div class="card-body">
-					    <h5 class="card-title">Educate A Child</h5>
-					    <p class="card-text">We are running another campaign for education the unpriviliged and deprived sections.</p>
-					  </div>
-					  <ul class="list-group list-group-flush">
-					    <!-- <li class="list-group-item">Shopping</li>
-					    <li class="list-group-item">Donation</li> -->
-					    <!-- <li class="list-group-item">Scrap Things Donation</li> -->
-					  </ul>
-					  <div class="card-body">
-					    <a href="#" class="card-link btn btn-block btn-primary" style="border: grey solid 2px; margin: 5px auto; text-transform: uppercase; position: absolute; bottom: 5px;"> Support this campaign</a>
-					    <!-- <a href="#" class="card-link">See More</a> -->
-					  </div>
-					</div>
-				</div>
-
-
-				<div class="col-lg-4">
-					<div class="card" style="width: 22rem; margin-top: 25px; height: 30rem;">
-					  <img class="card-img-top img-fluid" src="{% static 'images/campaigns/support_animals_large.png' %}" alt="Card image cap" style="height: 250px; overflow: hidden;">
-					  <div class="card-body">
-					    <h5 class="card-title">Stop Animal Cruelty and Save Them</h5>
-					    <p class="card-text">We are running a campaign to spread animal awareness in association with Friends for Animal, Foundation</p>
-					  </div>
-					  <ul class="list-group list-group-flush">
-					    <!-- <li class="list-group-item">Shopping</li>
-					    <li class="list-group-item">Donation</li> -->
-					    <!-- <li class="list-group-item">Scrap Things Donation</li> -->
-					  </ul>
-					  <div class="card-body">
-					    <a href="#" class="card-link btn btn-block btn-primary" style="border: grey solid 2px; margin: 5px auto; text-transform: uppercase; position: absolute; bottom: 5px;">Support this Campaign</a>
-					    <!-- <a href="#" class="card-link">See More</a> -->
-					  </div>
-					</div>
-				</div>
-
+				{% endfor %}
 			</div>
+		</div>
+
+		<div class="card-footer text-center" style="background-color: #fff;">
+			<a href="{% url 'campaigns-home' %}" class="btn btn-primary btn-lg" style="text-transform: uppercase;">view all campaigns</a>
 		</div>
 	</div>
 </div>

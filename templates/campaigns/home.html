@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
-
+{% load static %}
+{% load staticfiles %}
 {% block page %}
 
 <!-- Jumbotron -->
 <div class="jumbotron jumbotron-fluid" style="margin-top: 60px; background-color: #0b0c28;">
   <div class="container text-center" style="color: #fff; font-weight: bold;">
-    <h1 class="display-8">Earn Good Karma. Donate through Your Shopping or Booking Online.</h1>
+    <h1 class="display-8">Earn Good Karma. Donate through online Shopping or Booking.</h1>
     <p class="lead">You can donate money through your every online shopping to Charity. When you go to shopping through us , just select which Charity you'd like to donate to and how much. We will transfer the money to the selected Charitable Organization.</p>
   </div>
 </div>
 
-<div class="container" id="campaignsList">
+<div class="container" id="campaignsList" style="margin-top: -5%;">
 	<div class="card" style="border: none;">
 		<div class="card-header text-center" style="border: none; background-color: #fff;">
 			<h3 style="text-transform: uppercase;">Running Campaigns</h3>
@@ -18,17 +19,17 @@
 		<div class="card-body">
 			<div class="row">
 				{% for campaign in campaigns %}
-					<div class="col-md-3">
-						<div class="card">
-							<div class="card-header">
-								{{campaign.title}}
-							</div>
-							<div class="card-body">
-								<p class="card-title">{{campaign.category.name}}</p>
+					<div class="col-md-4">
+						<div class="card" style="height: 32rem;">
+							<img src="/media/{{campaign.image}}" class="card-img-top" style="overflow: hidden; height: 250px;">
+							<div class="card-body text-center">
+								<a href="{% url 'campaign-detail' campaign.pk %}" class="" style="font-weight: bold; text-transform: uppercase; text-align: center; text-decoration: none; text-align: center;">{{campaign.title}}</a>
 								<p class="card-text">
-									{{campaign.description}}
+									{{campaign.short_description}}
 								</p>
+								
 							</div>
+							<a href="{% url 'campaign-detail' campaign.pk %}" class="btn btn-success btn-md" style="position: absolute; bottom: 5px;">view more</a>
 						</div>
 					</div>
 				{% endfor %}

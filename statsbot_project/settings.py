@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'f57s+v#&#75*8)bxmiwr^#sk#=k$e%ef(-@65slmljx=p3ic+y'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '*', 'statsbot.org','127.0.0.1']
 
@@ -51,9 +51,11 @@ INSTALLED_APPS = [
     'graphos',
     'bootstrap3',
     'whitenoise',
+    'django_summernote',
     #Search
     'haystack',
     'elasticsearch_dsl',
+
 ]
 
 MIDDLEWARE = [
@@ -173,9 +175,7 @@ STATICFILES_DIRS=[
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR, "mediafiles/")
-MEDIAFILES_DIRS=[
-    os.path.join(BASE_DIR, "media/"),
-]
+
 
 # Access Tokens
 
@@ -187,3 +187,98 @@ FLIPKART_DOTD_XML_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/do
 FLIPKART_DOTD_JSON_URL='https://affiliate-api.flipkart.net/affiliate/offers/v1/dotd/json'
 FLIPKART_DELTA_FEEDS_JSON_URL='https://affiliate-api.flipkart.net/affiliate/1.0/deltaFeeds/rajeshmee/category/{catId}/fromVersion/{version}.json'
 FLIPKART_TOP_FEEDS_URL='https://affiliate-api.flipkart.net/affiliate/1.0/topFeeds/rajeshmee/category/{catId}.json'
+
+
+
+SUMMERNOTE_CONFIG = {
+    # Using SummernoteWidget - iframe mode
+    'iframe': True,  # or set False to use SummernoteInplaceWidget - no iframe mode
+
+    # Using Summernote Air-mode
+    'airMode': False,
+
+    # Use native HTML tags (`<b>`, `<i>`, ...) instead of style attributes
+    'styleWithSpan': False,
+
+    # Set text direction : 'left to right' is default.
+    'direction': 'ltr',
+
+    # Change editor size
+    'width': '100%',
+    'height': '480',
+
+    # Use proper language setting automatically (default)
+    'lang': None,
+
+    # Or, set editor language/locale forcely
+    'lang': 'ko-KR',
+
+    # Customize toolbar buttons
+    'toolbar': [
+        ['style', ['style']],
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['para', ['ul', 'ol', 'height']],
+        ['insert', ['link']],
+    ],
+
+    # Need authentication while uploading attachments.
+    'attachment_require_authentication': True,
+
+    'default_css': (
+        os.path.join(STATIC_URL, 'summernote/summernote.css'),
+        os.path.join(STATIC_URL, 'summernote/django_summernote.css'),
+    ),
+    'default_js': (
+        os.path.join(STATIC_URL, 'summernote/jquery.ui.widget.js'),
+        os.path.join(STATIC_URL, 'summernote/jquery.iframe-transport.js'),
+        os.path.join(STATIC_URL, 'summernote/jquery.fileupload.js'),
+        os.path.join(STATIC_URL, 'summernote/summernote.min.js'),
+    ),
+
+    # You can add custom css/js for SummernoteWidget.
+    'css': (
+    ),
+    'js': (
+    ),
+
+    # You can also add custom css/js for SummernoteInplaceWidget.
+    # !!! Be sure to put {{ form.media }} in template before initiate summernote.
+    'css_for_inplace': (
+    ),
+    'js_for_inplace': (
+    ),
+
+    # You can disable file upload feature.
+    'disable_upload': False,
+
+    # Codemirror as codeview
+    # If any codemirror settings are defined, it will include codemirror files automatically.
+    'css': {
+        '//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/monokai.min.css',
+    },
+    'codemirror': {
+        'mode': 'htmlmixed',
+        'lineNumbers': 'true',
+
+        # You have to include theme file in 'css' or 'css_for_inplace' before using it.
+        'theme': 'monokai',
+    },
+
+    # Lazy initialize
+    # If you want to initialize summernote at the bottom of page, set this as True
+    # and call `initSummernote()` on your page.
+    'lazy': True,
+
+    # To use external plugins,
+    # Include them within `css` and `js`.
+    'js': {
+        '/some_static_folder/summernote-ext-print.js',
+        '//somewhere_in_internet/summernote-plugin-name.js',
+    },
+    # You can also add custom settings in `summernote` section.
+    'summernote': {
+        'print': {
+            'stylesheetUrl': '/some_static_folder/printable.css',
+        },
+    }
+}

@@ -8,10 +8,21 @@ from flights.models import Store as TravelStore
 from .models import Contact
 from shopping.models import Store as ShoppingStore
 from django.views.generic.edit import CreateView
+from django.views.generic.base import TemplateView
+from campaigns.models import Campaign
 import urllib
 
 def home(request):
-	return render_to_response('home.html',{'stores': Store.objects.all()})
+	return render_to_response('home.html',{'stores': Store.objects.all(),'campaigns':Campaign.objects.all()})
+
+class HomeView(TemplateView):
+	template_name='home.html'
+
+	def get_context_data(self, *args, **kwargs):
+		context=super(HomeView, self).get_context_data(*args, **kwargs)
+		context['stores']=Store.objects.all()
+		context['campaigns']=Campaign.objects.all()
+		return context
 
 
 def selectCampaign(request):

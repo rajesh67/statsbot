@@ -51,7 +51,7 @@
 
               <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                 <div class="text-center">
-                    <a href="/shopping/" class="btn btn-primary btn-md">Shopping Home</a>
+                    <a href="{% url 'shopping-home' %}" class="btn btn-primary btn-sm" style="font-size: 0.85em;">Shopping Home</a>
                 </div>
                 <div class="row" style="width: 32rem;">
                   <div class="col-md-6">
@@ -60,7 +60,7 @@
                           <small>Shop By Category</small>
                         </div>
                         <div class="card-body">
-                              <ul style="list-style: none;">
+                              <ul style="list-style: none; font-weight: bold; font-size: 0.85em;">
                                 <!-- <li>
                                   <a href="{% url 'category-products'  'mobiles' %}">Mobiles</a>
                                 </li> -->
@@ -86,7 +86,7 @@
                           <small>Deals and Offers</small>
                         </div>
                         <div class="card-body">
-                              <ul style="list-style: none;">
+                              <ul style="list-style: none; font-size: 0.85em; font-weight: bold;">
                                 
                                 <li>
                                   <a href="{% url 'shopping-deals' %}">Coupouns & Deals</a>
@@ -111,7 +111,7 @@
                               <ul style="list-style: none;">
                                 {% for store in stores %}
                                 <li>
-                                  <a href="{% url 'store-homepage'  store.short_name %}">{{store.name}}</a>
+                                  <a href="{% url 'store-homepage'  store.short_name %}" style="text-decoration: none; font-size: 0.85em; font-weight: bold;">{{store.name}}</a>
                                 </li>
                                 {% endfor %}
                               </ul>
@@ -124,37 +124,19 @@
           </li>
           
           <li class="nav-item">
-            <a class="nav-link" href="/travels/">Travels</a>
+            <a class="nav-link" href="{% url 'travels-home' %}">Travels</a>
           </li>
           
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="{% url 'hotels-home' %}">food & beverage</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'buses-home' %}">Buses</a>
-          </li> -->
-
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="#">Cabs</a>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="#">Food and Grocery</a>
-          </li> -->
           
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="{% url 'shopping-offers' %}">Offers</a>
-          </li> -->
           <li class="nav-item">
             <a class="nav-link" href="{% url 'shopping-deals' %}">Coupouns & Deals</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'campaigns-home' %}">Campaigns</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'how-it-works' %}">How It Works</a>
           </li>
-          <!-- <li class="nav-item">
-            <a class="nav-link" href="{% url 'about-us' %}">About US</a>
-          </li> -->
           
         </ul>
       </div>
@@ -240,12 +222,7 @@
           </a>
         </li>
         <li>
-          <a href="#" style="text-decoration: none;">
-            <i class="fas fa-caret-right"></i> Supported Causes
-          </a>
-        </li>
-        <li>
-          <a href="#" style="text-decoration: none;">
+          <a href="{% url 'campaigns-home' %}" style="text-decoration: none;">
             <i class="fas fa-caret-right"></i> Partener NGO's
           </a>
         </li>

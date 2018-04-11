@@ -20,6 +20,18 @@
 <div class="jumbotron" style="text-align: center;" id="mainContainer">
   <h1 class="display-4" style="font-size: 1.2em; color: #fff; font-weight: bold; text-transform: uppercase;">support the unpriviliged one via shopping</h1>
   <!-- <p class="lead">We are here to innovate </p> -->
+  
+  	 <form role="form" action="{% url 'search-products' %}" method="get">
+        <div class="form-group row">
+	    <div class="col-sm-10 push-md-1">
+	      <input type="text" class="form-control form-control-lg input-lg" id="colFormLabelLg" placeholder="Search anything here for. e.g. moto g4, redmi note 5 etc." name="keywords">
+	    </div>
+	  </div>
+
+        <div class="col-auto">
+	      <button type="submit" class="btn btn-success mb-12 btn-lg">Search Now</button>
+	    </div>
+    </form>
 </div><!-- /Jumbotron -->
 
 
@@ -54,13 +66,16 @@
 			    </div>
 			    <!--/.Slides-->
 
-			    <a class="carousel-control-prev btn-dark btn btn-sm" href="#multi-item-stores" data-slide="prev" role="button" style="width: 2%; background-color: #000;"><i class="fa fa-chevron-left"></i>
+			    <a class="carousel-control-prev btn-dark btn btn-sm" href="#multi-item-stores" data-slide="prev" role="button" style="width: 2%;"><i class="fa fa-chevron-left" style="background-color: #000; transform: scale(2);"></i>
 			    	<span class="sr-only">Previous</span></a>
 
-			    <a class="carousel-control-next btn-dark btn btn-sm" href="#multi-item-stores" data-slide="next" role="button" style="width: 2%; background-color: #000;"><i class="fa fa-chevron-right"></i>
+			    <a class="carousel-control-next btn-dark btn btn-sm" href="#multi-item-stores" data-slide="next" role="button" style="width: 2%;"><i class="fa fa-chevron-right" style="background-color: #000; transform: scale(2);"></i>
 			    	<span class="sr-only">Next</span>
 			    </a>
 			</div><!-- /Carousal -->
+			<div class="text-center">
+				<a href="{% url 'shopping-store-directory' %}" style="text-transform: uppercase;" class="btn btn-success btn-lg">view all stores</a>
+			</div>
 		</div><!-- /Card body -->
 	</div><!-- /Card -->
 </div><!-- /Container -->

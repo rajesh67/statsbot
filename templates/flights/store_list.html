@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block page %}
+<style type="text/css">
+	#page{
+		margin-top: 60px;
+	}
+</style>
+<div class="container" id="page">
+	<nav aria-label="breadcrumb">
+	  <ol class="breadcrumb" style="background-color: #fff;">
+	    <li class="breadcrumb-item"><a href="/">Home</a></li>
+	    <li class="breadcrumb-item"><a href="{% url 'travels-home' %}">Travels</a></li>
+	    <li class="breadcrumb-item active" aria-current="page">All Stores</li>
+	  </ol>
+	</nav>
+	<div class="row">
+		<div class="col-md-12" style="background-color: #fff;">
+			<h2>All Stores</h2>
+
+			<ul style="list-style: none;">
+				{% for store in stores %}
+					<div class="col-md-4 card" style="margin: 20px auto; border: none; width: 32rem; float: left;">
+						<div class="card-title text-center">
+							<img src="{{MEDIA_URL}}{{store.logo_image}}" style="overflow: hidden; width: auto; max-width: 60%; height: 50px;">
+							<h5>{{store.name}}</h5>
+							<a href="{% url 'select-campaign' %}?store={{store.short_name}}" class="btn btn-success btn-block btn-md" style="text-transform: uppercase;">Book on {{store.name}}</a>
+						</div>
+					</div><!-- Card -->
+				{% empty %}
+					<h1>No Stores Available</h1>
+				{% endfor %}
+			</ul>
+
+		</div><!-- /Stores List -->
+		<div class="col-md-3">
+			
+		</div><!-- Right Sidebar -->
+
+
+		<div class="col-md-6 push-md-2" style="float: center;">
+			    {% if is_paginated %}
+				  <ul class="pagination" style="text-align: center;">
+				    {% if page_obj.has_previous %}
+				      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous Page&laquo;</a></li>
+				    {% else %}
+				      <li class="disabled page-item"><span class="page-link">Prev Page&laquo;</span></li>
+				    {% endif %}
+				    {% for i in paginator.page_range %}
+				      {% if page_obj.number == i %}
+				        <li class="active page-item"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+				      {% else %}
+				        <!-- <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li> -->
+				      {% endif %}
+				    {% endfor %}
+				    {% if page_obj.has_next %}
+				      <li class="page-item"><a class="page-link btn btn-primary" href="?page={{ page_obj.next_page_number }}">Next Page&raquo;</a></li>
+				    {% else %}
+				      <li class="disabled page-item"><span class="page-link">Next Page&raquo;</span></li>
+				    {% endif %}
+				  </ul>
+				{% endif %}
+			</div><!-- /Pagination -->
+			</div>
+	</div>
+</div>
+{% endblock %}

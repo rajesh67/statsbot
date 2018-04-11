@@ -243,7 +243,7 @@ class StoreListView(ListView):
 	template_name='shopping/store_list.html'
 	context_object_name='stores'
 	queryset=Store.objects.all()
-	paginate_by=10
+	paginate_by=12
 
 	def get_context_data(self, *args, **kwargs):
 		context=super(StoreListView, self).get_context_data(*args, **kwargs)

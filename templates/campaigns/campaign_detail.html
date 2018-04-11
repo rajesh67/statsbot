@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load staticfiles %}
+{% block page %}
+
+<!-- Jumbotron -->
+<div class="jumbotron jumbotron-fluid" style="margin-top: 60px; background-color: #0b0c28;">
+  <div class="container text-center" style="color: #fff; font-weight: bold;">
+    <h1 class="display-8 text-center">Earn Good Karma. Donate through online Shopping or Booking.</h1>
+    <p class="lead text-center">You can donate money through your every online shopping to Charity. When you go to shopping through us , just select which Charity you'd like to donate to and how much. We will transfer the money to the selected Charitable Organization.</p>
+    <a href="{% url 'campaigns-home' %}" class="btn btn-success btn-md" style="width: 20%; float: center;">Browse All Campaigns</a>
+  </div>
+</div>
+
+<div class="container" style="margin-top: -5%;">
+	<div class="row">
+		<div class="col-md-3">
+			<div class="card">
+				<img src="{{MEDIA_URL}}{{campaign.organization.logo_image}}" class="card-img-top" style="overflow: hidden; height: 275px;">
+				<div class="card-body">
+					<h5 class="card-title text-center" style="font-weight: bold;">{{campaign.organization.name}}</h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-9">
+			<div class="card" style="border: none;">
+				<div class="card-header" style="border: none; background-color: #fff;">
+					<h5 style="text-transform: uppercase; font-weight: bold;">{{campaign.title}}
+						<span class="text-right" style="width: 30%; float: right;">
+							<button type="button" class="btn btn-warning btn-block" data-toggle="tooltip" data-placement="bottom" title="This feature is not yet available">Donate Now</button>
+						</span>
+					</h5>
+					
+				</div>
+				<div class="card-body">
+					<p class="card-text" style="font-size: 0.85em;">{{campaign.description}}</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-12" style="margin-top: 25px;">
+			<div class="card" style="border:none;">
+				<div class="card-header" style="border: none;">
+					<h5>About the Organization</h5>
+				</div>
+				<div class="card-body">
+					<p class="card-title text-center" style="text-transform: uppercase; font-weight: bold;">{{campaign.organization.name}}</p>
+					<p class="card-text" style="font-size: 0.85em;">
+						{{campaign.organization.description}}
+					</p>
+					<p class="card-text text-center">
+						<a target="_blank" class="btn btn-secondary btn-md" href="{{campaign.organization.url}}" style="text-transform: uppercase;">visit now</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
